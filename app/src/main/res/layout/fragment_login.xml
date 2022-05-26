@@ -17,15 +17,15 @@
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintHorizontal_bias="0.100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323"
+        app:layout_constraintVertical_bias="0.315"
         />
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_tosignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="136dp"
@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.326" />
+        app:layout_constraintVertical_bias="0.315" />
 
     <EditText
         android:id="@+id/editText_Email"
@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/btn_tosignup"
         app:layout_constraintVertical_bias="0.024" />
 
     <EditText
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/btn_tosignup"
         app:layout_constraintVertical_bias="0.168" />
 
 

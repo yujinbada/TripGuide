@@ -25,19 +25,10 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_search"
-            android:layout_width="30dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="200dp"
-            android:layout_marginLeft="200dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/search" />
-
-        <Button
             android:id="@+id/btn_menu"
             android:layout_width="35dp"
             android:layout_height="50dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="240dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/menu" />

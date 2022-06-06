@@ -1,4 +1,4 @@
-package fragment.ui
+/*package fragment.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,4 +20,4 @@ class PlaceFragment : Fragment() {
         var apiExamSearchBlog = ApiExamSearchBlog()
         apiExamSearchBlog.main()
     }).start()
-}
+}*/

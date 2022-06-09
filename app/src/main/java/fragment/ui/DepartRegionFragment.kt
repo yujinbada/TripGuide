@@ -1,4 +1,4 @@
-package fragment.ui
+/*package fragment.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -22,5 +22,13 @@ class DepartRegionFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_depart_region, container, false)
     }
+<<<<<<< HEAD:app/src/main/java/fragment/ui/DepartRegionFragment.kt
 }
 
+=======
+    val thread = Thread({
+        var apiExamSearchBlog = ApiExamSearchBlog()
+        apiExamSearchBlog.main()
+    }).start()
+}*/
+>>>>>>> f3f980421bfa98ebf38239614a436bd7056caf0f:app/src/main/java/fragment/ui/PlaceFragment.kt

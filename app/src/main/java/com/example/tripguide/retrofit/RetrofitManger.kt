@@ -15,7 +15,7 @@ class RetrofitManger {
 
     fun getResultSearch() {
         val retrofitInterface: RetrofitInterface? = RetrofitClient.getInstance()?.create(RetrofitInterface::class.java)
-        val call: Call<JsonElement> = retrofitInterface?.getSearchResult(client_id, client_pw, region).let {
+        val call: Call<JsonElement> = retrofitInterface?.getSearchResult(client_id, client_pw, query = null).let {
             it
         }?: return
 

@@ -14,8 +14,7 @@
         android:background="@drawable/bolder"
         android:text="산"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="539dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="539dp" />
 
     <Button
         android:id="@+id/btn02"
@@ -71,9 +70,12 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="35dp"
-        tools:layout_editor_absoluteY="73dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.134"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.083" />
 
     <Button
         android:id="@+id/btn05"
@@ -210,6 +212,6 @@
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/previous" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

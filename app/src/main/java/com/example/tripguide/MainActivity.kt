@@ -1,26 +1,25 @@
 package com.example.tripguide
 
 import android.app.Activity
-import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import fragment.ui.LoginFragment
-import fragment.ui.SignUpFragment
+import com.example.tripguide.utils.SEARCH_REGION
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity() : AppCompatActivity() {
 
     val TAG: String = "로그"
     lateinit var navController: NavController
+
+    private var currentSarchType: SEARCH_REGION = SEARCH_REGION.REGION
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

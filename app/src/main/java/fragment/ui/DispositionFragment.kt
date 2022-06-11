@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.tripguide.R
-import com.example.tripguide.model.Region
 import com.example.tripguide.retrofit.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Response

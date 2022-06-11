@@ -10,7 +10,7 @@ interface RetrofitInterface {
     @GET("v2/local/search/address.json")
     fun getKakaoAddress(
         @Header("Aythorization") key: String,
-        @Query("query") query: String?
+        @Query("query") address: String
     ): Call<KakaoData>
 }
 

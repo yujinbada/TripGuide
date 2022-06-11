@@ -15,20 +15,34 @@
         tools:layout_editor_absoluteX="-16dp">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/region_search_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/back" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="어디에서 여행을 시작하세요?"
+            app:endIconMode="clear_text" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center"
-            android:hint="어디에서 여행을 시작하세요?"
+
             />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="669dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

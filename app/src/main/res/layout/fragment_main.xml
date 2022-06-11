@@ -31,8 +31,7 @@
             android:layout_marginStart="240dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/menu"
-            android:clickable="true"/>
+            android:background="@drawable/menu" />
 
     </LinearLayout>
 
@@ -55,8 +54,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.016"
-        android:clickable="true"/>
+        app:layout_constraintVertical_bias="0.016" />
 
     <Button
         android:id="@+id/btn_recentplan"
@@ -71,8 +69,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_plan"
-        app:layout_constraintVertical_bias="1.0"
-        android:clickable="true"/>
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -102,8 +99,7 @@
         android:textSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_overseas"
@@ -120,8 +116,7 @@
         android:textSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/someonestrip"

@@ -22,3 +22,4 @@ object API {
     const val CLIENT_SECRET : String = "IRVqBATb7R"
     const val SEARCH_REGION : String = "search/locals"
 }
+

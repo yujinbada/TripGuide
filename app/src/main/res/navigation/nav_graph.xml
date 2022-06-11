@@ -9,30 +9,10 @@
         android:id="@+id/mainFragment"
         android:name="fragment.ui.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="fragment.ui.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_main" >
         <action
-            android:id="@+id/action_signUpFragment_to_mainFragment2"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="fragment.ui.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            android:id="@+id/action_mainFragment_to_dispositionFragment"
+            app:destination="@id/dispositionFragment" />
     </fragment>
     <fragment
         android:id="@+id/firstFragment"
@@ -40,10 +20,21 @@
         android:label="fragment_first"
         tools:layout="@layout/fragment_first" >
         <action
-            android:id="@+id/action_firstFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_firstFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/departRegionFragment"
+        android:name="fragment.ui.DepartRegionFragment"
+        android:label="fragment_depart_region"
+        tools:layout="@layout/fragment_depart_region" />
+    <fragment
+        android:id="@+id/dispositionFragment"
+        android:name="fragment.ui.DispositionFragment"
+        android:label="fragment_disposition"
+        tools:layout="@layout/fragment_disposition" >
         <action
-            android:id="@+id/action_firstFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            android:id="@+id/action_dispositionFragment_to_departRegionFragment"
+            app:destination="@id/departRegionFragment" />
     </fragment>
 </navigation>

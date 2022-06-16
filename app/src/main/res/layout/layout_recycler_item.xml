@@ -10,14 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="15dp"
+        android:padding="5dp"
+        android:gravity="top"
         >
 
         <TextView
-            android:id="@+id/region_txt"
+            android:id="@+id/region_1depth_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="서울"
+            android:text="경북"
+            android:textSize="30sp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"
+            />
+        <TextView
+            android:id="@+id/region_2depth_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경주"
             android:textSize="30sp"
             android:layout_marginStart="20dp"
             android:layout_gravity="center_vertical"

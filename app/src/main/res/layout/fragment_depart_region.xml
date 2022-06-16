@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fragment.ui.DepartRegionFragment">
+    tools:context=".fragment.DepartRegionFragment">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -18,30 +19,42 @@
             android:id="@+id/region_search_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:gravity="bottom"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField"
-            android:layout_width="match_parent"
+            android:id="@+id/depart_textField"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:hint="어디에서 여행을 시작하세요?"
-            app:endIconMode="clear_text" >
+            app:endIconMode="clear_text">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:inputType="textPostalAddress"
+                />
 
-            />
+
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:id="@+id/depart_search_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/search"
+            android:backgroundTint="#575757"
+            android:gravity="bottom"
+            />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
+        android:id="@+id/depart_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="669dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 

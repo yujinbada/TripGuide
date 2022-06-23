@@ -65,6 +65,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/next"
@@ -90,30 +91,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_depart" />
 
-    <CalendarView
-        android:id="@+id/calendarView01"
+    <TextView
+        android:id="@+id/date_range_view"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/blackbolder"
+        android:gravity="center"
+        android:text="----.--.-- ~ ----.--.--"
+        android:textColor="@color/black"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.57"
-        android:layout_width="331dp"
-        android:layout_height="296dp"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="217dp" />
-
-    <ImageView
-        android:id="@+id/imageView02"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.991"
-        android:layout_width="30dp"
-        android:layout_height="26dp"
-        tools:layout_editor_absoluteX="349dp"
-        tools:layout_editor_absoluteY="674dp" />
+        app:layout_constraintVertical_bias="0.31" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

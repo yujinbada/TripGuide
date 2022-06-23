@@ -14,6 +14,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.kakao.KakaoData
 import com.example.tripguide.model.MyModel
@@ -33,8 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class DepartRegionFragment : Fragment(), View.OnClickListener {
-    lateinit var navController: NavController
-
+    val mainActivity = activity as MainActivity?
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
         const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
@@ -56,7 +56,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
         // 리사이클러뷰 방향 등 설정
         depart_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         depart_recycler_view.adapter = myRecyclerAdapter
@@ -97,7 +96,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
 
-                navController.popBackStack()
+                mainActivity?.changeFragment(3)
             }
         })
 

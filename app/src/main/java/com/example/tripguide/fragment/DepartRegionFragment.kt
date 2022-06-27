@@ -1,5 +1,6 @@
 package com.example.tripguide.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -24,6 +25,7 @@ import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import kotlinx.android.synthetic.main.fragment_depart_region.*
 import kotlinx.android.synthetic.main.fragment_depart_region.textInputEditText
+import kotlinx.android.synthetic.main.fragment_depart_region.view.*
 import kotlinx.android.synthetic.main.fragment_disposition.*
 import kotlinx.android.synthetic.main.layout_recycler_item.*
 import retrofit2.Call
@@ -34,7 +36,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class DepartRegionFragment : Fragment(), View.OnClickListener {
-    val mainActivity = activity as MainActivity?
+    private lateinit var mainActivity : MainActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
         const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
@@ -51,6 +57,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_depart_region, container, false)
     }
 
@@ -96,7 +103,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
 
-                mainActivity?.changeFragment(3)
+                mainActivity.changeFragment(3)
             }
         })
 

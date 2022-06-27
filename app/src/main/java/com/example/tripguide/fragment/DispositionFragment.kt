@@ -1,8 +1,9 @@
 package com.example.tripguide.fragment
 
+
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +18,21 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_disposition.*
 import kotlinx.android.synthetic.main.layout_recycler_item.*
 import androidx.core.util.Pair
+import androidx.fragment.app.Fragment
 import com.example.tripguide.MainActivity
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar.getInstance
 
+
 class DispositionFragment : Fragment(), View.OnClickListener {
-    private val mainActivity = activity as MainActivity?
+    private lateinit var mainActivity : MainActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_disposition, container, false)
@@ -32,6 +40,14 @@ class DispositionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val calendar: Calendar = Calendar.getInstance()
+        val currentTime = calendar.timeInMillis // 현재 시간
+        calendar.add(Calendar.DATE, +1)
+        val tomorrow = calendar.timeInMillis // 내일
+        val dataFormat = SimpleDateFormat("M월 d일")
+        date_range_view.text = "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}"
+
 
         view_depart.setOnClickListener(this)
         view_arriv.setOnClickListener(this)
@@ -43,7 +59,7 @@ class DispositionFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.view_depart -> {
-                mainActivity?.changeFragment(2)
+                mainActivity.changeFragment(2)
                 Log.d(TAG, "출발지 입력으로 이동")
                 setFragmentResultListener("requestKey") { key, bundle ->
                     val result = bundle.getString("bundleKey")
@@ -53,7 +69,7 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
             }
             R.id.view_arriv -> {
-                mainActivity?.changeFragment(2)
+                mainActivity.changeFragment(2)
                 Log.d(TAG, "도착지 입력으로 이동")
                 setFragmentResultListener("requestKey") { key, bundle ->
                     val result = bundle.getString("bundleKey")
@@ -67,26 +83,25 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 val dateRangePicker =
                     MaterialDatePicker.Builder.dateRangePicker()
                         .setTitleText("검색 기간을 골라주세요")
-//                    .setSelection(
-//                        Pair(
-//                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
-//                            MaterialDatePicker.todayInUtcMilliseconds()
-//                        )
-//                    )
+                    .setSelection(
+                        Pair(
+                            MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                            MaterialDatePicker.todayInUtcMilliseconds()
+                        )
+                    )
                         .build()
 
                 dateRangePicker.show(childFragmentManager, "date_picker")
                 dateRangePicker.addOnPositiveButtonClickListener { selection ->
                     val calendar = Calendar.getInstance()
                     calendar.timeInMillis = selection?.first ?: 0
-                    var startDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("start", startDate)
+                    val startDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
 
                     calendar.timeInMillis = selection?.second ?: 0
-                    var endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("end", endDate)
+                    val endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
 
                     date_range_view.text = dateRangePicker.headerText
+
                 }
             }
         }

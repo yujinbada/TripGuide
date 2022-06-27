@@ -81,7 +81,6 @@ class FirstFragment : Fragment() {
                     Log.d(TAG, "로그인 성공")
                     val user = auth.currentUser
                     Log.d(TAG, user.toString())
-                    Log.d(TAG, "FirstFragment - MainFragment로 이동")
                     mainActivity.changeFragment(4)
 
 

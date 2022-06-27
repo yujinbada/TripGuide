@@ -1,27 +1,16 @@
 package com.example.tripguide
 
 import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
 import com.example.tripguide.fragment.DispositionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.tripguide.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -46,6 +35,7 @@ class MainActivity() : AppCompatActivity() {
             .setReorderingAllowed(true)
             .addToBackStack(null)
             .commit()
+
         Log.d(TAG, "MainActivity - onCreate() called")
         fun Activity.setStatusBarTransparent() {
             window.setFlags( // 상태바 투명화 함수
@@ -60,16 +50,18 @@ class MainActivity() : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         when(index) {
             1 -> {
-                Log.d(TAG, "MainActivity - changeFragment() called")
-                transaction.replace(R.id.fragment_container_view, dispositionFragment)
+                Log.d(TAG, "MainFragment -> DispositionFragment")
+                transaction
+                    .add(R.id.fragment_container_view, dispositionFragment)
                     .show(dispositionFragment)
-                    .remove(firstFragment)
+                    .hide(mainFragment)
                     .addToBackStack(null)
                     .commit()
             }
             2 -> {
-                Log.d(TAG, "MainActivity - changeFragment() called")
-                transaction.replace(R.id.fragment_container_view, departRegionFragment)
+                Log.d(TAG, "depart: DispositionFragment -> DepartRegionFragment")
+                transaction
+                    .add(R.id.fragment_container_view, departRegionFragment)
                     .show(departRegionFragment)
                     .hide(dispositionFragment)
                     .addToBackStack(null)
@@ -77,17 +69,18 @@ class MainActivity() : AppCompatActivity() {
             }
 
             3 -> {
-                Log.d(TAG, "MainActivity - changeFragment() called")
-                transaction.show(dispositionFragment)
-                .remove(departRegionFragment)
-                .addToBackStack(null)
-                .commit()
+                Log.d(TAG, "DepartRegionFragment -> DispositionFragment")
+                transaction
+                    .remove(departRegionFragment)
+                    .show(dispositionFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             4 -> {
-                Log.d(TAG, "MainActivity - changeFragment() called")
-                transaction.replace(R.id.fragment_container_view, mainFragment)
-                    .addToBackStack(null)
+                Log.d(Constants.TAG, "FirstFragment -> MainFragment")
+                transaction
+                    .replace(R.id.fragment_container_view, mainFragment)
                     .commit()
             }
         }

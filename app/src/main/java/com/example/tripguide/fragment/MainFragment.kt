@@ -1,5 +1,6 @@
 package com.example.tripguide.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +14,11 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment(), View.OnClickListener {
 
-    val mainActivity = activity as MainActivity?
+    private lateinit var mainActivity : MainActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +38,7 @@ class MainFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btn_plan -> {
-                mainActivity?.changeFragment(1)
-                Log.d(TAG, "MainFragment - distpositionFragment로 이동")
+                mainActivity.changeFragment(1)
             }
         }
 

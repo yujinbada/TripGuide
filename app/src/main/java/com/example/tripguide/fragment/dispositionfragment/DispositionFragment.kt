@@ -1,4 +1,4 @@
-package com.example.tripguide.fragment
+package com.example.tripguide.fragment.dispositionfragment
 
 
 import android.content.Context
@@ -10,20 +10,15 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.example.tripguide.R
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_disposition.*
-import kotlinx.android.synthetic.main.layout_recycler_item.*
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import com.example.tripguide.MainActivity
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Calendar.getInstance
 
 
 class DispositionFragment : Fragment(), View.OnClickListener {
@@ -52,6 +47,8 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         view_depart.setOnClickListener(this)
         view_arriv.setOnClickListener(this)
         date_range_view.setOnClickListener(this)
+        next_btn.setOnClickListener(this)
+        before_btn.setOnClickListener(this)
 
 
     }
@@ -103,6 +100,12 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                     date_range_view.text = dateRangePicker.headerText
 
                 }
+            }
+            R.id.next_btn -> {
+                mainActivity.changeFragment(5)
+            }
+            R.id.before_btn -> {
+                mainActivity.changeFragment(6)
             }
         }
 

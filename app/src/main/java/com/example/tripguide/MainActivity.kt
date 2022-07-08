@@ -7,9 +7,12 @@ import android.util.Log
 import android.view.WindowManager
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
-import com.example.tripguide.fragment.DispositionFragment
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment2
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment22
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment3
 import com.example.tripguide.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -23,6 +26,9 @@ class MainActivity() : AppCompatActivity() {
     private val firstFragment = FirstFragment()
     private val departRegionFragment = DepartRegionFragment()
     private val mainFragment = MainFragment()
+    private val dispositionFragment2 = DispositionFragment2()
+    private val dispositionFragment22 = DispositionFragment22()
+    private val dispositionFragment3 = DispositionFragment3()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +89,54 @@ class MainActivity() : AppCompatActivity() {
                     .replace(R.id.fragment_container_view, mainFragment)
                     .commit()
             }
+            5 -> {
+                Log.d(TAG, "DispositionFragment -> DispositionFragment2")
+                transaction
+                    .add(R.id.fragment_container_view, dispositionFragment2)
+                    .hide(dispositionFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            6 -> {
+                Log.d(TAG, "DispositionFragment -> MainFragemnt")
+                transaction
+                    .remove(dispositionFragment)
+                    .show(mainFragment)
+                    .commit()
+            }
+            6 -> {
+                Log.d(TAG, "DispositionFragment2 -> DispositionFragment")
+                transaction
+                    .remove(dispositionFragment2)
+                    .show(dispositionFragment)
+                    .commit()
+            }
+            7 -> {
+                Log.d(TAG, "DispositionFragment2 -> DispositionFragment22")
+                transaction
+                    .add(R.id.fragment_container_view, dispositionFragment22)
+                    .hide(dispositionFragment2)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            8 -> {
+                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
+                transaction
+                    .add(R.id.fragment_container_view, dispositionFragment3)
+                    .hide(dispositionFragment2)
+                    .hide(dispositionFragment22)
+                    .addToBackStack(null)
+                    .commit()
+            }
+            9 -> {
+                Log.d(TAG, "DispositionFragment22 -> DispositionFragment2")
+                transaction
+                    .remove(dispositionFragment22)
+                    .show(dispositionFragment2)
+                    .commit()
+            }
         }
     }
-
 }
 
 

@@ -61,6 +61,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         return inflater.inflate(R.layout.fragment_depart_region, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // 리사이클러뷰 방향 등 설정
@@ -89,7 +90,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         myRecyclerAdapter.setItemClickListener(object : MyRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
 
-                Log.d(TAG, "아이템클릭 이벤트 발생")
+                Log.d(TAG, "MyRecyclerAdapter - 아이템클릭 이벤트 발생")
                 Log.d(TAG, "region_1depth_txt :${modelList[position].firstregion} region_2depth_txt: ${modelList[position].secondregion}")
 
                 if (modelList[position].secondregion.toString() == ""){

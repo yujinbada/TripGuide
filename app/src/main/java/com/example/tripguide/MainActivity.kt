@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import androidx.fragment.app.FragmentManager
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
@@ -12,9 +13,8 @@ import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment2
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment22
-import com.example.tripguide.fragment.dispositionfragment.DispositionFragment3
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment4
 import com.example.tripguide.utils.Constants
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity() : AppCompatActivity() {
@@ -28,7 +28,7 @@ class MainActivity() : AppCompatActivity() {
     private val mainFragment = MainFragment()
     private val dispositionFragment2 = DispositionFragment2()
     private val dispositionFragment22 = DispositionFragment22()
-    private val dispositionFragment3 = DispositionFragment3()
+    private val dispositionFragment4 = DispositionFragment4()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +67,9 @@ class MainActivity() : AppCompatActivity() {
             2 -> {
                 Log.d(TAG, "depart: DispositionFragment -> DepartRegionFragment")
                 transaction
-                    .add(R.id.fragment_container_view, departRegionFragment)
-                    .show(departRegionFragment)
+                    .add(R.id.fragment_container_view, departRegionFragment, "depart")
                     .hide(dispositionFragment)
-                    .addToBackStack(null)
+                    .addToBackStack("depart")
                     .commit()
             }
 
@@ -79,8 +78,8 @@ class MainActivity() : AppCompatActivity() {
                 transaction
                     .remove(departRegionFragment)
                     .show(dispositionFragment)
-                    .addToBackStack(null)
                     .commit()
+                supportFragmentManager.popBackStack("depart", FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
 
             4 -> {
@@ -104,7 +103,7 @@ class MainActivity() : AppCompatActivity() {
                     .show(mainFragment)
                     .commit()
             }
-            6 -> {
+            66 -> {
                 Log.d(TAG, "DispositionFragment2 -> DispositionFragment")
                 transaction
                     .remove(dispositionFragment2)
@@ -120,9 +119,9 @@ class MainActivity() : AppCompatActivity() {
                     .commit()
             }
             8 -> {
-                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
+                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment4")
                 transaction
-                    .add(R.id.fragment_container_view, dispositionFragment3)
+                    .add(R.id.fragment_container_view, dispositionFragment4)
                     .hide(dispositionFragment2)
                     .hide(dispositionFragment22)
                     .addToBackStack(null)

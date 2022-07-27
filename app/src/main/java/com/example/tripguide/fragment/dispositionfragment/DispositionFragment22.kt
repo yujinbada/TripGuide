@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import kotlinx.android.synthetic.main.fragment_disposition2.*
-import kotlinx.android.synthetic.main.fragment_disposition_fragment2_2.*
+import kotlinx.android.synthetic.main.fragment_disposition22.*
 
 class DispositionFragment22 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity

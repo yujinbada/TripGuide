@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.dispositionfragment.DispositionFragment3">
+    tools:context=".fragment.dispositionfragment.DispositionFragment4">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -20,7 +20,7 @@
             android:id="@+id/textField_region"
             android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:hint="어디에서 여행을 시작하세요?"
+            android:hint="가고 싶은 관광지를 선택해 주세요!"
             app:endIconMode="clear_text"
             >
 
@@ -37,7 +37,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/depart_search_btn"
+            android:id="@+id/depart_search_region_btn"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/search"
@@ -45,14 +45,26 @@
             android:gravity="bottom" />
     </LinearLayout>
 
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/depart_recycler_view"
+        android:id="@+id/region_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chip_group"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

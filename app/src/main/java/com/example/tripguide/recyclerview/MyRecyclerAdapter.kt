@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripguide.R
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.utils.Constants.TAG
 
 class MyRecyclerAdapter(var modelList : ArrayList<MyModel>): RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder>() {
-    lateinit var navController: NavController
     // 뷰홀더가 생성 되었을때
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecyclerAdapter.ViewHolder {
         // 연결할 레이아웃 설정
@@ -21,9 +19,7 @@ class MyRecyclerAdapter(var modelList : ArrayList<MyModel>): RecyclerView.Adapte
     }
 
     // 목록의 아이템수
-    override fun getItemCount(): Int {
-        return this.modelList.size
-    }
+    override fun getItemCount(): Int = modelList.size
 
     // 뷰와 뷰홀더가 묶였을때
     override fun onBindViewHolder(holder: MyRecyclerAdapter.ViewHolder, position: Int) {

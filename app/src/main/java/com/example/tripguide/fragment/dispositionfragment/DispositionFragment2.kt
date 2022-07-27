@@ -64,7 +64,7 @@ class DispositionFragment2 : Fragment(), View.OnClickListener {
 
             }
             R.id.before_btn2 -> {
-                mainActivity.changeFragment(6)
+                mainActivity.changeFragment(66)
             }
         }
     }

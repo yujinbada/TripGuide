@@ -12,8 +12,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
@@ -24,9 +22,7 @@ import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import kotlinx.android.synthetic.main.fragment_depart_region.*
-import kotlinx.android.synthetic.main.fragment_depart_region.textInputEditText
-import kotlinx.android.synthetic.main.fragment_depart_region.view.*
-import kotlinx.android.synthetic.main.fragment_disposition.*
+import kotlinx.android.synthetic.main.fragment_depart_region.tripName
 import kotlinx.android.synthetic.main.layout_recycler_item.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,10 +71,10 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
 
         depart_search_btn.setOnClickListener(this)
-        textInputEditText.setOnKeyListener{v, keyCode, event ->
+        tripName.setOnKeyListener{ v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = textInputEditText.text.toString()
+                keyword = tripName.text.toString()
                 getResultSearch(keyword)
                 true
 
@@ -107,18 +103,19 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                 mainActivity.changeFragment(3)
             }
         })
-
-
     }
+
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.depart_search_btn -> {
                 Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = textInputEditText.text.toString()
+                keyword = tripName.text.toString()
                 getResultSearch(keyword)
             }
         }
     }
+
 
     private fun getResultSearch(keyword: String) {
         val retrofit = Retrofit.Builder()
@@ -140,6 +137,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         })
     }
 
+
     private fun addItems(searchResult: KakaoData?) {
         if (!searchResult?.documents.isNullOrEmpty()) {
             //검색결과있음
@@ -154,8 +152,4 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         } else
             Toast.makeText(activity, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
     }
-
-
-
-
 }

@@ -38,7 +38,7 @@
 
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputEditText"
+        android:id="@+id/tripName"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textInputEditText"
+        app:layout_constraintTop_toBottomOf="@+id/tripName"
         app:layout_constraintVertical_bias="0.029" />
 
     <TextView
@@ -81,7 +81,7 @@
         app:layout_constraintVertical_bias="0.054" />
 
     <TextView
-        android:id="@+id/view_arriv"
+        android:id="@+id/view_arrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -100,7 +100,7 @@
         android:layout_height="30dp"
         android:src="@drawable/next"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/view_arriv"
+        app:layout_constraintEnd_toStartOf="@+id/view_arrive"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toEndOf="@+id/view_depart"
         app:layout_constraintTop_toTopOf="parent"

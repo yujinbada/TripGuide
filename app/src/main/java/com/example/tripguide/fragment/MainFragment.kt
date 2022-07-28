@@ -9,8 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
+import com.example.tripguide.TripGuide
 import com.example.tripguide.utils.Constants.TAG
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_main.*
+
+var fbAuth : FirebaseAuth?= null
+var fbFirestore : FirebaseFirestore?= null
 
 class MainFragment : Fragment(), View.OnClickListener {
 
@@ -33,6 +39,17 @@ class MainFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         btn_plan.setOnClickListener(this)
 
+        fbAuth = FirebaseAuth.getInstance()
+        fbFirestore = FirebaseFirestore.getInstance()
+
+        if(true)
+        {
+            var userInfo = TripGuide()
+
+            userInfo.uid = fbAuth?.uid
+            userInfo.userId = fbAuth?.currentUser?.email
+            fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -41,6 +58,5 @@ class MainFragment : Fragment(), View.OnClickListener {
                 mainActivity.changeFragment(1)
             }
         }
-
     }
 }

@@ -8,12 +8,9 @@ import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
-import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
-import com.example.tripguide.fragment.dispositionfragment.DispositionFragment2
-import com.example.tripguide.fragment.dispositionfragment.DispositionFragment22
-import com.example.tripguide.fragment.dispositionfragment.DispositionFragment4
+import com.example.tripguide.fragment.dispositionfragment.*
 import com.example.tripguide.utils.Constants
 
 
@@ -28,6 +25,7 @@ class MainActivity() : AppCompatActivity() {
     private val mainFragment = MainFragment()
     private val dispositionFragment2 = DispositionFragment2()
     private val dispositionFragment22 = DispositionFragment22()
+    private val dispositionFragment3 = DispositionFragment3()
     private val dispositionFragment4 = DispositionFragment4()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,9 +117,9 @@ class MainActivity() : AppCompatActivity() {
                     .commit()
             }
             8 -> {
-                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment4")
+                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
                 transaction
-                    .add(R.id.fragment_container_view, dispositionFragment4)
+                    .add(R.id.fragment_container_view, dispositionFragment3)
                     .hide(dispositionFragment2)
                     .hide(dispositionFragment22)
                     .addToBackStack(null)
@@ -132,6 +130,14 @@ class MainActivity() : AppCompatActivity() {
                 transaction
                     .remove(dispositionFragment22)
                     .show(dispositionFragment2)
+                    .commit()
+            }
+            10 -> {
+                Log.d(TAG, "DispositionFragment3 -> DispositionFragment4")
+                transaction
+                    .add(R.id.fragment_container_view, dispositionFragment4)
+                    .hide(dispositionFragment3)
+                    .addToBackStack(null)
                     .commit()
             }
         }

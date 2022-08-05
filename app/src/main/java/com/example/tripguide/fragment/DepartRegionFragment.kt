@@ -2,6 +2,8 @@ package com.example.tripguide.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -73,19 +75,21 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             depart_textField.hint = hint
         }
 
+        textInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun afterTextChanged(p0: Editable?) {
+            }
 
-        depart_search_btn.setOnClickListener(this)
-        textInputEditText.setOnKeyListener{v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
                 keyword = textInputEditText.text.toString()
                 getResultSearch(keyword)
-                true
-
             }
 
-            false
-        }
+
+        })
+
 
         myRecyclerAdapter.setItemClickListener(object : MyRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
@@ -112,11 +116,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
     }
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.depart_search_btn -> {
-                Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = textInputEditText.text.toString()
-                getResultSearch(keyword)
-            }
         }
     }
 
@@ -151,11 +150,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                 modelList.add(item)
                 myRecyclerAdapter.notifyDataSetChanged()
             }
-        } else
-            Toast.makeText(activity, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
-
-
-
-
 }

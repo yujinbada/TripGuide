@@ -18,15 +18,16 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textField_region"
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="가고 싶은 관광지를 선택해 주세요!"
+            android:gravity="center"
             app:endIconMode="clear_text"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_region"
-                android:layout_width="411dp"
+                android:layout_width="400dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/white"
                 android:gravity="center"
@@ -35,14 +36,6 @@
 
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/depart_search_region_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/search"
-            android:backgroundTint="#575757"
-            android:gravity="bottom" />
     </LinearLayout>
 
 

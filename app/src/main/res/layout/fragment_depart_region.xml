@@ -17,12 +17,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/depart_textField"
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="어디에서 여행을 시작하세요?"
+            android:gravity="center"
             app:endIconMode="clear_text"
             >
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText"
                 android:text=""
@@ -32,18 +32,8 @@
                 android:backgroundTint="@color/white"
                 android:inputType="textPostalAddress"
                 />
-
-
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/depart_search_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/search"
-            android:backgroundTint="#575757"
-            android:gravity="bottom"
-            />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

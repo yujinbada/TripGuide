@@ -48,5 +48,4 @@ class MyRecyclerAdapter(var modelList : ArrayList<MyModel>): RecyclerView.Adapte
     // (4) setItemClickListener로 설정한 함수 실행
     private lateinit var itemClickListener : OnItemClickListener
 
-
 }

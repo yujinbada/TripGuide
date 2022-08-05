@@ -20,8 +20,11 @@ import com.example.tripguide.recyclerview.TourAdapter
 import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.chip.Chip
+<<<<<<< HEAD
 import kotlinx.android.synthetic.main.fragment_depart_region.*
 import kotlinx.android.synthetic.main.fragment_disposition3.*
+=======
+>>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
 import kotlinx.android.synthetic.main.fragment_disposition4.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory

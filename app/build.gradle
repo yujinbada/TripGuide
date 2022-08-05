@@ -54,9 +54,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
 
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
-    implementation 'com.google.firebase:firebase-firestore:19.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx'    //파이어베이스 앱 분석
     implementation 'com.google.firebase:firebase-auth-ktx'  //파이어베이스 인증
+    implementation 'com.google.firebase:firebase-firestore:19.0.0'  //파이어스토어 개발 환경
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -88,5 +88,4 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
 }

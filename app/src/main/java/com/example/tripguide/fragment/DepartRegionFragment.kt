@@ -14,8 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
@@ -26,9 +24,7 @@ import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import kotlinx.android.synthetic.main.fragment_depart_region.*
-import kotlinx.android.synthetic.main.fragment_depart_region.textInputEditText
-import kotlinx.android.synthetic.main.fragment_depart_region.view.*
-import kotlinx.android.synthetic.main.fragment_disposition.*
+import kotlinx.android.synthetic.main.fragment_depart_region.tripName
 import kotlinx.android.synthetic.main.layout_recycler_item.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -81,9 +77,15 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             override fun afterTextChanged(p0: Editable?) {
             }
 
+<<<<<<< HEAD
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+=======
+        depart_search_btn.setOnClickListener(this)
+        tripName.setOnKeyListener{ v, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+>>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
                 Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = textInputEditText.text.toString()
+                keyword = tripName.text.toString()
                 getResultSearch(keyword)
             }
 
@@ -111,13 +113,22 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                 mainActivity.changeFragment(3)
             }
         })
-
-
     }
+
+
     override fun onClick(v: View?) {
         when(v?.id) {
+<<<<<<< HEAD
+=======
+            R.id.depart_search_btn -> {
+                Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
+                keyword = tripName.text.toString()
+                getResultSearch(keyword)
+            }
+>>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
         }
     }
+
 
     private fun getResultSearch(keyword: String) {
         val retrofit = Retrofit.Builder()
@@ -138,6 +149,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             }
         })
     }
+
 
     private fun addItems(searchResult: KakaoData?) {
         if (!searchResult?.documents.isNullOrEmpty()) {

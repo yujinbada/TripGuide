@@ -17,6 +17,9 @@ import kotlinx.android.synthetic.main.fragment_disposition.*
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import com.example.tripguide.MainActivity
+import com.example.tripguide.TripGuide
+import com.example.tripguide.fragment.fbAuth
+import com.example.tripguide.fragment.fbFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,12 +48,24 @@ class DispositionFragment : Fragment(), View.OnClickListener {
 
 
         view_depart.setOnClickListener(this)
-        view_arriv.setOnClickListener(this)
+        view_arrive.setOnClickListener(this)
         date_range_view.setOnClickListener(this)
         next_btn.setOnClickListener(this)
         before_btn.setOnClickListener(this)
 
 
+        next_btn.setOnClickListener {
+            var userInfo = TripGuide()
+            userInfo.uid = fbAuth?.uid
+            userInfo.userId = fbAuth?.currentUser?.email
+            userInfo.timestamp = System.currentTimeMillis()
+            userInfo.tripName = tripName.text.toString()
+            userInfo.departure = view_depart.text.toString()
+            userInfo.arrival = view_arrive.text.toString()
+            userInfo.date = date_range_view.text.toString()
+
+            fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -65,12 +80,12 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 val hint = "어디에서 여행을 시작하세요?"
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
             }
-            R.id.view_arriv -> {
+            R.id.view_arrive -> {
                 mainActivity.changeFragment(2)
                 Log.d(TAG, "도착지 입력으로 이동")
                 setFragmentResultListener("requestKey") { key, bundle ->
                     val result = bundle.getString("bundleKey")
-                    view_arriv.text = result
+                    view_arrive.text = result
                 }
                 val hint = "어디로 여행를 가시나요?"
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))

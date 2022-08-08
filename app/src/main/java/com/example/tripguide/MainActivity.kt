@@ -3,9 +3,11 @@ package com.example.tripguide
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.system.Os.remove
 import android.util.Log
 import android.view.WindowManager
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
 import com.example.tripguide.fragment.FirstFragment
@@ -63,11 +65,11 @@ class MainActivity() : AppCompatActivity() {
                     .commit()
             }
             2 -> {
-                Log.d(TAG, "depart: DispositionFragment -> DepartRegionFragment")
+                Log.d(TAG, "DispositionFragment -> DepartRegionFragment")
                 transaction
                     .add(R.id.fragment_container_view, departRegionFragment, "depart")
                     .hide(dispositionFragment)
-                    .addToBackStack("depart")
+                    .addToBackStack(null)
                     .commit()
             }
 
@@ -77,7 +79,9 @@ class MainActivity() : AppCompatActivity() {
                     .remove(departRegionFragment)
                     .show(dispositionFragment)
                     .commit()
-                supportFragmentManager.popBackStack("depart", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.commit {
+                    supportFragmentManager.findFragmentByTag("depart")?.let { remove(it) }
+                }
             }
 
             4 -> {

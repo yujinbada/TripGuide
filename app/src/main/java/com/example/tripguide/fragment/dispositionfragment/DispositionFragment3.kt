@@ -44,16 +44,22 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
             R.id.search_btn_1 -> {
                 val hint = "가고 싶은 관광지를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
+                val contentTypeId = 12
+                setFragmentResult("typerequestKey", bundleOf("typebundlekey" to contentTypeId))
                 mainActivity.changeFragment(10)
             }
             R.id.search_btn_2 -> {
                 val hint = "가고 싶은 식당/카페를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
+                val contentTypeId = 39
+                setFragmentResult("typerequestKey", bundleOf("typebundlekey" to contentTypeId))
                 mainActivity.changeFragment(10)
             }
             R.id.search_btn_3 -> {
                 val hint = "가고 싶은 숙소를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
+                val contentTypeId = 32
+                setFragmentResult("typerequestKey", bundleOf("typebundlekey" to contentTypeId))
                 mainActivity.changeFragment(10)
             }
             R.id.next_btn3 -> {

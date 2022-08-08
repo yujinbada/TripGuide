@@ -26,11 +26,11 @@ import java.util.*
 
 class DispositionFragment : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_disposition, container, false)
@@ -53,19 +53,6 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         next_btn.setOnClickListener(this)
         before_btn.setOnClickListener(this)
 
-
-        next_btn.setOnClickListener {
-            var userInfo = TripGuide()
-            userInfo.uid = fbAuth?.uid
-            userInfo.userId = fbAuth?.currentUser?.email
-            userInfo.timestamp = System.currentTimeMillis()
-            userInfo.tripName = tripName.text.toString()
-            userInfo.departure = view_depart.text.toString()
-            userInfo.arrival = view_arrive.text.toString()
-            userInfo.date = date_range_view.text.toString()
-
-            fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
-        }
     }
 
     override fun onClick(v: View?) {
@@ -118,6 +105,16 @@ class DispositionFragment : Fragment(), View.OnClickListener {
             }
             R.id.next_btn -> {
                 mainActivity.changeFragment(5)
+                var userInfo = TripGuide()
+                userInfo.uid = fbAuth?.uid
+                userInfo.userId = fbAuth?.currentUser?.email
+                userInfo.timestamp = System.currentTimeMillis()
+                userInfo.tripName = tripName.text.toString()
+                userInfo.departure = view_depart.text.toString()
+                userInfo.arrival = view_arrive.text.toString()
+                userInfo.date = date_range_view.text.toString()
+
+                fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
             }
             R.id.before_btn -> {
                 mainActivity.changeFragment(6)

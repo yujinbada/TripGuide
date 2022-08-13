@@ -9,7 +9,14 @@ data class TripGuide (var strName : String? = null,
                       var timestamp : Long? = null,
                       var departure : String? = null,
                       var arrival : String? = null,
-                      var date : String? = null) {
+                      var date : String? = null,
+                      var with : String? = null,
+                      var style : String? = null,
+                      var arrival_how : String? = null,
+                      var departure_how : String? = null,
+                      var must_sights : String? = null,
+                      var must_restaurant : String? = null,
+                      var must_hotel : String? = null) {
 }
 
 class App : Application() {

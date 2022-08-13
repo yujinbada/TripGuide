@@ -31,6 +31,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.HEAD
 
 
 class DepartRegionFragment : Fragment(), View.OnClickListener {
@@ -71,25 +72,16 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             depart_textField.hint = hint
         }
 
-        textInputEditText.addTextChangedListener(object : TextWatcher {
+        tripName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun afterTextChanged(p0: Editable?) {
             }
-
-<<<<<<< HEAD
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-=======
-        depart_search_btn.setOnClickListener(this)
-        tripName.setOnKeyListener{ v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
->>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
                 Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
                 keyword = tripName.text.toString()
                 getResultSearch(keyword)
             }
-
-
         })
 
 
@@ -118,14 +110,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id) {
-<<<<<<< HEAD
-=======
-            R.id.depart_search_btn -> {
-                Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = tripName.text.toString()
-                getResultSearch(keyword)
-            }
->>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
         }
     }
 
@@ -158,7 +142,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             for (document in searchResult!!.documents) {
                 Log.d(TAG, "DepartRegionFragment - addItems() called")
                 val item = MyModel(document.address.region_1depth_name,
-                                   document.address.region_2depth_name)
+                    document.address.region_2depth_name)
                 modelList.add(item)
                 myRecyclerAdapter.notifyDataSetChanged()
             }

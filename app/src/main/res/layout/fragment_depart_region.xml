@@ -32,6 +32,7 @@
                 android:backgroundTint="@color/white"
                 android:inputType="textPostalAddress"
                 />
+
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

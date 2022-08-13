@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+        android:id="@+id/arrival_how"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -46,7 +46,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/trans_chip1"
+            android:id="@+id/arrival_car"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -58,7 +58,7 @@
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/trans_chip2"
+            android:id="@+id/arrival_public"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -70,7 +70,7 @@
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/trans_chip3"
+            android:id="@+id/arrival_plane"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+        app:layout_constraintTop_toBottomOf="@+id/arrival_how"
         >
 
         <TextView

@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
-import kotlinx.android.synthetic.main.fragment_disposition.*
+import com.example.tripguide.TripGuide
+import com.example.tripguide.fragment.fbAuth
+import com.example.tripguide.fragment.fbFirestore
 import kotlinx.android.synthetic.main.fragment_disposition3.*
-import kotlinx.android.synthetic.main.layout_recycler_item.*
 
 class DispositionFragment3 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
@@ -40,6 +40,11 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        var userInfo = TripGuide()
+
+        fbFirestore?.collection("must_visit_place")?.document(fbAuth?.uid.toString())?.set(userInfo)
+
+
         when(v?.id) {
             R.id.search_btn_1 -> {
                 val hint = "가고 싶은 관광지를 선택해 주세요."

@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
@@ -20,11 +22,6 @@ import com.example.tripguide.recyclerview.TourAdapter
 import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.chip.Chip
-<<<<<<< HEAD
-import kotlinx.android.synthetic.main.fragment_depart_region.*
-import kotlinx.android.synthetic.main.fragment_disposition3.*
-=======
->>>>>>> 60a759643a05b03ae8ccf4003e08daca5af122e6
 import kotlinx.android.synthetic.main.fragment_disposition4.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -33,6 +30,7 @@ import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
 import java.net.URLEncoder
+
 
 class DispositionFragment4 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
@@ -43,12 +41,12 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     val mobile_os = "AND"
     val mobile_app = "TripGuide"
+    var contentTypeId = 12
     val type = "json"
-    val contentTypeId = 12
     val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
     val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
 
-    private lateinit var arrayList : ArrayList<Tour>
+    private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
 
     override fun onCreateView(
@@ -67,7 +65,12 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             textField_region.hint = hint
         }
 
+        setFragmentResultListener("typerequestKey") { key, bundle ->
+//            contentTypeId = bundle.getInt("typebundleKey")
+        }
+
         region_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        region_recycler_view.adapter = tourAdapter
 
         textInputEditText_region.setOnKeyListener{ v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -83,12 +86,12 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             override fun onClick(v: View, position: Int) {
                 Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
                 chip_group.addView(Chip(activity).apply {
-                    text = arrayList[position].readcount // text 세팅
+                    text = arrayList[position].title // text 세팅
                     isCloseIconVisible = true // x 버튼 보이게 하기
                     setOnCloseIconClickListener { chip_group.removeView(this) } // x버튼 눌렀을 때 삭제되기
                 })
+                makeButton()
             }
-
         })
 
 
@@ -121,7 +124,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             // 읽어온 xml 파싱하기
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
-                arrayList = arrayListOf()
 
                 var tagImage = false   // 이미지 태그
                 var tagTitle = false   // 제목 태그
@@ -163,6 +165,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             // 기관명까지 다 읽으면 하나의 데이터 다 읽은 것임
                             var item = Tour(firstimage, title, addr1, readcount)
                             arrayList.add(item)
+                            tourAdapter.notifyDataSetChanged()
                         }
                         else if (tagAddr1) {    // 주소
                             addr1 = xpp.text
@@ -174,12 +177,11 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                         }
                     }
                     if (eventType == XmlPullParser.END_TAG) {}
-
                     eventType = xpp.next()
                 }
                 // 리사이클러 뷰에 데이터 연결
                 arrayList.sortBy { it.readcount }
-                region_recycler_view.adapter = tourAdapter
+
 
             }
         }
@@ -205,8 +207,25 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 "&contentTypeId=" + contentTypeId +
                 "&keyword=" + keyword
 
-
         fetchXML(requstUrl)
+    }
+    // 동적 버튼 생성
+    fun makeButton() {
+        val dynamicButton = Button(activity).apply {
+            width = 50
+            height = 50
+            val Ip = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            Ip.setMargins(20,20,20,20)
+            layoutParams = Ip
+            text = "선택완료"
+            setOnClickListener {
+
+            }
+        }
+        linearLayout.addView(dynamicButton)
     }
 
 }

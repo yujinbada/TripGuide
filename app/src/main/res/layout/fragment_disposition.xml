@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/chipgroup"
+        app:layout_constraintTop_toBottomOf="@+id/trip_with"
         app:layout_constraintVertical_bias="0.079" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -156,7 +156,7 @@
         app:layout_constraintVertical_bias="0.071" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipgroup"
+        android:id="@+id/trip_with"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -170,28 +170,28 @@
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip1"
+            android:id="@+id/alone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="혼자서" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip2"
+            android:id="@+id/couple"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="연인과" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip3"
+            android:id="@+id/family"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가족과" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip4"
+            android:id="@+id/over5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5인이상" />
@@ -199,7 +199,7 @@
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipgroup2"
+        android:id="@+id/trip_style"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -213,42 +213,42 @@
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip5"
+            android:id="@+id/sns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SNS 핫플레이스" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip6"
+            android:id="@+id/nature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="자연 친화적" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip7"
+            android:id="@+id/activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="액티비티" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip8"
+            android:id="@+id/art"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="예술 / 공연" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip9"
+            android:id="@+id/culture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="전통 문화" />
 
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip10"
+            android:id="@+id/cafe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카페는 필수" />

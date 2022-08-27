@@ -39,15 +39,6 @@ class MainFragment : Fragment(), View.OnClickListener {
 
         fbAuth = FirebaseAuth.getInstance()
         fbFirestore = FirebaseFirestore.getInstance()
-
-        if(true)
-        {
-            var userInfo = TripGuide()
-
-            userInfo.uid = fbAuth?.uid
-            userInfo.userId = fbAuth?.currentUser?.email
-            fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
-        }
     }
 
     override fun onClick(v: View?) {

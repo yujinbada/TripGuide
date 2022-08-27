@@ -52,10 +52,28 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         date_range_view.setOnClickListener(this)
         next_btn.setOnClickListener(this)
         before_btn.setOnClickListener(this)
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
     }
 
+
     override fun onClick(v: View?) {
+        var userInfo = TripGuide()
+        userInfo.uid = fbAuth?.uid
+        userInfo.userId = fbAuth?.currentUser?.email
+        userInfo.timestamp = System.currentTimeMillis()
+        userInfo.tripName = tripName.text.toString()
+        userInfo.departure = view_depart.text.toString()
+        userInfo.arrival = view_arrive.text.toString()
+        userInfo.date = date_range_view.text.toString()
+        userInfo.with = trip_with.checkedChipId.toString()
+        userInfo.style = trip_style.checkedChipId.toString()
+
+        fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
+
+
         when(v?.id) {
             R.id.view_depart -> {
                 mainActivity.changeFragment(2)

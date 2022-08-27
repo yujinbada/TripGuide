@@ -16,7 +16,10 @@ import android.view.View.generateViewId
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+<<<<<<< HEAD
 import androidx.constraintlayout.widget.ConstraintSet
+=======
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
@@ -35,6 +38,7 @@ import java.io.StringReader
 import java.net.URL
 import java.net.URLEncoder
 
+
 class DispositionFragment4 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
@@ -49,8 +53,11 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
     val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
 
+<<<<<<< HEAD
     var cnt = 0
 
+=======
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
     private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
 
@@ -73,6 +80,12 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         setFragmentResultListener("typerequestKey") { key, bundle ->
 //            contentTypeId = bundle.getInt("typebundleKey")
         }
+<<<<<<< HEAD
+=======
+
+        region_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        region_recycler_view.adapter = tourAdapter
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
 
         region_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         region_recycler_view.adapter = tourAdapter
@@ -224,12 +237,17 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             width = 50
             height = 50
             val Ip = LinearLayout.LayoutParams(
+<<<<<<< HEAD
                 ViewGroup.LayoutParams.MATCH_PARENT,
+=======
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             Ip.setMargins(20,20,20,20)
             layoutParams = Ip
             text = "선택완료"
+<<<<<<< HEAD
 
             setBackgroundColor(resources.getColor(R.color.sky))
 
@@ -247,5 +265,13 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
 
 
+=======
+            setOnClickListener {
+
+            }
+        }
+        linearLayout.addView(dynamicButton)
+    }
+>>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
 
 }

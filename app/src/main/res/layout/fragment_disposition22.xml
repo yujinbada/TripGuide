@@ -7,6 +7,7 @@
     tools:context=".fragment.dispositionfragment.DispositionFragment22"
     android:background="@color/white">
 
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -37,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup2"
+        android:id="@+id/departure_how"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -48,7 +49,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/trans_chip2_1"
+            android:id="@+id/departure_car"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -60,7 +61,7 @@
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/trans_chip2_2"
+            android:id="@+id/departure_public"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -83,7 +84,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup2">
+        app:layout_constraintTop_toBottomOf="@+id/departure_how">
 
         <TextView
             android:id="@+id/textView4"
@@ -161,6 +162,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

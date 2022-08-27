@@ -1,16 +1,22 @@
 package com.example.tripguide.fragment.dispositionfragment
 
 import android.content.Context
+import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.style.DynamicDrawableSpan.ALIGN_CENTER
 import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.generateViewId
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
@@ -43,6 +49,8 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
     val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
 
+    var cnt = 0
+
     private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
 
@@ -69,6 +77,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         region_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         region_recycler_view.adapter = tourAdapter
 
+        // 여행지 검색
         textInputEditText_region.setOnKeyListener{ v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 Log.d(Constants.TAG, "여행지 검색")
@@ -79,16 +88,20 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
             false
         }
+        // 여행지 클릭 이벤트
         tourAdapter.setItemClickListener(object : TourAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
+                val mutableList: MutableList<String> = mutableListOf<String>()
+                mutableList.add(arrayList[position].title.toString())
+
                 chip_group.addView(Chip(activity).apply {
                     text = arrayList[position].title // text 세팅
                     isCloseIconVisible = true // x 버튼 보이게 하기
                     setOnCloseIconClickListener { chip_group.removeView(this) } // x버튼 눌렀을 때 삭제되기
                 })
+                makeButton()
             }
-
         })
 
 
@@ -176,7 +189,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                     if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
-                // 리사이클러 뷰에 데이터 연결
                 arrayList.sortBy { it.readcount }
 
 
@@ -206,4 +218,34 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
         fetchXML(requstUrl)
     }
+    // 동적 버튼 생성
+    fun makeButton() {
+        val dynamicButton = Button(activity).apply {
+            width = 50
+            height = 50
+            val Ip = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            Ip.setMargins(20,20,20,20)
+            layoutParams = Ip
+            text = "선택완료"
+
+            setBackgroundColor(resources.getColor(R.color.sky))
+
+            // 버튼 클릭 이벤트
+            setOnClickListener {
+                Log.d(TAG, "DispositionFragment4 - 검색완료 called")
+                mainActivity.changeFragment(11)
+            }
+        }
+
+        cnt++
+        if (cnt == 1)
+            linearLayout2.addView(dynamicButton)
+    }
+
+
+
+
 }

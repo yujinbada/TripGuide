@@ -45,24 +45,26 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
     }
     val bundle = Bundle()
-
-
+    var keyword = ""
     // 데이터를 담을 그릇 즉 배열
     private val modelList = ArrayList<MyModel>()
     private val myRecyclerAdapter = MyRecyclerAdapter(modelList)
-    private var keyword = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_depart_region, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tripName.text?.clear()
+        modelList.clear()
+
         // 리사이클러뷰 방향 등 설정
         depart_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         depart_recycler_view.adapter = myRecyclerAdapter
@@ -84,7 +86,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             }
         })
 
-
+        //리사이클러뷰 아이템 클릭 이벤트
         myRecyclerAdapter.setItemClickListener(object : MyRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
 
@@ -101,7 +103,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     val result = region_2depth_txt?.text.toString()
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
-
                 mainActivity.changeFragment(3)
             }
         })

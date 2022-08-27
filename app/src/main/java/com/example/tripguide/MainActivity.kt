@@ -1,19 +1,25 @@
 package com.example.tripguide
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
+import android.app.PendingIntent.getActivity
+import android.icu.number.Scale.none
 import android.os.Bundle
-import android.system.Os.remove
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.DepartRegionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
 import com.example.tripguide.fragment.dispositionfragment.*
 import com.example.tripguide.utils.Constants
+import com.google.common.base.CharMatcher.none
 
 
 class MainActivity() : AppCompatActivity() {
@@ -21,20 +27,29 @@ class MainActivity() : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
+    private val mainFragment = MainFragment()
     private val dispositionFragment = DispositionFragment()
     private val firstFragment = FirstFragment()
     private val departRegionFragment = DepartRegionFragment()
-    private val mainFragment = MainFragment()
     private val dispositionFragment2 = DispositionFragment2()
     private val dispositionFragment22 = DispositionFragment22()
     private val dispositionFragment3 = DispositionFragment3()
     private val dispositionFragment4 = DispositionFragment4()
+//
+//    lateinit var myViewModel: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+//
+//        myViewModel.currentValue.observe(this, Observer {
+//            Log.d(TAG, "MainActivity - myViewmodel - currentValue 라이브 데이터 값 변경 : $it")
+//
+//        })
 
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container_view, firstFragment)
@@ -45,45 +60,65 @@ class MainActivity() : AppCompatActivity() {
         Log.d(TAG, "MainActivity - onCreate() called")
         fun Activity.setStatusBarTransparent() {
             window.setFlags( // 상태바 투명화 함수
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
         }
 
     }
+//    fun addFragment(a: Fragment, b: Fragment) {
+//        Log.d(TAG, "$a -> $b")
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.fragment_container_view, b)
+//            .show(b)
+//            .hide(a)
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
+    // Fragment 전환을 위한 supportFragmentManager
     fun changeFragment(index: Int?) {
         val transaction = supportFragmentManager.beginTransaction()
+
         when(index) {
             1 -> {
                 Log.d(TAG, "MainFragment -> DispositionFragment")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
+                    .hide(mainFragment)
                     .add(R.id.fragment_container_view, dispositionFragment)
                     .show(dispositionFragment)
-                    .hide(mainFragment)
                     .addToBackStack(null)
                     .commit()
             }
             2 -> {
                 Log.d(TAG, "DispositionFragment -> DepartRegionFragment")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, departRegionFragment, "depart")
                     .hide(dispositionFragment)
-                    .addToBackStack(null)
+                    .addToBackStack("depart")
                     .commit()
             }
 
             3 -> {
                 Log.d(TAG, "DepartRegionFragment -> DispositionFragment")
+                supportFragmentManager.popBackStack("depart", POP_BACK_STACK_INCLUSIVE)
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .remove(departRegionFragment)
                     .show(dispositionFragment)
                     .commit()
-                supportFragmentManager.commit {
-                    supportFragmentManager.findFragmentByTag("depart")?.let { remove(it) }
-                }
             }
-
             4 -> {
                 Log.d(Constants.TAG, "FirstFragment -> MainFragment")
                 transaction
@@ -93,6 +128,10 @@ class MainActivity() : AppCompatActivity() {
             5 -> {
                 Log.d(TAG, "DispositionFragment -> DispositionFragment2")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, dispositionFragment2)
                     .hide(dispositionFragment)
                     .addToBackStack(null)
@@ -115,6 +154,10 @@ class MainActivity() : AppCompatActivity() {
             7 -> {
                 Log.d(TAG, "DispositionFragment2 -> DispositionFragment22")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, dispositionFragment22)
                     .hide(dispositionFragment2)
                     .addToBackStack(null)
@@ -123,6 +166,10 @@ class MainActivity() : AppCompatActivity() {
             8 -> {
                 Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, dispositionFragment3)
                     .hide(dispositionFragment2)
                     .hide(dispositionFragment22)
@@ -139,15 +186,23 @@ class MainActivity() : AppCompatActivity() {
             10 -> {
                 Log.d(TAG, "DispositionFragment3 -> DispositionFragment4")
                 transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, dispositionFragment4)
                     .hide(dispositionFragment3)
                     .addToBackStack(null)
                     .commit()
             }
+            11 -> {
+                Log.d(TAG, "DispositionFragment4 -> DispositionFragment3")
+                transaction
+                    .remove(dispositionFragment4)
+                    .show(dispositionFragment3)
+                    .commit()
+            }
         }
     }
+
 }
-
-
-
-

@@ -52,10 +52,7 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         date_range_view.setOnClickListener(this)
         next_btn.setOnClickListener(this)
         before_btn.setOnClickListener(this)
-<<<<<<< HEAD
 
-=======
->>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
     }
 
 

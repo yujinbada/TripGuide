@@ -173,8 +173,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-<<<<<<< HEAD
+
 </androidx.constraintlayout.widget.ConstraintLayout>
-=======
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> cf9ffeaa0f02ceb0aa5df46757bcf77e0142a568
+

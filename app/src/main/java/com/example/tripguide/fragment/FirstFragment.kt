@@ -1,3 +1,7 @@
+/*
+ This fragment is the first fragment the user sees.
+ It contains the code for google login
+*/
 package com.example.tripguide.fragment
 
 import android.content.Context
@@ -10,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
+import com.example.tripguide.databinding.FragmentDispositionBinding
+import com.example.tripguide.databinding.FragmentFirstBinding
 import com.example.tripguide.model.FirebaseClass
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -22,29 +28,30 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_first.*
 
 class FirstFragment : Fragment() {
-    private lateinit var auth: FirebaseAuth//객체의 공유 인스턴스
+    private lateinit var auth: FirebaseAuth // shared instance of object
     private lateinit var firestore : FirebaseFirestore
     private val RC_SIGN_IN = 9001
     private var googleSignInClient: GoogleSignInClient?=null
+
+    // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.d(TAG, "FirstFragment - onCreateView() called")
-
-        return inflater.inflate(R.layout.fragment_first, container, false)
+    private var mBinding: FragmentFirstBinding? = null
+    private val binding get() = mBinding!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        mBinding = FragmentFirstBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "FirstFragment - onViewCreated() called")
         auth = Firebase.auth
         firestore = FirebaseFirestore.getInstance()
 
@@ -55,8 +62,8 @@ class FirstFragment : Fragment() {
 
         var googleSignInClient = GoogleSignIn.getClient(activity!!, gso)
 
-        sign_in_google.setOnClickListener {
-            Log.d(TAG, "MainActivity 로그인 버튼 클릭")
+        binding.signingoogle.setOnClickListener {
+            Log.d(TAG, "MainActivity login button clicked")
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
@@ -68,11 +75,11 @@ class FirstFragment : Fragment() {
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try{ //로그인 성공할 경우
+            try{ // If we succeeded login
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {  //로그인 실패 할 경우
-                Log.d(TAG, "로그인 실패")
+            } catch (e: ApiException) {  // If we failed login
+                Log.d(TAG, "login failed")
             }
         }
     }
@@ -80,9 +87,9 @@ class FirstFragment : Fragment() {
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity!!) { task -> //파이어 베이스에 등록
-                if (task.isSuccessful) { //성공
-                    Log.d(TAG, "로그인 성공")
+            .addOnCompleteListener(activity!!) { task -> // Register on Firebase
+                if (task.isSuccessful) { // Succeeded
+                    Log.d(TAG, "login succeeded")
                     val user = auth.currentUser
                     var userInfo = FirebaseClass()
                     user?.let {
@@ -94,10 +101,15 @@ class FirstFragment : Fragment() {
                     mainActivity.changeFragment(4)
 
 
-                } else { //실패
+                } else { // Failed
                     Log.d(TAG, "signInWithCredential:failure", task.exception)
                 }
             }
+    }
+
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
     }
 }
 

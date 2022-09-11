@@ -10,33 +10,34 @@ import android.widget.Toast
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.TripGuide
+import com.example.tripguide.databinding.FragmentDisposition22Binding
 import com.example.tripguide.fragment.fbAuth
 import com.example.tripguide.fragment.fbFirestore
-import kotlinx.android.synthetic.main.fragment_disposition2.*
-import kotlinx.android.synthetic.main.fragment_disposition22.*
 
 class DispositionFragment22 : Fragment(), View.OnClickListener {
+
+    // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_disposition22, container, false)
+    private var mBinding: FragmentDisposition22Binding? = null
+    private val binding get() = mBinding!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        mBinding = FragmentDisposition22Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        departure_car.setOnClickListener(this)
-        departure_public.setOnClickListener(this)
-        trans_chip2_3.setOnClickListener(this)
-        trans_chip2_4.setOnClickListener(this)
-        next_btn22.setOnClickListener(this)
-        before_btn22.setOnClickListener(this)
+        binding.departurecar.setOnClickListener(this)
+        binding.departurepublic.setOnClickListener(this)
+        binding.transchip23.setOnClickListener(this)
+        binding.transchip24.setOnClickListener(this)
+        binding.nextbtn22.setOnClickListener(this)
+        binding.beforebtn22.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -44,33 +45,37 @@ class DispositionFragment22 : Fragment(), View.OnClickListener {
         userInfo.uid = fbAuth?.uid
         userInfo.userId = fbAuth?.currentUser?.email
         userInfo.timestamp = System.currentTimeMillis()
-        userInfo.departure_how = departure_how.checkedChipId.toString()
+        userInfo.departure_how = binding.departurehow.checkedChipId.toString()
 
         fbFirestore?.collection("departure_how")?.document(fbAuth?.uid.toString())?.set(userInfo)
 
 
         when(v?.id) {
-            R.id.departure_car -> {
-                trans_constraintLayout2.visibility = View.VISIBLE
+            R.id.departurecar -> {
+                binding.transconstraintLayout2.visibility = View.VISIBLE
             }
-            R.id.departure_public -> {
-                trans_constraintLayout2.visibility = View.VISIBLE
+            R.id.departurepublic -> {
+                binding.transconstraintLayout2.visibility = View.VISIBLE
             }
-            R.id.trans_chip2_3 -> {
+            R.id.transchip23 -> {
 
             }
-            R.id.trans_chip2_4 -> {
+            R.id.transchip24 -> {
 
             }
-            R.id.next_btn22 -> {
-                if ((departure_car.isChecked || departure_public.isChecked) && (trans_chip2_3.isChecked || trans_chip2_4.isChecked)) {
+            R.id.nextbtn22 -> {
+                if ((binding.departurecar.isChecked || binding.departurepublic.isChecked) && (binding.transchip23.isChecked || binding.transchip24.isChecked)) {
                     mainActivity.changeFragment(8)
                 } else
                     Toast.makeText(activity, "이동수단을 선택해 주세요!", Toast.LENGTH_SHORT).show()
             }
-            R.id.before_btn22 -> {
+            R.id.beforebtn22 -> {
                 mainActivity.changeFragment(9)
             }
         }
+    }
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
     }
 }

@@ -1,18 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
-
+    id 'kotlin-parcelize'
 }
 
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
-
-    viewBinding {
-            enabled = true
-        }
 
     defaultConfig {
         applicationId "com.example.tripguide"
@@ -25,11 +20,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-        viewBinding true
-    }
-
     buildTypes {
+        buildFeatures {
+            viewBinding true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -42,11 +37,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-
 dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'

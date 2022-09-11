@@ -1,32 +1,29 @@
 package com.example.tripguide.fragment.dispositionfragment
 
 import android.content.Context
-import android.graphics.Color
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.text.style.DynamicDrawableSpan.ALIGN_CENTER
+import android.os.Parcelable
 import android.util.Log
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.generateViewId
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
+import com.example.tripguide.databinding.FragmentDisposition4Binding
+import com.example.tripguide.model.SelectItem
 import com.example.tripguide.model.Tour
 import com.example.tripguide.recyclerview.TourAdapter
 import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.fragment_disposition4.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.BufferedReader
@@ -37,6 +34,8 @@ import java.net.URLEncoder
 
 
 class DispositionFragment4 : Fragment(), View.OnClickListener {
+
+    // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,13 +52,16 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
+    private val chipList: ArrayList<SelectItem> = arrayListOf<SelectItem>()
 
+    private var mBinding: FragmentDisposition4Binding? = null
+    private val binding get() = mBinding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_disposition4, container, false)
+        mBinding = FragmentDisposition4Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,18 +69,20 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
         setFragmentResultListener("hintrequestKey") { key, bundle ->
             val hint = bundle.getString("hintbundleKey")
-            textField_region.hint = hint
+            binding.textFieldregion.hint = hint
         }
 
         setFragmentResultListener("typerequestKey") { key, bundle ->
 //            contentTypeId = bundle.getInt("typebundleKey")
         }
 
-        region_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        region_recycler_view.adapter = tourAdapter
+        binding.regionrecyclerview.layoutManager = LinearLayoutManager(activity,
+            LinearLayoutManager.VERTICAL,
+            false)
+        binding.regionrecyclerview.adapter = tourAdapter
 
         // 여행지 검색
-        textInputEditText_region.setOnKeyListener{ v, keyCode, event ->
+        binding.textInputEditTextregion.setOnKeyListener{ v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 Log.d(Constants.TAG, "여행지 검색")
                 keywordParser()
@@ -91,14 +95,20 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         // 여행지 클릭 이벤트
         tourAdapter.setItemClickListener(object : TourAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
-                val mutableList: MutableList<String> = mutableListOf<String>()
-                mutableList.add(arrayList[position].title.toString())
 
-                chip_group.addView(Chip(activity).apply {
+                Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
+                var selecttitle = arrayList[position].title.toString()
+                var selectimage = arrayList[position].firstimage.toString()
+                chipList.add(SelectItem(selectimage, selecttitle))
+
+
+                binding.chipgroup.addView(Chip(activity).apply {
                     text = arrayList[position].title // text 세팅
                     isCloseIconVisible = true // x 버튼 보이게 하기
-                    setOnCloseIconClickListener { chip_group.removeView(this) } // x버튼 눌렀을 때 삭제되기
+                    setOnCloseIconClickListener {
+                        binding.chipgroup.removeView(this)
+                        chipList.remove(SelectItem(selectimage, selecttitle))
+                    } // x버튼 눌렀을 때 삭제되기
                 })
                 makeButton()
             }
@@ -108,7 +118,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     }
 
     // xml 파싱하기
-    fun fetchXML(url : String) {
+    fun fetchXML(url: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
 
         // xml 데이터 가져와서 파싱하기
@@ -206,7 +216,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     fun keywordParser() {
         Log.d(TAG, "장소 검색중")
-        val textfield = textInputEditText_region.text.toString()
+        val textfield = binding.textInputEditTextregion.text.toString()
         val keyword = URLEncoder.encode(textfield)
         // 이 url 주소 가지고 xml에서 데이터 파싱하기
         val requstUrl = serviceUrl +
@@ -227,7 +237,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-            Ip.setMargins(20,20,20,20)
+            Ip.setMargins(20, 20, 20, 20)
             layoutParams = Ip
             text = "선택완료"
 
@@ -236,10 +246,19 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             // 버튼 클릭 이벤트
             setOnClickListener {
                 Log.d(TAG, "DispositionFragment4 - 검색완료 called")
+                val intent: Intent = Intent(context, DispositionFragment3::class.java)
+                intent.putParcelableArrayListExtra("Data", chipList)
+                startActivity(intent)
                 mainActivity.changeFragment(11)
+                DispositionFragment3().createcardview()
             }
         }
-        linearLayout.addView(dynamicButton)
-        }
+        binding.linearLayout.addView(dynamicButton)
+    }
 
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
+    }
 }
+

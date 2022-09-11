@@ -1,3 +1,7 @@
+/*
+ An activity that defines a function for moving between fragments.
+*/
+
 package com.example.tripguide
 
 import android.app.Activity
@@ -27,7 +31,6 @@ class MainActivity() : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-
     private val mainFragment = MainFragment()
     private val dispositionFragment = DispositionFragment()
     private val firstFragment = FirstFragment()
@@ -36,11 +39,12 @@ class MainActivity() : AppCompatActivity() {
     private val dispositionFragment22 = DispositionFragment22()
     private val dispositionFragment3 = DispositionFragment3()
     private val dispositionFragment4 = DispositionFragment4()
-//
+
 //    lateinit var myViewModel: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "MainActivity - onCreate() called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -51,15 +55,16 @@ class MainActivity() : AppCompatActivity() {
 //
 //        })
 
+        // setting the first fragment when the app is started
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container_view, firstFragment)
             .setReorderingAllowed(true)
             .addToBackStack(null)
             .commit()
 
-        Log.d(TAG, "MainActivity - onCreate() called")
+        // set status bar to transparent
         fun Activity.setStatusBarTransparent() {
-            window.setFlags( // 상태바 투명화 함수
+            window.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
@@ -76,7 +81,7 @@ class MainActivity() : AppCompatActivity() {
 //            .commit()
 //    }
 
-    // Fragment 전환을 위한 supportFragmentManager
+    // supportFragmentManager function for fragment transaction
     fun changeFragment(index: Int?) {
         val transaction = supportFragmentManager.beginTransaction()
 
@@ -103,18 +108,16 @@ class MainActivity() : AppCompatActivity() {
                         R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, departRegionFragment, "depart")
                     .hide(dispositionFragment)
-                    .addToBackStack("depart")
                     .commit()
             }
 
             3 -> {
                 Log.d(TAG, "DepartRegionFragment -> DispositionFragment")
-                supportFragmentManager.popBackStack("depart", POP_BACK_STACK_INCLUSIVE)
                 transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
+                    .setCustomAnimations(R.anim.none,
+                        R.anim.horizon_exit,
                         R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
+                        R.anim.none)
                     .remove(departRegionFragment)
                     .show(dispositionFragment)
                     .commit()

@@ -10,11 +10,17 @@ import android.widget.Toast
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.TripGuide
+import com.example.tripguide.databinding.FragmentDisposition2Binding
+import com.example.tripguide.databinding.FragmentDispositionBinding
 import com.example.tripguide.fragment.fbAuth
 import com.example.tripguide.fragment.fbFirestore
-import kotlinx.android.synthetic.main.fragment_disposition2.*
+
 
 class DispositionFragment2 : Fragment(), View.OnClickListener {
+    private var mBinding: FragmentDisposition2Binding? = null
+    private val binding get() = mBinding!!
+
+    // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -24,18 +30,18 @@ class DispositionFragment2 : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_disposition2, container, false)
+        mBinding = FragmentDisposition2Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arrival_car.setOnClickListener(this)
-        arrival_public.setOnClickListener(this)
-        arrival_plane.setOnClickListener(this)
-        before_btn2.setOnClickListener(this)
-        next_btn2.setOnClickListener(this)
+        binding.arrivalcar.setOnClickListener(this)
+        binding.arrivalpublic.setOnClickListener(this)
+        binding.arrivalplane.setOnClickListener(this)
+        binding.beforebtn2.setOnClickListener(this)
+        binding.nextbtn2.setOnClickListener(this)
 
     }
 
@@ -45,34 +51,38 @@ class DispositionFragment2 : Fragment(), View.OnClickListener {
         userInfo.uid = fbAuth?.uid
         userInfo.userId = fbAuth?.currentUser?.email
         userInfo.timestamp = System.currentTimeMillis()
-        userInfo.arrival_how = arrival_how.checkedChipId.toString()
+        userInfo.arrival_how = binding.arrivalhow.checkedChipId.toString()
 
         fbFirestore?.collection("arrival_how")?.document(fbAuth?.uid.toString())?.set(userInfo)
 
 
         when(v?.id) {
-            R.id.arrival_car -> {
-                trans_constraintLayout.visibility = View.INVISIBLE
+            R.id.arrivalcar -> {
+                binding.transconstraintLayout.visibility = View.INVISIBLE
             }
-            R.id.arrival_public -> {
-                trans_constraintLayout.visibility = View.INVISIBLE
+            R.id.arrivalpublic -> {
+                binding.transconstraintLayout.visibility = View.INVISIBLE
             }
-            R.id.arrival_plane -> {
-                trans_constraintLayout.visibility = View.VISIBLE
+            R.id.arrivalplane -> {
+                binding.transconstraintLayout.visibility = View.VISIBLE
             }
-            R.id.next_btn2 -> {
-                if (arrival_plane.isChecked) {
+            R.id.nextbtn2 -> {
+                if (binding.arrivalplane.isChecked) {
                     mainActivity.changeFragment(7)
-                } else if (arrival_car.isChecked || arrival_public.isChecked) {
+                } else if (binding.arrivalcar.isChecked || binding.arrivalpublic.isChecked) {
                     mainActivity.changeFragment(8)
                 } else {
                     Toast.makeText(activity, "이동수단을 선택해 주세요!", Toast.LENGTH_SHORT).show()
                 }
 
             }
-            R.id.before_btn2 -> {
+            R.id.beforebtn2 -> {
                 mainActivity.changeFragment(66)
             }
         }
+    }
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
     }
 }

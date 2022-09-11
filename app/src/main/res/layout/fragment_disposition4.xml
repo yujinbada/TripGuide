@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteX="-16dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField_region"
+            android:id="@+id/textFieldregion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="가고 싶은 관광지를 선택해 주세요!"
@@ -29,7 +29,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_region"
+                android:id="@+id/textInputEditTextregion"
                 android:layout_width="400dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/white"
@@ -42,7 +42,7 @@
     </LinearLayout>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chip_group"
+        android:id="@+id/chipgroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -56,14 +56,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/chip_group"
+        app:layout_constraintTop_toBottomOf="@id/chipgroup"
         >
     </LinearLayout>
 
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/region_recycler_view"
+        android:id="@+id/regionrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

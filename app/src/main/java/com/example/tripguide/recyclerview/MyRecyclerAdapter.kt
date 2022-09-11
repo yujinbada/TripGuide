@@ -33,8 +33,8 @@ class MyRecyclerAdapter(var modelList : ArrayList<MyModel>): RecyclerView.Adapte
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val firstregion: TextView = itemView.findViewById(R.id.region_1depth_txt)
-        val secondregion: TextView = itemView.findViewById(R.id.region_2depth_txt)
+        val firstregion: TextView = itemView.findViewById(R.id.region1depthtxt)
+        val secondregion: TextView = itemView.findViewById(R.id.region2depthtxt)
     }
 
     // (2) 리스너 인터페이스

@@ -1,3 +1,10 @@
+/*
+ This fragment is a fragment that receives the correct region name
+ when you enter a search term using the Kakao api.
+ We show the list through the recycler view when it is searched
+ and also set an event when it is clicked.
+*/
+
 package com.example.tripguide.fragment
 
 import android.content.Context
@@ -10,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -17,15 +25,13 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
+import com.example.tripguide.databinding.FragmentDepartRegionBinding
 import com.example.tripguide.kakao.KakaoData
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.recyclerview.MyRecyclerAdapter
 import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
-import kotlinx.android.synthetic.main.fragment_depart_region.*
-import kotlinx.android.synthetic.main.fragment_depart_region.tripName
-import kotlinx.android.synthetic.main.layout_recycler_item.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,72 +41,88 @@ import retrofit2.http.HEAD
 
 
 class DepartRegionFragment : Fragment(), View.OnClickListener {
+    private lateinit var callback: OnBackPressedCallback
+
+    // To get the main activity's change fragment function
+    // And since this fragment has not set the backstack, so we set the situation when back is clicked
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mainActivity.changeFragment(3)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
+
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
         const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
     }
+
     val bundle = Bundle()
     var keyword = ""
-    // 데이터를 담을 그릇 즉 배열
-    private val modelList = ArrayList<MyModel>()
+
+    private val modelList = ArrayList<MyModel>() // Array to hold data
     private val myRecyclerAdapter = MyRecyclerAdapter(modelList)
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_depart_region, container, false)
+    private var mBinding: FragmentDepartRegionBinding? = null
+    private val binding get() = mBinding!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        mBinding = FragmentDepartRegionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tripName.text?.clear()
+        binding.tripName.text?.clear()
         modelList.clear()
 
-        // 리사이클러뷰 방향 등 설정
-        depart_recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        depart_recycler_view.adapter = myRecyclerAdapter
+        // Set the recycler view direction, etc.
+        binding.departrecyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding.departrecyclerview.adapter = myRecyclerAdapter
 
+        // This code modifies the hint of DepartRegionFragment to reuse one fragment when inputting the departure and destination.
         setFragmentResultListener("hintrequestKey") { key, bundle ->
             val hint = bundle.getString("hintbundleKey")
-            depart_textField.hint = hint
+            binding.departtextField.hint = hint
         }
 
-        tripName.addTextChangedListener(object : TextWatcher {
+        binding.tripName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun afterTextChanged(p0: Editable?) {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d(TAG, "DepartRegionFragment - 출발지 버튼 클릭")
-                keyword = tripName.text.toString()
+                Log.d(TAG, "DepartRegionFragment - search event occurs")
+                keyword = binding.tripName.text.toString()
                 getResultSearch(keyword)
             }
         })
 
-        //리사이클러뷰 아이템 클릭 이벤트
+        // Recycler Item click event
         myRecyclerAdapter.setItemClickListener(object : MyRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
 
-                Log.d(TAG, "MyRecyclerAdapter - 아이템클릭 이벤트 발생")
+                Log.d(TAG, "MyRecyclerAdapter - item click event occur")
                 Log.d(TAG, "region_1depth_txt :${modelList[position].firstregion} region_2depth_txt: ${modelList[position].secondregion}")
 
+                // This code is the code for where to put the text of the origin or destination in the dispositionfragment
+                // when two search terms come up like Gyeongju-si, Gyeongbuk when searching for a region name.
                 if (modelList[position].secondregion.toString() == ""){
-                    Log.d(TAG, "departresult에 region_1depth_txt 대입")
-                    val result = region_1depth_txt?.text.toString()
+                    Log.d(TAG, "departresult <- region_1depth_txt")
+                    val result = modelList[position].firstregion
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
                 else {
-                    Log.d(TAG, "departresult에 region_2depth_txt 대입")
-                    val result = region_2depth_txt?.text.toString()
+                    Log.d(TAG, "departresult <- region_2depth_txt")
+                    val result = modelList[position].secondregion
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
                 mainActivity.changeFragment(3)
@@ -125,12 +147,12 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
         call.enqueue(object : Callback<KakaoData> {
             override fun onResponse(call: Call<KakaoData>, response: Response<KakaoData>) {
-                Log.d(TAG, "통신 성공")
+                Log.d(TAG, "communication success")
                 addItems(response.body())
             }
 
             override fun onFailure(call: Call<KakaoData>, t: Throwable) {
-                Log.d(TAG, "에러 : " + t.message)
+                Log.d(TAG, "error : " + t.message)
             }
         })
     }
@@ -138,8 +160,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
     private fun addItems(searchResult: KakaoData?) {
         if (!searchResult?.documents.isNullOrEmpty()) {
-            //검색결과있음
-            modelList.clear()
+            // Search results available
             for (document in searchResult!!.documents) {
                 Log.d(TAG, "DepartRegionFragment - addItems() called")
                 val item = MyModel(document.address.region_1depth_name,
@@ -148,5 +169,17 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                 myRecyclerAdapter.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
+    override fun onDestroyView() {
+        mBinding = null
+        modelList.clear()
+        keyword = ""
+        super.onDestroyView()
     }
 }

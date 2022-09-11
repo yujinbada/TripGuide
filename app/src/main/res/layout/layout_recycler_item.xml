@@ -15,7 +15,7 @@
         >
 
         <TextView
-            android:id="@+id/region_1depth_txt"
+            android:id="@+id/region1depthtxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="경북"
@@ -24,7 +24,7 @@
             android:layout_gravity="center_vertical"
             />
         <TextView
-            android:id="@+id/region_2depth_txt"
+            android:id="@+id/region2depthtxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="경주"

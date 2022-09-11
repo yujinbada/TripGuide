@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/departure_how"
+        android:id="@+id/departurehow"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -49,7 +49,7 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/departure_car"
+            android:id="@+id/departurecar"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -57,11 +57,13 @@
             android:text="자가용 / 렌트카"
             android:textAlignment="center"
             android:textSize="35dp"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/departure_public"
+            android:id="@+id/departurepublic"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -69,6 +71,8 @@
             android:text="대중교통"
             android:textAlignment="center"
             android:textSize="35dp"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
@@ -76,7 +80,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/trans_constraintLayout2"
+        android:id="@+id/transconstraintLayout2"
         android:layout_width="331dp"
         android:layout_height="364dp"
         android:layout_marginTop="20dp"
@@ -84,7 +88,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/departure_how">
+        app:layout_constraintTop_toBottomOf="@+id/departurehow">
 
         <TextView
             android:id="@+id/textView4"
@@ -112,7 +116,7 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/trans_chip2_3"
+                android:id="@+id/transchip23"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -124,7 +128,7 @@
                 app:chipStartPadding="10dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/trans_chip2_4"
+                android:id="@+id/transchip24"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -140,7 +144,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/next_btn22"
+        android:id="@+id/nextbtn22"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"
@@ -152,7 +156,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/before_btn22"
+        android:id="@+id/beforebtn22"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"

@@ -26,7 +26,7 @@
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_menu"
+            android:id="@+id/btnmenu"
             android:layout_width="35dp"
             android:layout_height="50dp"
             android:layout_marginStart="240dp"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_plan"
+        android:id="@+id/btnplan"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@drawable/planbg"
@@ -60,7 +60,7 @@
         app:layout_constraintVertical_bias="0.016" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_recentplan"
+        android:id="@+id/btnrecentplan"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginBottom="492dp"
@@ -88,7 +88,7 @@
         app:layout_constraintVertical_bias="0.36" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_korea"
+        android:id="@+id/btnkorea"
         android:layout_width="178dp"
         android:layout_height="141dp"
         android:layout_marginStart="16dp"
@@ -105,7 +105,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_overseas"
+        android:id="@+id/btnoverseas"
         android:layout_width="178dp"
         android:layout_height="141dp"
         android:layout_marginStart="216dp"

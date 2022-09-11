@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/arrival_how"
+        android:id="@+id/arrivalhow"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -47,37 +47,43 @@
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/arrival_car"
+            android:id="@+id/arrivalcar"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="자가용 / 렌트카"
             android:textAlignment="center"
             android:textSize="35dp"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:checked="false"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/arrival_public"
+            android:id="@+id/arrivalpublic"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="대중교통"
             android:textAlignment="center"
             android:textSize="35dp"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:checked="false"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/arrival_plane"
+            android:id="@+id/arrivalplane"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="비행기 / 기차"
             android:textAlignment="center"
             android:textSize="35dp"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:checked="false"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
@@ -87,14 +93,14 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/trans_constraintLayout"
+        android:id="@+id/transconstraintLayout"
         android:layout_width="322dp"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/arrival_how"
+        app:layout_constraintTop_toBottomOf="@+id/arrivalhow"
         >
 
         <TextView
@@ -121,32 +127,34 @@
             android:textColor="@color/black"
             android:textSize="40dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/arrive_timepicker"
+            app:layout_constraintEnd_toStartOf="@+id/arrivetimepicker"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <TimePicker
-            android:id="@+id/depart_timepicker"
+            android:id="@+id/departtimepicker"
             android:layout_width="240dp"
             android:layout_height="109dp"
             android:layout_marginTop="20dp"
             android:timePickerMode="spinner"
+            android:numbersTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <TimePicker
-            android:id="@+id/arrive_timepicker"
+            android:id="@+id/arrivetimepicker"
             android:layout_width="240dp"
             android:layout_height="109dp"
             android:layout_marginTop="12dp"
             android:timePickerMode="spinner"
+            android:numbersTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/depart_timepicker" />
+            app:layout_constraintTop_toBottomOf="@+id/departtimepicker" />
 
         <TextView
             android:id="@+id/textView5"
@@ -159,7 +167,7 @@
             android:textColor="@color/black"
             android:textSize="40dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/depart_timepicker"
+            app:layout_constraintEnd_toStartOf="@+id/departtimepicker"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -168,7 +176,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/next_btn2"
+        android:id="@+id/nextbtn2"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"
@@ -180,7 +188,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/before_btn2"
+        android:id="@+id/beforebtn2"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"

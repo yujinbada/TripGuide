@@ -15,11 +15,12 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/trip_with"
+        app:layout_constraintTop_toBottomOf="@+id/tripwith"
         app:layout_constraintVertical_bias="0.079" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -44,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:hint="여행 일정 이름을 만들어주세요!"
+        android:textColorHint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -60,6 +62,7 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
@@ -68,12 +71,13 @@
         app:layout_constraintVertical_bias="0.029" />
 
     <TextView
-        android:id="@+id/view_depart"
+        android:id="@+id/viewdepart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
+
         android:text="출발지"
         android:textSize="30dp"
+        android:textColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -82,18 +86,19 @@
         app:layout_constraintVertical_bias="0.054" />
 
     <TextView
-        android:id="@+id/view_arrive"
+        android:id="@+id/viewarrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="도착지"
+        android:textColor="@color/gray"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textView01"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintVertical_bias="0.054" />
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -101,12 +106,11 @@
         android:layout_height="30dp"
         android:src="@drawable/next"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/view_arrive"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toEndOf="@+id/view_depart"
+        app:layout_constraintEnd_toStartOf="@+id/viewarrive"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toEndOf="@+id/viewdepart"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.201" />
-
+        app:layout_constraintVertical_bias="0.197" />
 
     <TextView
         android:id="@+id/textView04"
@@ -118,13 +122,14 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/view_depart" />
+        app:layout_constraintTop_toBottomOf="@+id/viewdepart" />
 
     <TextView
-        android:id="@+id/date_range_view"
+        android:id="@+id/daterangeview"
         android:layout_width="327dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
@@ -149,15 +154,16 @@
         android:textAllCaps="false"
         android:textSize="16dp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/date_range_view"
+        app:layout_constraintTop_toBottomOf="@+id/daterangeview"
         app:layout_constraintVertical_bias="0.071" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/trip_with"
+        android:id="@+id/tripwith"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -172,6 +178,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/alone"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="혼자서" />
@@ -179,6 +187,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/couple"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="연인과" />
@@ -186,6 +196,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/family"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가족과" />
@@ -193,6 +205,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/over5"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5인이상" />
@@ -200,7 +214,7 @@
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/trip_style"
+        android:id="@+id/tripstyle"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -215,6 +229,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/sns"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SNS 핫플레이스" />
@@ -222,6 +238,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/nature"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="자연 친화적" />
@@ -229,6 +247,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/activity"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="액티비티" />
@@ -236,6 +256,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/art"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="예술 / 공연" />
@@ -243,6 +265,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/culture"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="전통 문화" />
@@ -250,6 +274,8 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/cafe"
+            android:textColor="@color/black"
+            android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카페는 필수" />
@@ -257,7 +283,7 @@
     </com.google.android.material.chip.ChipGroup>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/next_btn"
+        android:id="@+id/nextbtn"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"
@@ -269,7 +295,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/before_btn"
+        android:id="@+id/beforebtn"
         android:layout_width="84dp"
         android:layout_height="67dp"
         android:layout_marginBottom="28dp"

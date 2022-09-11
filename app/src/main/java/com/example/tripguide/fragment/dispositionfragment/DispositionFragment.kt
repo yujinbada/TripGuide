@@ -1,3 +1,7 @@
+/*
+ This fragment appears when you click the "Create travel itinerary" button in the MainFragment,
+ and receives the most basic travel information.
+*/
 package com.example.tripguide.fragment.dispositionfragment
 
 
@@ -13,11 +17,11 @@ import androidx.fragment.app.setFragmentResultListener
 import com.example.tripguide.R
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.android.synthetic.main.fragment_disposition.*
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import com.example.tripguide.MainActivity
 import com.example.tripguide.TripGuide
+import com.example.tripguide.databinding.FragmentDispositionBinding
 import com.example.tripguide.fragment.fbAuth
 import com.example.tripguide.fragment.fbFirestore
 import java.text.SimpleDateFormat
@@ -25,15 +29,19 @@ import java.util.*
 
 
 class DispositionFragment : Fragment(), View.OnClickListener {
+    // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
 
+    private var mBinding: FragmentDispositionBinding? = null
+    private val binding get() = mBinding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_disposition, container, false)
+        mBinding = FragmentDispositionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,16 +52,17 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         calendar.add(Calendar.DATE, +1)
         val tomorrow = calendar.timeInMillis // 내일
         val dataFormat = SimpleDateFormat("M월 d일")
-        date_range_view.text = "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}"
+        binding.daterangeview.text = "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}"
 
+        binding.viewdepart.setOnClickListener(this)
+        binding.viewarrive.setOnClickListener(this)
+        binding.daterangeview.setOnClickListener(this)
+        binding.nextbtn.setOnClickListener(this)
+        binding.beforebtn.setOnClickListener(this)
 
-        view_depart.setOnClickListener(this)
-        view_arrive.setOnClickListener(this)
-        date_range_view.setOnClickListener(this)
-        next_btn.setOnClickListener(this)
-        before_btn.setOnClickListener(this)
 
     }
+
 
 
     override fun onClick(v: View?) {
@@ -61,39 +70,38 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         userInfo.uid = fbAuth?.uid
         userInfo.userId = fbAuth?.currentUser?.email
         userInfo.timestamp = System.currentTimeMillis()
-        userInfo.tripName = tripName.text.toString()
-        userInfo.departure = view_depart.text.toString()
-        userInfo.arrival = view_arrive.text.toString()
-        userInfo.date = date_range_view.text.toString()
-        userInfo.with = trip_with.checkedChipId.toString()
-        userInfo.style = trip_style.checkedChipId.toString()
+        userInfo.tripName = binding.tripName.text.toString()
+        userInfo.departure = binding.viewdepart.text.toString()
+        userInfo.arrival = binding.viewarrive.text.toString()
+        userInfo.date = binding.daterangeview.text.toString()
+        userInfo.with = binding.tripwith.checkedChipId.toString()
+        userInfo.style = binding.tripstyle.checkedChipId.toString()
 
         fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
 
-
         when(v?.id) {
-            R.id.view_depart -> {
+            R.id.viewdepart -> {
                 mainActivity.changeFragment(2)
                 Log.d(TAG, "출발지 입력으로 이동")
                 setFragmentResultListener("requestKey") { key, bundle ->
                     val result = bundle.getString("bundleKey")
-                    view_depart.text = result
+                    binding.viewdepart.text = result
                 }
                 val hint = "어디에서 여행을 시작하세요?"
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
             }
-            R.id.view_arrive -> {
+            R.id.viewarrive -> {
                 mainActivity.changeFragment(2)
                 Log.d(TAG, "도착지 입력으로 이동")
                 setFragmentResultListener("requestKey") { key, bundle ->
                     val result = bundle.getString("bundleKey")
-                    view_arrive.text = result
+                    binding.viewarrive.text = result
                 }
                 val hint = "어디로 여행를 가시나요?"
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
 
             }
-            R.id.date_range_view -> {
+            R.id.daterangeview -> {
                 val dateRangePicker =
                     MaterialDatePicker.Builder.dateRangePicker()
                         .setTitleText("검색 기간을 골라주세요")
@@ -114,27 +122,31 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                     calendar.timeInMillis = selection?.second ?: 0
                     val endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
 
-                    date_range_view.text = dateRangePicker.headerText
+                    binding.daterangeview.text = dateRangePicker.headerText
 
                 }
             }
-            R.id.next_btn -> {
+            R.id.nextbtn -> {
                 mainActivity.changeFragment(5)
                 var userInfo = TripGuide()
                 userInfo.uid = fbAuth?.uid
                 userInfo.userId = fbAuth?.currentUser?.email
                 userInfo.timestamp = System.currentTimeMillis()
-                userInfo.tripName = tripName.text.toString()
-                userInfo.departure = view_depart.text.toString()
-                userInfo.arrival = view_arrive.text.toString()
-                userInfo.date = date_range_view.text.toString()
+                userInfo.tripName = binding.tripName.text.toString()
+                userInfo.departure = binding.viewdepart.text.toString()
+                userInfo.arrival = binding.viewarrive.text.toString()
+                userInfo.date = binding.daterangeview.text.toString()
 
                 fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
             }
-            R.id.before_btn -> {
+            R.id.beforebtn -> {
                 mainActivity.changeFragment(6)
             }
         }
-
     }
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
+    }
+
 }

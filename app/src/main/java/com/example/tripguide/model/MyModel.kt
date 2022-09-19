@@ -27,8 +27,4 @@ data class Tour (
 data class SelectItem (
     val firstimage: String?,
     val title: String? ) : Parcelable
-{
-    override fun toString(): String {
-        return "firstimage:$firstimage, title:$title"
-    }
-}
+

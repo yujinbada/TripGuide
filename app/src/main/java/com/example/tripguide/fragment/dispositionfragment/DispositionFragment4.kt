@@ -1,10 +1,8 @@
 package com.example.tripguide.fragment.dispositionfragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -52,8 +50,8 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
-    private val chipList: ArrayList<SelectItem> = arrayListOf<SelectItem>()
-
+    private var chipList: ArrayList<SelectItem> = arrayListOf<SelectItem>()
+    var count = 0
     private var mBinding: FragmentDisposition4Binding? = null
     private val binding get() = mBinding!!
     override fun onCreateView(
@@ -95,26 +93,23 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         // 여행지 클릭 이벤트
         tourAdapter.setItemClickListener(object : TourAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-
                 Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
                 var selecttitle = arrayList[position].title.toString()
                 var selectimage = arrayList[position].firstimage.toString()
                 chipList.add(SelectItem(selectimage, selecttitle))
 
-
                 binding.chipgroup.addView(Chip(activity).apply {
-                    text = arrayList[position].title // text 세팅
-                    isCloseIconVisible = true // x 버튼 보이게 하기
+                    text = arrayList[position].title // text setting
+                    isCloseIconVisible = true // show 'x' button
                     setOnCloseIconClickListener {
                         binding.chipgroup.removeView(this)
                         chipList.remove(SelectItem(selectimage, selecttitle))
-                    } // x버튼 눌렀을 때 삭제되기
+                    } // delete when we clicked 'x' button
                 })
+
                 makeButton()
             }
         })
-
-
     }
 
     // xml 파싱하기
@@ -230,30 +225,33 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     }
     // 동적 버튼 생성
     fun makeButton() {
-        val dynamicButton = Button(activity).apply {
-            width = 50
-            height = 50
-            val Ip = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            Ip.setMargins(20, 20, 20, 20)
-            layoutParams = Ip
-            text = "선택완료"
+        if (count == 0) {
+            val dynamicButton = Button(activity).apply {
+                width = 1000
+                height = 50
+                val Ip = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                Ip.setMargins(20, 20, 20, 20)
+                layoutParams = Ip
+                text = "선택완료"
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                setBackgroundColor(resources.getColor(R.color.sky))
 
-            setBackgroundColor(resources.getColor(R.color.sky))
-
-            // 버튼 클릭 이벤트
-            setOnClickListener {
-                Log.d(TAG, "DispositionFragment4 - 검색완료 called")
-                val intent: Intent = Intent(context, DispositionFragment3::class.java)
-                intent.putParcelableArrayListExtra("Data", chipList)
-                startActivity(intent)
-                mainActivity.changeFragment(11)
-                DispositionFragment3().createcardview()
+                // 버튼 클릭 이벤트
+                setOnClickListener {
+                    Log.d(TAG, "DispositionFragment4 - 검색완료 called")
+                    val f: Fragment = DispositionFragment3()
+                    val bundle = Bundle()
+                    bundle.putParcelableArrayList("Data", chipList)
+                    f.arguments = bundle
+                    mainActivity.changeFragment(11)
+                }
             }
+            binding.linearLayout2.addView(dynamicButton)
         }
-        binding.linearLayout.addView(dynamicButton)
+        count++
     }
 
     override fun onDestroyView() {

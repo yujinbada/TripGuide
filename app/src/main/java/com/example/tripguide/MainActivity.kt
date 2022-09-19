@@ -204,6 +204,7 @@ class MainActivity() : AppCompatActivity() {
                     .remove(dispositionFragment4)
                     .show(dispositionFragment3)
                     .commit()
+                dispositionFragment3.signal()
             }
         }
     }

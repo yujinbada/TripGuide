@@ -18,7 +18,7 @@ import com.example.tripguide.R
 import com.example.tripguide.databinding.FragmentDisposition4Binding
 import com.example.tripguide.model.SelectItem
 import com.example.tripguide.model.Tour
-import com.example.tripguide.recyclerview.TourAdapter
+import com.example.tripguide.adapter.TourAdapter
 import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.chip.Chip
@@ -39,6 +39,8 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+    private var mBinding: FragmentDisposition4Binding? = null
+    private val binding get() = mBinding!!
 
     val mobile_os = "AND"
     val mobile_app = "TripGuide"
@@ -52,8 +54,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     private val tourAdapter = TourAdapter(arrayList)
     private var chipList: ArrayList<SelectItem> = arrayListOf<SelectItem>()
     var count = 0
-    private var mBinding: FragmentDisposition4Binding? = null
-    private val binding get() = mBinding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -106,7 +107,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                         chipList.remove(SelectItem(selectimage, selecttitle))
                     } // delete when we clicked 'x' button
                 })
-
                 makeButton()
             }
         })

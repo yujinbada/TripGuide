@@ -1,4 +1,4 @@
-package com.example.tripguide.recyclerview
+package com.example.tripguide.adapter
 
 import android.util.Log
 import android.view.LayoutInflater

@@ -121,9 +121,10 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
     }
 
     fun createView(index: LinearLayout) {
-        val bundle = activity?.intent?.extras
         Log.d(TAG, "DispositionFragment3 - createView() called")
+        val bundle = activity?.intent?.extras
         val data = bundle?.getParcelableArrayList<SelectItem>("Data") as ArrayList<SelectItem>?
+
         if (data != null){
             for (i in 0 until data!!.size) {
                 val layoutParams = LinearLayout.LayoutParams(
@@ -155,7 +156,6 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
         else Log.d(TAG, "DispositionFragment3 - createView() Error")
 
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -99,7 +99,7 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
 
             }
             R.id.beforebtn3 -> {
-
+                mainActivity.changeFragment(100)
             }
         }
 

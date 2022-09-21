@@ -198,6 +198,13 @@ class MainActivity() : AppCompatActivity() {
                     .addToBackStack(null)
                     .commit()
             }
+            100 -> {
+                Log.d(TAG, "DispositionFragment3 -> DispositionFragment2")
+                transaction
+                    .remove(dispositionFragment3)
+                    .show(dispositionFragment2)
+                    .commit()
+            }
             11 -> {
                 Log.d(TAG, "DispositionFragment4 -> DispositionFragment3")
                 transaction

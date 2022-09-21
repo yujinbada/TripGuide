@@ -23,10 +23,9 @@
             android:id="@+id/textFieldregion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="가고 싶은 관광지를 선택해 주세요!"
             android:gravity="center"
-            app:endIconMode="clear_text"
-            >
+            android:hint="가고 싶은 관광지를 선택해 주세요!"
+            app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextregion"

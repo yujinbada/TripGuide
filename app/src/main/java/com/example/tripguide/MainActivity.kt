@@ -39,6 +39,7 @@ class MainActivity() : AppCompatActivity() {
     private val dispositionFragment22 = DispositionFragment22()
     private val dispositionFragment3 = DispositionFragment3()
     private val dispositionFragment4 = DispositionFragment4()
+    private val dispositionFragment5 = DispositionFragment5()
 
 //    lateinit var myViewModel: MyViewModel
 
@@ -108,6 +109,7 @@ class MainActivity() : AppCompatActivity() {
                         R.anim.horizon_exit)
                     .add(R.id.fragment_container_view, departRegionFragment, "depart")
                     .hide(dispositionFragment)
+                    .disallowAddToBackStack()
                     .commit()
             }
 
@@ -120,6 +122,7 @@ class MainActivity() : AppCompatActivity() {
                         R.anim.none)
                     .remove(departRegionFragment)
                     .show(dispositionFragment)
+                    .disallowAddToBackStack()
                     .commit()
             }
             4 -> {
@@ -205,6 +208,26 @@ class MainActivity() : AppCompatActivity() {
                     .show(dispositionFragment3)
                     .commit()
                 dispositionFragment3.signal()
+            }
+            13 -> {
+                Log.d(TAG, "DispositionFragment3 -> DispositionFragment5")
+                transaction
+                    .setCustomAnimations(R.anim.horizon_enter,
+                        R.anim.none,
+                        R.anim.none,
+                        R.anim.horizon_exit)
+                    .add(R.id.fragment_container_view, dispositionFragment5)
+                    .hide(dispositionFragment3)
+                    .addToBackStack(null)
+                    .commit()
+
+            }
+            14 -> {
+                Log.d(TAG, "DispositionFragment3 -> DispositionFragment2")
+                transaction
+                    .remove(dispositionFragment3)
+                    .show(dispositionFragment2)
+                    .commit()
             }
         }
     }

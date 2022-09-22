@@ -26,12 +26,12 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="여행지까지 어떻게 가시나요?"
-        android:textSize="27dp"
         android:textColor="@color/black"
+        android:textSize="25dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,9 +39,9 @@
         android:id="@+id/arrivalhow"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:singleSelection="true">
@@ -51,12 +51,12 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="자가용 / 렌트카"
-            android:textAlignment="center"
-            android:textSize="35dp"
-            android:textColor="@color/black"
             android:background="@color/gray"
             android:checked="false"
+            android:text="자가용 / 렌트카"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="35dp"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
@@ -65,12 +65,12 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="대중교통"
-            android:textAlignment="center"
-            android:textSize="35dp"
-            android:textColor="@color/black"
             android:background="@color/gray"
             android:checked="false"
+            android:text="대중교통"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="35dp"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
@@ -79,29 +79,28 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="비행기 / 기차"
-            android:textAlignment="center"
-            android:textSize="35dp"
-            android:textColor="@color/black"
             android:background="@color/gray"
             android:checked="false"
+            android:text="비행기 / 기차"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="35dp"
             app:chipEndPadding="10dp"
             app:chipStartPadding="10dp" />
 
 
     </com.google.android.material.chip.ChipGroup>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/transconstraintLayout"
         android:layout_width="322dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/arrivalhow"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/arrivalhow">
 
         <TextView
             android:id="@+id/textView4"
@@ -110,8 +109,8 @@
             android:layout_marginTop="16dp"
             android:text="비행기 / 기차의 \n출발 시간과 도착 시간을 \n입력해 주세요."
             android:textAlignment="center"
-            android:textSize="27dp"
             android:textColor="@color/black"
+            android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.567"
             app:layout_constraintStart_toStartOf="parent"
@@ -137,8 +136,10 @@
             android:layout_width="240dp"
             android:layout_height="109dp"
             android:layout_marginTop="20dp"
-            android:timePickerMode="spinner"
+            android:background="#82B1FF"
+            android:headerBackground="@color/sky"
             android:numbersTextColor="@color/black"
+            android:timePickerMode="spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,8 +150,10 @@
             android:layout_width="240dp"
             android:layout_height="109dp"
             android:layout_marginTop="12dp"
-            android:timePickerMode="spinner"
+            android:background="#82B1FF"
+            android:headerBackground="@color/sky"
             android:numbersTextColor="@color/black"
+            android:timePickerMode="spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -175,29 +178,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextbtn2"
-        android:layout_width="84dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/ic_baseline_navigate_next_24"
         android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/beforebtn2"
-        android:layout_width="84dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/ic_baseline_navigate_before_24"
         android:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

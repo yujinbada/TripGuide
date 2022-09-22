@@ -28,9 +28,7 @@ class DispositionFragment5 : Fragment() {
     }
     private var mBinding: FragmentDisposition5Binding? = null
     private val binding get() = mBinding!!
-
-    private lateinit var viewPager: ViewPager2
-    private lateinit var tabLayout: TabLayout
+    private val tabTextList = listOf("관광지", "식당 / 카페", "숙소")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,35 +36,19 @@ class DispositionFragment5 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = FragmentDisposition5Binding.inflate(inflater, container, false)
-        viewPager = view!!.findViewById(R.id.viewPager)
-        tabLayout = view!!.findViewById(R.id.tabLayout)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.viewPager.adapter = RecommendAdapter(requireActivity())
 
-        val recommendAdapter = RecommendAdapter(requireActivity())
-        // 3개의 Fragment Add
-        recommendAdapter.addFragment(RecommendFragment1())
-        recommendAdapter.addFragment(RecommendFragment2())
-        recommendAdapter.addFragment(RecommendFragment3())
-        // Adapter
-        viewPager.adapter = recommendAdapter
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                Log.e("ViewPagerFragment", "Page ${position+1}")
-            }
-        })
-
-        // TabLayout attach
-        TabLayoutMediator(tabLayout, viewPager){ tab, position ->
-            when(position){
-                1 -> tab.text = "관광지"
-                2 -> tab.text = "식당 / 카페"
-                3 -> tab.text = "숙소"
-            }
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
+            tab.text = tabTextList[pos]
         }.attach()
+
     }
+
+
+
 }

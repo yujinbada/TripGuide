@@ -28,3 +28,8 @@ data class SelectItem (
     val firstimage: String?,
     val title: String? ) : Parcelable
 
+data class RecommendTtem (
+    val recommendImage : String? = null,
+    val recommendTitle : String? = null,
+    val recommendContent: String? = null )
+

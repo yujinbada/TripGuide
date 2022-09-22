@@ -178,7 +178,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/alone"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/couple"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/family"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/over5"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/sns"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -238,7 +238,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/nature"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -247,7 +247,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/activity"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -256,7 +256,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/art"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -265,7 +265,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/culture"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -274,7 +274,7 @@
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/cafe"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -284,8 +284,9 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextbtn"
-        android:layout_width="84dp"
-        android:layout_height="67dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="28dp"
         android:background="@drawable/ic_baseline_navigate_next_24"
         android:backgroundTint="@color/black"
@@ -296,8 +297,9 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/beforebtn"
-        android:layout_width="84dp"
-        android:layout_height="67dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="28dp"
         android:background="@drawable/ic_baseline_navigate_before_24"
         android:backgroundTint="@color/black"

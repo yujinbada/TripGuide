@@ -46,6 +46,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     val mobile_app = "TripGuide"
     var contentTypeId = 12
     val type = "json"
+    val arrange = "B"
     val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
     val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
 
@@ -218,6 +219,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 "?serviceKey=" + serviceKey +
                 "&MobileApp=" + mobile_app +
                 "&MobileOS=" + mobile_os +
+                "&arrange=" + arrange +
                 "&contentTypeId=" + contentTypeId +
                 "&keyword=" + keyword
 

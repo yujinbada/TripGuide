@@ -96,10 +96,10 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
                 mainActivity.changeFragment(10)
             }
             R.id.nextbtn3 -> {
-
+                mainActivity.changeFragment(13)
             }
             R.id.beforebtn3 -> {
-
+                mainActivity.changeFragment(14)
             }
         }
 

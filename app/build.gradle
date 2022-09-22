@@ -81,4 +81,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    compile files('libs/libDaumMapAndroid.jar')
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
 }

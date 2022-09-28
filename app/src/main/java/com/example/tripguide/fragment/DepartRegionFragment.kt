@@ -121,6 +121,9 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     val result = modelList[position].secondregion
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
+                modelList[position].x
+                modelList[position].y
+
                 mainActivity.changeFragment(3)
             }
         })
@@ -160,7 +163,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             for (document in searchResult!!.documents) {
                 Log.d(TAG, "DepartRegionFragment - addItems() called")
                 val item = MyModel(document.address.region_1depth_name,
-                    document.address.region_2depth_name)
+                    document.address.region_2depth_name, document.x, document.y)
                 modelList.add(item)
                 myRecyclerAdapter.notifyDataSetChanged()
             }

@@ -70,7 +70,6 @@ class MainActivity() : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
         }
-
     }
 //    fun addFragment(a: Fragment, b: Fragment) {
 //        Log.d(TAG, "$a -> $b")
@@ -207,7 +206,6 @@ class MainActivity() : AppCompatActivity() {
                     .remove(dispositionFragment4)
                     .show(dispositionFragment3)
                     .commit()
-                dispositionFragment3.signal()
             }
             13 -> {
                 Log.d(TAG, "DispositionFragment3 -> DispositionFragment5")

@@ -6,7 +6,10 @@ import kotlinx.parcelize.Parcelize
 
 class MyModel(
     val firstregion: String? = null,
-    val secondregion: String? = null)
+    val secondregion: String? = null,
+    val x: String? = null,
+    val y: String? = null
+)
 
 data class FirebaseClass(
     var name : String? = null,
@@ -20,16 +23,21 @@ data class FirebaseClass(
 data class Tour (
     val firstimage : String? = null,
     val title : String? = null,
-    val addr1 : String? = null,
-    val readcount : String? = null)
+    val addr1 : String? = null
+)
 
-@Parcelize
 data class SelectItem (
     val firstimage: String?,
-    val title: String? ) : Parcelable
+    val title: String?,
+    val type: Int?)
 
-data class RecommendTtem (
+data class RecommendItem (
     val recommendImage : String? = null,
     val recommendTitle : String? = null,
-    val recommendContent: String? = null )
+    val tourOverview : String? = null
+)
+
+data class RecommendTourDetail (
+    val tourOverview : String? = null
+)
 

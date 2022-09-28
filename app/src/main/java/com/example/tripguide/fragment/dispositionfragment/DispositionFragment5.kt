@@ -11,7 +11,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.adapter.RecommendAdapter
+import com.example.tripguide.databinding.FragmentDisposition4Binding
 import com.example.tripguide.databinding.FragmentDisposition5Binding
+import com.example.tripguide.databinding.FragmentFirstBinding
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.recommend.RecommendFragment1
 import com.example.tripguide.fragment.recommend.RecommendFragment2

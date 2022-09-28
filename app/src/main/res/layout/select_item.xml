@@ -6,8 +6,8 @@
     >
 
     <LinearLayout
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:orientation="vertical">
         <FrameLayout
             android:layout_width="wrap_content"
@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@+id/selectimg"
-                android:layout_width="match_parent"
-                android:layout_height="92dp"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
                 android:src="@drawable/ic_launcher_foreground"
                 />
         </FrameLayout>

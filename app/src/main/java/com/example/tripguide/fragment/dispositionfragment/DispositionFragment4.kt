@@ -12,16 +12,21 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.databinding.FragmentDisposition4Binding
 import com.example.tripguide.model.SelectItem
-import com.example.tripguide.model.Tour
+import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.adapter.TourAdapter
+import com.example.tripguide.model.SelectViewModel
+import com.example.tripguide.model.Tour
 import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.chip.Chip
+import okhttp3.internal.notify
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.BufferedReader
@@ -41,10 +46,11 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     }
     private var mBinding: FragmentDisposition4Binding? = null
     private val binding get() = mBinding!!
+    private lateinit var viewModel: SelectViewModel
 
     val mobile_os = "AND"
     val mobile_app = "TripGuide"
-    var contentTypeId = 12
+    var contentTypeId : Int? = null
     val type = "json"
     val arrange = "B"
     val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
@@ -53,28 +59,35 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     private var arrayList = ArrayList<Tour>()
     private val tourAdapter = TourAdapter(arrayList)
-    private var chipList: ArrayList<SelectItem> = arrayListOf<SelectItem>()
     var count = 0
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener("numberrequestKey") { key, bundle ->
+            val result = bundle.getInt("numberbundleKey")
+            contentTypeId = result
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        Log.d(TAG, "DispositionFragment4 - onCreateView() called")
+        // 1. View Model 설정
         mBinding = FragmentDisposition4Binding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(SelectViewModel::class.java)
 
         setFragmentResultListener("hintrequestKey") { key, bundle ->
             val hint = bundle.getString("hintbundleKey")
             binding.textFieldregion.hint = hint
         }
 
-        setFragmentResultListener("typerequestKey") { key, bundle ->
-//            contentTypeId = bundle.getInt("typebundleKey")
-        }
+
 
         binding.regionrecyclerview.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,
@@ -86,8 +99,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 Log.d(Constants.TAG, "여행지 검색")
                 keywordParser()
-                Log.d(TAG, "검색완료")
-
             }
 
             false
@@ -98,14 +109,14 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
                 var selecttitle = arrayList[position].title.toString()
                 var selectimage = arrayList[position].firstimage.toString()
-                chipList.add(SelectItem(selectimage, selecttitle))
+                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId))
 
                 binding.chipgroup.addView(Chip(activity).apply {
                     text = arrayList[position].title // text setting
                     isCloseIconVisible = true // show 'x' button
                     setOnCloseIconClickListener {
                         binding.chipgroup.removeView(this)
-                        chipList.remove(SelectItem(selectimage, selecttitle))
+                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId))
                     } // delete when we clicked 'x' button
                 })
                 makeButton()
@@ -144,12 +155,10 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 var tagImage = false   // 이미지 태그
                 var tagTitle = false   // 제목 태그
                 var tagAddr1 = false   // 주소 태그
-                var tagCount = false   // 조회수 태그
 
                 var firstimage = ""    // 이미지
                 var title = ""         // 제목
                 var addr1 = ""         // 주소
-                var readcount = ""     // 조회수
 
                 var factory = XmlPullParserFactory.newInstance()    // 파서 생성
                 factory.setNamespaceAware(true)                     // 파서 설정
@@ -167,7 +176,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                         if (tagName.equals("firstimage")) tagImage = true
                         else if (tagName.equals("title")) tagTitle = true
                         else if (tagName.equals("addr1")) tagAddr1 = true
-                        else if (tagName.equals("readcount")) tagCount = true
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagImage) {         // 이미지
@@ -179,7 +187,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             tagTitle = false
 
                             // 기관명까지 다 읽으면 하나의 데이터 다 읽은 것임
-                            var item = Tour(firstimage, title, addr1, readcount)
+                            var item = Tour(firstimage, title, addr1)
                             arrayList.add(item)
                             tourAdapter.notifyDataSetChanged()
                         }
@@ -187,17 +195,10 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             addr1 = xpp.text
                             tagAddr1 = false
                         }
-                        else if (tagCount) {
-                            readcount = xpp.text
-                            tagCount = false
-                        }
                     }
                     if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
-                arrayList.sortBy { it.readcount }
-
-
             }
         }
 
@@ -243,11 +244,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
                 // 버튼 클릭 이벤트
                 setOnClickListener {
-                    Log.d(TAG, "DispositionFragment4 - 검색완료 called")
-                    val f: Fragment = DispositionFragment3()
-                    val bundle = Bundle()
-                    bundle.putParcelableArrayList("Data", chipList)
-                    f.arguments = bundle
                     mainActivity.changeFragment(11)
                 }
             }

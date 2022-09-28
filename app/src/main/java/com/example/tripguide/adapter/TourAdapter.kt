@@ -28,32 +28,30 @@ class TourAdapter(var items : ArrayList<Tour>) : RecyclerView.Adapter<TourAdapte
         holder.tvAddr1.text = item.addr1
 
         Glide.with(holder.imgFirstImage)
-                .load(item.firstimage)
-                .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
-                .into(holder.imgFirstImage)
+            .load(item.firstimage)
+            .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
+            .into(holder.imgFirstImage)
 
         holder.itemView.setOnClickListener {
-            clickListener.onClick(it, position)
+            itemClickListener.onClick(it, position)
         }
     }
 
     // 뷰 홀더 설정
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-            val imgFirstImage : ImageView = itemView.findViewById(R.id.imgfirst)    // 이미지
-            val tvTitle : TextView = itemView.findViewById(R.id.tvTitle)                 // 제목
-            val tvAddr1 : TextView = itemView.findViewById(R.id.tvAddr1)                 // 주소
+        val imgFirstImage : ImageView = itemView.findViewById(R.id.imgfirst)    // 이미지
+        val tvTitle : TextView = itemView.findViewById(R.id.tvTitle)                 // 제목
+        val tvAddr1 : TextView = itemView.findViewById(R.id.tvAddr1)                 // 주소
     }
 
     // (2) 리스너 인터페이스
     interface OnItemClickListener {
         fun onClick(v: View, position: Int)
     }
-
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.clickListener = onItemClickListener
+        this.itemClickListener = onItemClickListener
     }
-    private lateinit var clickListener : OnItemClickListener
-
-
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemClickListener : OnItemClickListener
 }

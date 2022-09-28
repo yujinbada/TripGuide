@@ -6,6 +6,7 @@
     tools:context=".fragment.recommend.RecommendFragment1">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvrecommend1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </androidx.recyclerview.widget.RecyclerView>

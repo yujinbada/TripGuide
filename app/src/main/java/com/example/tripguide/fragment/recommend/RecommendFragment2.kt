@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.tripguide.MainActivity
-import com.example.tripguide.R
-import com.example.tripguide.databinding.FragmentDisposition4Binding
+
+import com.example.tripguide.databinding.FragmentRecommend2Binding
 
 class RecommendFragment2 : Fragment() {
     // To get the main activity's change fragment function
@@ -17,15 +17,15 @@ class RecommendFragment2 : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    private var mBinding: FragmentDisposition4Binding? = null
+    private var mBinding: FragmentRecommend2Binding? = null
     private val binding get() = mBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recommend2, container, false)
+        mBinding = FragmentRecommend2Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     fun newInstant() : RecommendFragment2

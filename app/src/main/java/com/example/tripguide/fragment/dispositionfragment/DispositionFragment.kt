@@ -66,19 +66,6 @@ class DispositionFragment : Fragment(), View.OnClickListener {
 
 
     override fun onClick(v: View?) {
-        var userInfo = TripGuide()
-        userInfo.uid = fbAuth?.uid
-        userInfo.userId = fbAuth?.currentUser?.email
-        userInfo.timestamp = System.currentTimeMillis()
-        userInfo.tripName = binding.tripName.text.toString()
-        userInfo.departure = binding.viewdepart.text.toString()
-        userInfo.arrival = binding.viewarrive.text.toString()
-        userInfo.date = binding.daterangeview.text.toString()
-        userInfo.with = binding.tripwith.checkedChipId.toString()
-        userInfo.style = binding.tripstyle.checkedChipId.toString()
-
-        fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
-
         when(v?.id) {
             R.id.viewdepart -> {
                 mainActivity.changeFragment(2)
@@ -136,8 +123,10 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 userInfo.departure = binding.viewdepart.text.toString()
                 userInfo.arrival = binding.viewarrive.text.toString()
                 userInfo.date = binding.daterangeview.text.toString()
+                userInfo.with = binding.tripwith.checkedChipId.toString()
+                userInfo.style = binding.tripstyle.checkedChipId.toString()
 
-                fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.set(userInfo)
+                fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
             }
             R.id.beforebtn -> {
                 mainActivity.changeFragment(6)

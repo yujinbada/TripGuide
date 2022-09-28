@@ -14,8 +14,12 @@
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_disposition6.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_first.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_recommend1.xml" value="0.25364583333333335" />
+        <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_recommend2.xml" value="0.25364583333333335" />
+        <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/fragment_recommend3.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/layout_recycler_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/list_item_tour.xml" value="0.25364583333333335" />
+        <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/recommend_recycler_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/Demo01/app/src/main/res/layout/select_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Work_Android/TripGuide/app/src/main/res/drawable/ic_launcher_background.xml" value="0.126" />
         <entry key="..\:/Work_Android/TripGuide/app/src/main/res/drawable/mainpage.xml" value="0.126" />
@@ -41,7 +45,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

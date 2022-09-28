@@ -14,8 +14,9 @@ data class TripGuide (var strName : String? = null,
                       var style : String? = null,
                       var arrival_how : String? = null,
                       var departure_how : String? = null,
+                      var transportation :String? = null,
                       var must_sights : String? = null,
-                      var must_restaurant : String? = null,
+                      var must_food : String? = null,
                       var must_hotel : String? = null) {
 }
 

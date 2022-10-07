@@ -25,6 +25,11 @@ import com.example.tripguide.fragment.SelectTourFragment
 import com.example.tripguide.fragment.dispositionfragment.*
 import com.example.tripguide.utils.Constants
 import com.google.common.base.CharMatcher.none
+import android.content.pm.PackageManager
+import android.util.Base64
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.security.MessageDigest
 
 
 class MainActivity() : AppCompatActivity() {
@@ -45,6 +50,7 @@ class MainActivity() : AppCompatActivity() {
 
 //    lateinit var myViewModel: MyViewModel
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "MainActivity - onCreate() called")
@@ -72,7 +78,23 @@ class MainActivity() : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
         }
+
+        try {
+            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            val signatures = info.signingInfo.apkContentsSigners
+            val md = MessageDigest.getInstance("SHA")
+            for (signature in signatures) {
+                val md: MessageDigest
+                md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val key = String(Base64.encode(md.digest(), 0))
+                Log.d("Hash key:", "!!!!!!!$key!!!!!!")
+            }
+        } catch (e: Exception) {
+            Log.e("name not found", e.toString())
+        }
     }
+
 //    fun addFragment(a: Fragment, b: Fragment) {
 //        Log.d(TAG, "$a -> $b")
 //        supportFragmentManager.beginTransaction()

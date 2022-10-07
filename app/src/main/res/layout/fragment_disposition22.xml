@@ -105,7 +105,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup3"
+            android:id="@+id/transportation"
             android:layout_width="326dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -116,7 +116,7 @@
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/transchip23"
+                android:id="@+id/transcar"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -128,7 +128,7 @@
                 app:chipStartPadding="10dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/transchip24"
+                android:id="@+id/transpublic"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

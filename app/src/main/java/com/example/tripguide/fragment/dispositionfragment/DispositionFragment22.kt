@@ -34,8 +34,8 @@ class DispositionFragment22 : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.departurecar.setOnClickListener(this)
         binding.departurepublic.setOnClickListener(this)
-        binding.transchip23.setOnClickListener(this)
-        binding.transchip24.setOnClickListener(this)
+        binding.transcar.setOnClickListener(this)
+        binding.transpublic.setOnClickListener(this)
         binding.nextbtn22.setOnClickListener(this)
         binding.beforebtn22.setOnClickListener(this)
     }
@@ -46,6 +46,7 @@ class DispositionFragment22 : Fragment(), View.OnClickListener {
         userInfo.userId = fbAuth?.currentUser?.email
         userInfo.timestamp = System.currentTimeMillis()
         userInfo.departure_how = binding.departurehow.checkedChipId.toString()
+        userInfo.transportation = binding.transportation.checkedChipId.toString()
 
         fbFirestore?.collection("departure_how")?.document(fbAuth?.uid.toString())?.set(userInfo)
 
@@ -57,14 +58,14 @@ class DispositionFragment22 : Fragment(), View.OnClickListener {
             R.id.departurepublic -> {
                 binding.transconstraintLayout2.visibility = View.VISIBLE
             }
-            R.id.transchip23 -> {
+            R.id.transcar -> {
 
             }
-            R.id.transchip24 -> {
+            R.id.transpublic -> {
 
             }
             R.id.nextbtn22 -> {
-                if ((binding.departurecar.isChecked || binding.departurepublic.isChecked) && (binding.transchip23.isChecked || binding.transchip24.isChecked)) {
+                if ((binding.departurecar.isChecked || binding.departurepublic.isChecked) && (binding.transcar.isChecked || binding.transpublic.isChecked)) {
                     mainActivity.changeFragment(8)
                 } else
                     Toast.makeText(activity, "이동수단을 선택해 주세요!", Toast.LENGTH_SHORT).show()

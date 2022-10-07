@@ -98,6 +98,13 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         var userInfo = TripGuide()
+        userInfo.uid = fbAuth?.uid
+        userInfo.userId = fbAuth?.currentUser?.email
+        userInfo.timestamp = System.currentTimeMillis()
+        userInfo.must_sights = binding.rvtour.itemDecorationCount.toString()
+        userInfo.must_food = binding.rvfood.itemDecorationCount.toString()
+        userInfo.must_hotel = binding.rvhotel.itemDecorationCount.toString()
+
         fbFirestore?.collection("must_visit_place")?.document(fbAuth?.uid.toString())?.set(userInfo)
 
 

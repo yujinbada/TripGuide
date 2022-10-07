@@ -7,7 +7,7 @@
 
     <meta-data
         android:name="com.kakao.sdk.AppKey"
-        android:value="48ad751ca72b3e49a7f746f46b40b142"/>
+        android:value="ddb1caa8bc77c6a0eb62a545fa0b5ec7"/>
 
     <application
         android:allowBackup="true"

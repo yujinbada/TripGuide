@@ -1,6 +1,7 @@
 package com.example.tripguide.fragment.dispositionfragment
 
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,8 +19,17 @@ import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.recommend.RecommendFragment1
 import com.example.tripguide.fragment.recommend.RecommendFragment2
 import com.example.tripguide.fragment.recommend.RecommendFragment3
+import com.example.tripguide.model.RecommendAreaCode
+import com.example.tripguide.model.RecommendItem
+import com.example.tripguide.utils.Constants
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.StringReader
+import java.net.URL
 
 class DispositionFragment5 : Fragment() {
     // To get the main activity's change fragment function
@@ -50,7 +60,5 @@ class DispositionFragment5 : Fragment() {
         }.attach()
 
     }
-
-
 
 }

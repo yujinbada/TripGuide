@@ -53,7 +53,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     var contentTypeId : Int? = null
     val type = "json"
     val arrange = "B"
-    val serviceUrl = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword"
+    val serviceUrl = "http://apis.data.go.kr/B551011/KorService/searchKeyword"
     val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
 
 
@@ -122,6 +122,21 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 makeButton()
             }
         })
+    }
+    fun keywordParser() {
+        Log.d(TAG, "장소 검색중")
+        val textfield = binding.textInputEditTextregion.text.toString()
+        val keyword = URLEncoder.encode(textfield)
+        // 이 url 주소 가지고 xml에서 데이터 파싱하기
+        val requstUrl = serviceUrl +
+                "?serviceKey=" + serviceKey +
+                "&MobileApp=" + mobile_app +
+                "&MobileOS=" + mobile_os +
+                "&arrange=" + arrange +
+                "&contentTypeId=" + contentTypeId +
+                "&keyword=" + keyword
+
+        fetchXML(requstUrl)
     }
 
     // xml 파싱하기
@@ -211,21 +226,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         }
     }
 
-    fun keywordParser() {
-        Log.d(TAG, "장소 검색중")
-        val textfield = binding.textInputEditTextregion.text.toString()
-        val keyword = URLEncoder.encode(textfield)
-        // 이 url 주소 가지고 xml에서 데이터 파싱하기
-        val requstUrl = serviceUrl +
-                "?serviceKey=" + serviceKey +
-                "&MobileApp=" + mobile_app +
-                "&MobileOS=" + mobile_os +
-                "&arrange=" + arrange +
-                "&contentTypeId=" + contentTypeId +
-                "&keyword=" + keyword
 
-        fetchXML(requstUrl)
-    }
     // 동적 버튼 생성
     fun makeButton() {
         if (count == 0) {

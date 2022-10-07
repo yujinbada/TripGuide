@@ -12,10 +12,14 @@ import com.example.tripguide.R
 import com.example.tripguide.model.Tour
 import com.example.tripguide.utils.Constants.TAG
 
-class TourAdapter(var items : ArrayList<Tour>) : RecyclerView.Adapter<TourAdapter.ViewHolder>() {
+class TourAdapter(var items : ArrayList<Tour>) :
+    RecyclerView.Adapter<TourAdapter.ViewHolder>() {
     // 뷰 홀더 만들어서 반환, 뷰릐 레이아웃은 list_item_tour.xml
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TourAdapter.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_tour, parent, false))
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int): TourAdapter.ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item_tour, parent, false))
     }
     // 아이템 갯수 리턴
     override fun getItemCount() = items.size
@@ -29,6 +33,7 @@ class TourAdapter(var items : ArrayList<Tour>) : RecyclerView.Adapter<TourAdapte
 
         Glide.with(holder.imgFirstImage)
             .load(item.firstimage)
+            .centerCrop()
             .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
             .into(holder.imgFirstImage)
 

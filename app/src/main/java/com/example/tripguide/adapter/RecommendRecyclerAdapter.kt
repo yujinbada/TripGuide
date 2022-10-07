@@ -8,13 +8,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.example.tripguide.R
 import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.model.SelectItem
 import com.example.tripguide.utils.Constants.TAG
 import org.w3c.dom.Text
 
-class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) : RecyclerView.Adapter<RecommendRecyclerAdapter.ViewHolder>() {
+class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) :
+    RecyclerView.Adapter<RecommendRecyclerAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -28,18 +31,20 @@ class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) : RecyclerV
 
     // 전달받은 위치의 아이템 연결
     override fun onBindViewHolder(holder: RecommendRecyclerAdapter.ViewHolder, position: Int) {
-        Log.d(TAG, "RecommendRecyclerAdapter - onBindViewHolder() called")
         val item = items[position]
-        holder.tvTitle.text = item.recommendTitle
-        holder.tvOverView.text = item.tourOverview
+        if (item.recommendTitle != null) {
+            holder.tvTitle.text = item.recommendTitle
+            holder.tvOverView.text = item.tourOverView
 
-        Glide.with(holder.imgFirstImage)
-            .load(item.recommendImage)
-            .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
-            .into(holder.imgFirstImage)
+            Glide.with(holder.imgFirstImage)
+                .load(item.recommendImage)
+                .centerCrop()
+                .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
+                .into(holder.imgFirstImage)
 
-        holder.itemView.setOnClickListener {
-            clickListener.onClick(it, position)
+            holder.itemView.setOnClickListener {
+                clickListener.onClick(it, position)
+            }
         }
     }
 

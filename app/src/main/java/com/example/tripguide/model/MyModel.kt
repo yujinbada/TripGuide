@@ -6,9 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 class MyModel(
     val firstregion: String? = null,
-    val secondregion: String? = null,
-    val x: String? = null,
-    val y: String? = null
+    val secondregion: String? = null
 )
 
 data class FirebaseClass(
@@ -34,10 +32,14 @@ data class SelectItem (
 data class RecommendItem (
     val recommendImage : String? = null,
     val recommendTitle : String? = null,
-    val tourOverview : String? = null
+    val recommendcontentId : String? = null,
+    var tourOverView : String? = null,
+    var recommendmapX : String? = null,
+    var recommendmapY : String? = null,
 )
 
-data class RecommendTourDetail (
-    val tourOverview : String? = null
+data class RecommendAreaCode (
+    val recommendAreaCode : String? = null,
+    val recommendSiGunGuCode : String? = null
 )
 

@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
-import com.example.tripguide.R
 import com.example.tripguide.adapter.RecommendRecyclerAdapter
 import com.example.tripguide.databinding.FragmentRecommend1Binding
 import com.example.tripguide.fragment.SelectTourFragment
-import com.example.tripguide.model.RecommendAreaCode
 import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.utils.Constants.TAG
 import org.xmlpull.v1.XmlPullParser
@@ -28,6 +25,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
+import kotlin.math.log
 
 
 class RecommendFragment1 : Fragment(), View.OnClickListener {
@@ -56,8 +54,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     private var arrayList = ArrayList<RecommendItem>()
     private val recommendRecyclerAdapter = RecommendRecyclerAdapter(arrayList)
-//    private val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-    private var arrayCodeList = ArrayList<RecommendAreaCode>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +69,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         keywordParser()
         binding.rvrecommend1.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,
@@ -81,22 +79,24 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
         binding.rvrecommend1.adapter = recommendRecyclerAdapter
 
-        arrayCodeList = findAreaCode("서울")
-
-        Log.d(TAG, "arraycodelist - $arrayCodeList")
-
         // recycler item click event
         recommendRecyclerAdapter.setItemClickListener(object : RecommendRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-//                transaction
-//                    .add(R.id.fragment_container_view, SelectTourFragment())
-//                    .show(SelectTourFragment())
-//                    .hide(RecommendFragment1())
-//                    .commit()
-//                val f = SelectTourFragment()
-//                val bundle = Bundle()
-//                bundle.putParcelableArrayList("list", arrayList[position] as ArrayList<out Parcelable?>?) // list 넘기기
-//                f.arguments = bundle
+                val tourId = arrayList[position].recommendcontentId.toString()
+                val tourTitle = arrayList[position].recommendTitle.toString()
+                val tourImage = arrayList[position].recommendImage.toString()
+                val tourOverView = arrayList[position].tourOverView.toString()
+                val tourX = arrayList[position].recommendmapX.toString()
+                val tourY = arrayList[position].recommendmapY.toString()
+
+                setFragmentResult("tourIdrequestKey", bundleOf("tourIdbundleKey" to tourId))
+                setFragmentResult("tourTitle", bundleOf("tourTitlebundleKey" to tourTitle))
+                setFragmentResult("tourImage", bundleOf("tourImagebundleKey" to tourImage))
+                setFragmentResult("tourOverView", bundleOf("tourOverViewdbundleKey" to tourOverView))
+                setFragmentResult("tourX", bundleOf("tourXbundleKey" to tourX))
+                setFragmentResult("tourY", bundleOf("tourYbundleKey" to tourY))
+                mainActivity.changeFragment(15)
+
             }
 
         })
@@ -280,7 +280,9 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagOverView) {         // 이미지
-                            overView = xpp.text
+                            overView = xpp.text.replace("<br />", "\n")
+                                .replace("<br/>", "\n")
+                                .replace("<br>", "")
                             tagOverView = false
                             arrayList.map {
                                 if( it.recommendcontentId == contentid) {

@@ -12,24 +12,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.adapter.RecommendAdapter
-import com.example.tripguide.databinding.FragmentDisposition4Binding
 import com.example.tripguide.databinding.FragmentDisposition5Binding
-import com.example.tripguide.databinding.FragmentFirstBinding
-import com.example.tripguide.fragment.FirstFragment
-import com.example.tripguide.fragment.recommend.RecommendFragment1
-import com.example.tripguide.fragment.recommend.RecommendFragment2
-import com.example.tripguide.fragment.recommend.RecommendFragment3
-import com.example.tripguide.model.RecommendAreaCode
-import com.example.tripguide.model.RecommendItem
-import com.example.tripguide.utils.Constants
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserFactory
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.StringReader
-import java.net.URL
+
 
 class DispositionFragment5 : Fragment() {
     // To get the main activity's change fragment function

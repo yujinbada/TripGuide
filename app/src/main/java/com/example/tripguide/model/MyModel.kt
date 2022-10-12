@@ -3,6 +3,7 @@ package com.example.tripguide.model
 import android.os.Parcelable
 import android.service.quicksettings.Tile
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 class MyModel(
     val firstregion: String? = null,
@@ -21,7 +22,9 @@ data class FirebaseClass(
 data class Tour (
     val firstimage : String? = null,
     val title : String? = null,
-    val addr1 : String? = null
+    val addr1 : String? = null,
+    val areaCode : String? = null,
+    val siGunGuCode : String? = null
 )
 
 data class SelectItem (
@@ -37,9 +40,3 @@ data class RecommendItem (
     var recommendmapX : String? = null,
     var recommendmapY : String? = null,
 )
-
-data class RecommendAreaCode (
-    val recommendAreaCode : String? = null,
-    val recommendSiGunGuCode : String? = null
-)
-

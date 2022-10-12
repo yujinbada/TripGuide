@@ -73,7 +73,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?,
     ): View? {
         Log.d(TAG, "DispositionFragment4 - onCreateView() called")
-        // 1. View Model 설정
         mBinding = FragmentDisposition4Binding.inflate(inflater, container, false)
         return binding.root
     }
@@ -140,7 +139,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
     }
 
     // xml 파싱하기
-    fun fetchXML(url: String) {
+    private fun fetchXML(url: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
 
         // xml 데이터 가져와서 파싱하기

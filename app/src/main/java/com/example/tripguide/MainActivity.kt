@@ -6,6 +6,7 @@ package com.example.tripguide
 
 import android.app.Activity
 import android.app.PendingIntent.getActivity
+import android.content.pm.PackageInfo
 import android.icu.number.Scale.none
 import android.os.Bundle
 import android.util.Log
@@ -29,7 +30,12 @@ import android.content.pm.PackageManager
 import android.util.Base64
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.tripguide.fragment.recommend.RecommendFragment1
+import com.kakao.util.maps.helper.Utility
+import kotlinx.coroutines.selects.select
 import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.Base64.getEncoder
 
 
 class MainActivity() : AppCompatActivity() {
@@ -50,7 +56,6 @@ class MainActivity() : AppCompatActivity() {
 
 //    lateinit var myViewModel: MyViewModel
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "MainActivity - onCreate() called")
@@ -79,22 +84,8 @@ class MainActivity() : AppCompatActivity() {
             )
         }
 
-        try {
-            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
-            val signatures = info.signingInfo.apkContentsSigners
-            val md = MessageDigest.getInstance("SHA")
-            for (signature in signatures) {
-                val md: MessageDigest
-                md = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                val key = String(Base64.encode(md.digest(), 0))
-                Log.d("Hash key:", "!!!!!!!$key!!!!!!")
-            }
-        } catch (e: Exception) {
-            Log.e("name not found", e.toString())
-        }
-    }
-
+        var keyHash = Utility.getKeyHash(this)
+        Log.d(TAG, "keyhash : $keyHash")
 //    fun addFragment(a: Fragment, b: Fragment) {
 //        Log.d(TAG, "$a -> $b")
 //        supportFragmentManager.beginTransaction()
@@ -104,154 +95,175 @@ class MainActivity() : AppCompatActivity() {
 //            .addToBackStack(null)
 //            .commit()
 //    }
+    }
 
-    // supportFragmentManager function for fragment transaction
-    fun changeFragment(index: Int?) {
-        val transaction = supportFragmentManager.beginTransaction()
 
-        when(index) {
-            1 -> {
-                Log.d(TAG, "MainFragment -> DispositionFragment")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .hide(mainFragment)
-                    .add(R.id.fragment_container_view, dispositionFragment)
-                    .show(dispositionFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            2 -> {
-                Log.d(TAG, "DispositionFragment -> DepartRegionFragment")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, departRegionFragment, "depart")
-                    .hide(dispositionFragment)
-                    .disallowAddToBackStack()
-                    .commit()
-            }
+        // supportFragmentManager function for fragment transaction
+        fun changeFragment(index: Int?) {
+            val transaction = supportFragmentManager.beginTransaction()
 
-            3 -> {
-                Log.d(TAG, "DepartRegionFragment -> DispositionFragment")
-                transaction
-                    .setCustomAnimations(R.anim.none,
-                        R.anim.horizon_exit,
-                        R.anim.none,
-                        R.anim.none)
-                    .remove(departRegionFragment)
-                    .show(dispositionFragment)
-                    .disallowAddToBackStack()
-                    .commit()
-            }
-            4 -> {
-                Log.d(Constants.TAG, "FirstFragment -> MainFragment")
-                transaction
-                    .replace(R.id.fragment_container_view, mainFragment)
-                    .commit()
-            }
-            5 -> {
-                Log.d(TAG, "DispositionFragment -> DispositionFragment2")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, dispositionFragment2)
-                    .hide(dispositionFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            6 -> {
-                Log.d(TAG, "DispositionFragment -> MainFragemnt")
-                transaction
-                    .remove(dispositionFragment)
-                    .show(mainFragment)
-                    .commit()
-            }
-            66 -> {
-                Log.d(TAG, "DispositionFragment2 -> DispositionFragment")
-                transaction
-                    .remove(dispositionFragment2)
-                    .show(dispositionFragment)
-                    .commit()
-            }
-            7 -> {
-                Log.d(TAG, "DispositionFragment2 -> DispositionFragment22")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, dispositionFragment22)
-                    .hide(dispositionFragment2)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            8 -> {
-                Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, dispositionFragment3)
-                    .hide(dispositionFragment2)
-                    .hide(dispositionFragment22)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            9 -> {
-                Log.d(TAG, "DispositionFragment22 -> DispositionFragment2")
-                transaction
-                    .remove(dispositionFragment22)
-                    .show(dispositionFragment2)
-                    .commit()
-            }
-            10 -> {
-                Log.d(TAG, "DispositionFragment3 -> DispositionFragment4")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, dispositionFragment4)
-                    .hide(dispositionFragment3)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            11 -> {
-                Log.d(TAG, "DispositionFragment4 -> DispositionFragment3")
-                transaction
-                    .remove(dispositionFragment4)
-                    .show(dispositionFragment3)
-                    .commit()
-            }
-            13 -> {
-                Log.d(TAG, "DispositionFragment3 -> DispositionFragment5")
-                transaction
-                    .setCustomAnimations(R.anim.horizon_enter,
-                        R.anim.none,
-                        R.anim.none,
-                        R.anim.horizon_exit)
-                    .add(R.id.fragment_container_view, dispositionFragment5)
-                    .hide(dispositionFragment3)
-                    .addToBackStack(null)
-                    .commit()
+            when (index) {
+                1 -> {
+                    Log.d(TAG, "MainFragment -> DispositionFragment")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .hide(mainFragment)
+                        .add(R.id.fragment_container_view, dispositionFragment)
+                        .show(dispositionFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                2 -> {
+                    Log.d(TAG, "DispositionFragment -> DepartRegionFragment")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, departRegionFragment, "depart")
+                        .hide(dispositionFragment)
+                        .disallowAddToBackStack()
+                        .commit()
+                }
 
-            }
-            14 -> {
-                Log.d(TAG, "DispositionFragment3 -> DispositionFragment2")
-                transaction
-                    .remove(dispositionFragment3)
-                    .show(dispositionFragment2)
-                    .commit()
+                3 -> {
+                    Log.d(TAG, "DepartRegionFragment -> DispositionFragment")
+                    transaction
+                        .setCustomAnimations(R.anim.none,
+                            R.anim.horizon_exit,
+                            R.anim.none,
+                            R.anim.none)
+                        .remove(departRegionFragment)
+                        .show(dispositionFragment)
+                        .disallowAddToBackStack()
+                        .commit()
+                }
+                4 -> {
+                    Log.d(Constants.TAG, "FirstFragment -> MainFragment")
+                    transaction
+                        .replace(R.id.fragment_container_view, mainFragment)
+                        .commit()
+                }
+                5 -> {
+                    Log.d(TAG, "DispositionFragment -> DispositionFragment2")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment2)
+                        .hide(dispositionFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                6 -> {
+                    Log.d(TAG, "DispositionFragment -> MainFragemnt")
+                    transaction
+                        .remove(dispositionFragment)
+                        .show(mainFragment)
+                        .commit()
+                }
+                66 -> {
+                    Log.d(TAG, "DispositionFragment2 -> DispositionFragment")
+                    transaction
+                        .remove(dispositionFragment2)
+                        .show(dispositionFragment)
+                        .commit()
+                }
+                7 -> {
+                    Log.d(TAG, "DispositionFragment2 -> DispositionFragment22")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment22)
+                        .hide(dispositionFragment2)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                8 -> {
+                    Log.d(TAG, "DispositionFragment2, DisposiotnFragment22 -> DispositionFragment3")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment3)
+                        .hide(dispositionFragment2)
+                        .hide(dispositionFragment22)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                9 -> {
+                    Log.d(TAG, "DispositionFragment22 -> DispositionFragment2")
+                    transaction
+                        .remove(dispositionFragment22)
+                        .hide(dispositionFragment22)
+                        .show(dispositionFragment2)
+                        .commit()
+                }
+                10 -> {
+                    Log.d(TAG, "DispositionFragment3 -> DispositionFragment4")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment4)
+                        .hide(dispositionFragment3)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                11 -> {
+                    Log.d(TAG, "DispositionFragment4 -> DispositionFragment3")
+                    transaction
+                        .remove(dispositionFragment4)
+                        .remove(dispositionFragment4)
+                        .show(dispositionFragment3)
+                        .commit()
+                }
+                13 -> {
+                    Log.d(TAG, "DispositionFragment3 -> DispositionFragment5")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment5)
+                        .hide(dispositionFragment3)
+                        .addToBackStack(null)
+                        .commit()
+
+                }
+                14 -> {
+                    Log.d(TAG, "DispositionFragment3 -> DispositionFragment2")
+                    transaction
+                        .remove(dispositionFragment3)
+                        .remove(dispositionFragment3)
+                        .show(dispositionFragment2)
+                        .commit()
+                }
+                15 -> {
+                    Log.d(TAG, "RecommendFragment1 -> SelectTourFragment")
+                    transaction
+                        .add(R.id.fragment_container_view, selectTourFragment)
+                        .show(selectTourFragment)
+                        .hide(dispositionFragment5)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                16 -> {
+                    Log.d(TAG, "SelectTourFragment -> RecommendFragment1")
+                    transaction
+                        .remove(selectTourFragment)
+                        .hide(selectTourFragment)
+                        .show(dispositionFragment5)
+                        .commit()
+                }
             }
         }
     }
-
-}

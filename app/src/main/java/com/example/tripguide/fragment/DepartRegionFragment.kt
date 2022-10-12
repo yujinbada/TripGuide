@@ -27,8 +27,7 @@ import com.example.tripguide.databinding.FragmentDepartRegionBinding
 import com.example.tripguide.kakao.KakaoData
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.adapter.MyRecyclerAdapter
-import com.example.tripguide.fragment.recommend.findAreaCode
-import com.example.tripguide.model.RecommendAreaCode
+
 import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
@@ -127,13 +126,13 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                 if (modelList[position].secondregion.toString() == ""){
                     Log.d(TAG, "departresult <- region_1depth_txt")
                     val result = modelList[position].firstregion
-                    findAreaCode(result.toString())
+                    areaCode(result.toString())
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
                 else {
                     Log.d(TAG, "departresult <- region_2depth_txt")
                     val result = modelList[position].secondregion
-                    findAreaCode( modelList[position].firstregion + " " + modelList[position].secondregion)
+                    areaCode( modelList[position].firstregion + " " + modelList[position].secondregion)
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
 
@@ -181,29 +180,56 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+    fun areaCode(name: String) {
+        val areaNameSplit = name.split(" ")
+        var areacode = ""
+        when(areaNameSplit[0]) {
+            "서울" -> areacode = "1"
+            "인천" -> areacode = "2"
+            "대전" -> areacode = "3"
+            "대구" -> areacode = "4"
+            "광주" -> areacode = "5"
+            "부산" -> areacode = "6"
+            "울산" -> areacode = "7"
+            "세종특별자치시" -> areacode = "8"
+            "경기" -> areacode = "31"
+            "강원" -> areacode = "32"
+            "충북" -> areacode = "33"
+            "충남" -> areacode = "34"
+            "경북" -> areacode = "35"
+            "경남" -> areacode = "36"
+            "전북" -> areacode = "37"
+            "전남" -> areacode = "38"
+            else -> areacode = "39"
+        }
+        if(areaNameSplit.size == 1) {
+            // 여기에 도착지에 관한 areaCode를 Firestore에 넣는 코드 작성해야 함
+        }
+        else {
+            findSiGunGuCode(areacode, areaNameSplit[1].removeSuffix("시"))
+        }
+    }
 
-    private val arrayList = ArrayList<RecommendAreaCode>()
-    private val areaNameMap = mutableMapOf<String, String>()
-
-    val mobile_os = "AND"
-    val mobile_app = "TripGuide"
-    val serviceUrl = "http://apis.data.go.kr/B551011/KorService/areaCode"
-    val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
-
-    fun findAreaCode(areaname : String): ArrayList<RecommendAreaCode> {
+    fun findSiGunGuCode(areaCode : String, sigunguName : String) {
         Log.d(TAG, "FindAreaCode() called")
+        val mobile_os = "AND"
+        val mobile_app = "TripGuide"
+        val serviceUrl = "http://apis.data.go.kr/B551011/KorService/areaCode"
+        val serviceKey = "LUjHE2JtNIM0j7H1yjIJnSkVhIS6p6I6R0y5F235iEiBQL9it8MXwm6mjNUFYGbnDpVFsqLgeYnIqcMNF83ilg%3D%3D"
+
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
+                "&areaCode" + areaCode +
                 "&numOfRows=20" +
                 "&MobileApp=" + mobile_app +
                 "&MobileOS=" + mobile_os
 
-        fetchXML(requstUrl, areaname)
-
-        return arrayList
+        fetchXML(requstUrl, sigunguName)
     }
 
-    private fun fetchXML(url: String, areaname: String) {
+
+
+    fun fetchXML(url: String, sigunguName: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
 
         // xml 데이터 가져와서 파싱하기
@@ -257,33 +283,10 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagAreaName) {
                             areaname = xpp.text
+                            if(areaname.contains(sigunguName)) {
+                                // 여기에 code의 시군구 코드를 Firestore에 넣는 코드 작성해야 함
+                            }
                             tagAreaName = false
-                            // 기관명까지 다 읽으면 하나의 데이터 다 읽은 것임
-                            areaNameMap[areaname] = code
-
-                            Log.d(TAG, "areaNameMap - $areaNameMap")
-                            val areaNameSplit = areaname.split(" ")
-                            if(areaNameSplit.size == 1) {
-
-                                Log.d(TAG, "areaNameMap - $areaNameMap")
-                                val areaCode = areaNameMap.filter { it.key == areaname }.values.toString()
-                                arrayList.add(RecommendAreaCode(areaCode))
-                            }
-                            else {
-                                val areaCode = areaNameMap.filter { it.key == areaNameSplit[0] }.values.toString()
-                                areaNameMap.clear()
-
-                                val requstUrl2 = serviceUrl +
-                                        "?serviceKey=" + serviceKey +
-                                        "&areaCode=" + areaCode +
-                                        "&numOfRows=20" +
-                                        "&MobileApp=" + mobile_app +
-                                        "&MobileOS=" + mobile_os
-
-                                val sigunguCode = areaNameMap.filter { it.key == areaNameSplit[1] }.values.toString()
-                                arrayList.add(RecommendAreaCode(areaCode, sigunguCode))
-                            }
-
                         }
                         else if (tagCode) {
                             code = xpp.text

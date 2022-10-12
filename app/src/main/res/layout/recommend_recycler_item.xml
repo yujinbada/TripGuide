@@ -17,14 +17,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <ImageView
             android:id="@+id/recommendImage"
-
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:src="@color/sky" />
-
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -36,6 +33,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/sky"
+        android:maxLength="12"
         app:layout_constraintStart_toEndOf="@+id/cardview"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="title" />

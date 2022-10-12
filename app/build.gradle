@@ -38,6 +38,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
+    }
     namespace 'com.example.tripguide'
 
 }
@@ -84,7 +92,8 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation files('libs/libDaumMapAndroid.jar')
+    // imgslide
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')

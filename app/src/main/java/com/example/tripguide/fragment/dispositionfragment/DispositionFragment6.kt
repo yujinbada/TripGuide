@@ -15,4 +15,5 @@ class DispositionFragment6 : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_disposition6, container, false)
     }
+
 }

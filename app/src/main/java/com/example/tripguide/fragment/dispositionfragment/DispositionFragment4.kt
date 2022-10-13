@@ -202,6 +202,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
                             // 기관명까지 다 읽으면 하나의 데이터 다 읽은 것임
                             var item = Tour(firstimage, title, addr1)
+                            Log.d(TAG, "item - $item")
                             arrayList.add(item)
                             tourAdapter.notifyDataSetChanged()
                         }
@@ -244,6 +245,9 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
 
                 // 버튼 클릭 이벤트
                 setOnClickListener {
+                    arrayList.clear()
+                    binding.textInputEditTextregion.text = null
+                    count = 0
                     mainActivity.changeFragment(11)
                 }
             }

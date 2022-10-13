@@ -16,7 +16,7 @@ import com.example.tripguide.databinding.FragmentDisposition5Binding
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class DispositionFragment5 : Fragment() {
+class DispositionFragment5 : Fragment(),View.OnClickListener {
     // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
@@ -44,6 +44,19 @@ class DispositionFragment5 : Fragment() {
             tab.text = tabTextList[pos]
         }.attach()
 
+        binding.nextbtn5.setOnClickListener(this)
+        binding.beforebtn5.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.beforebtn5 -> {
+                mainActivity.changeFragment(17)
+            }
+            R.id.nextbtn5 -> {
+                mainActivity.changeFragment(18)
+            }
+        }
     }
 
 }

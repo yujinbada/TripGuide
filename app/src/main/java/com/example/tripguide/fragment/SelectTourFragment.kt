@@ -19,6 +19,7 @@ import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.model.SelectItem
 import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.utils.Constants.TAG
+import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import org.xmlpull.v1.XmlPullParser
@@ -26,7 +27,10 @@ import org.xmlpull.v1.XmlPullParserFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
+import java.lang.Math.round
 import java.net.URL
+import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 
 class SelectTourFragment : Fragment(), View.OnClickListener {
@@ -94,20 +98,27 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         setFragmentResultListener("tourX") { key, bundle ->
             val result = bundle.getString("tourXbundleKey").toString()
             tourX = result.toDouble()
+            Log.d(TAG, "tourX - $tourX")
 
         }
         setFragmentResultListener("tourY") { key, bundle ->
             val result = bundle.getString("tourYbundleKey").toString()
             tourY = result.toDouble()
             val mapView = MapView(activity)
+            val mapPoint = MapPoint.mapPointWithGeoCoord(tourY, tourX)
             binding.KakaoMapView.addView(mapView)
-
-            val mapPoint = MapPoint.mapPointWithGeoCoord(tourX, tourY)
             mapView.setMapCenterPoint(mapPoint, true)
-            mapView.setZoomLevel(1, true)
+            mapView.setZoomLevel(5, true)
 
+            //마커 생성
+            val marker = MapPOIItem()
+            marker.itemName = "이곳이 $title 입니다"
+            marker.mapPoint = mapPoint
+            marker.markerType = MapPOIItem.MarkerType.BluePin
+            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+
+            mapView.addPOIItem(marker)
         }
-
 
         binding.back.setOnClickListener(this)
         binding.add.setOnClickListener(this)

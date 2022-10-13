@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.tripguide.R
 import com.example.tripguide.model.Tour
 import com.example.tripguide.utils.Constants.TAG
@@ -31,9 +32,11 @@ class TourAdapter(var items : ArrayList<Tour>) :
         holder.tvTitle.text = item.title
         holder.tvAddr1.text = item.addr1
 
+        Log.d(TAG, "imgFirstImage -${item.firstimage}")
+
         Glide.with(holder.imgFirstImage)
             .load(item.firstimage)
-            .centerCrop()
+            .apply(RequestOptions.timeoutOf(5 * 60 * 1000))
             .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
             .into(holder.imgFirstImage)
 

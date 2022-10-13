@@ -23,8 +23,6 @@ data class Tour (
     val firstimage : String? = null,
     val title : String? = null,
     val addr1 : String? = null,
-    val areaCode : String? = null,
-    val siGunGuCode : String? = null
 )
 
 data class SelectItem (

@@ -52,6 +52,7 @@ class MainActivity() : AppCompatActivity() {
     private val dispositionFragment3 = DispositionFragment3()
     private val dispositionFragment4 = DispositionFragment4()
     private val dispositionFragment5 = DispositionFragment5()
+    private val dispositionFragment6 = DispositionFragment6()
     private val selectTourFragment = SelectTourFragment()
 
 //    lateinit var myViewModel: MyViewModel
@@ -248,7 +249,7 @@ class MainActivity() : AppCompatActivity() {
                         .commit()
                 }
                 15 -> {
-                    Log.d(TAG, "RecommendFragment1 -> SelectTourFragment")
+                    Log.d(TAG, "DispositionFragment5 -> SelectTourFragment")
                     transaction
                         .add(R.id.fragment_container_view, selectTourFragment)
                         .show(selectTourFragment)
@@ -257,11 +258,31 @@ class MainActivity() : AppCompatActivity() {
                         .commit()
                 }
                 16 -> {
-                    Log.d(TAG, "SelectTourFragment -> RecommendFragment1")
+                    Log.d(TAG, "SelectTourFragment -> DispositionFragment5")
                     transaction
                         .remove(selectTourFragment)
                         .hide(selectTourFragment)
                         .show(dispositionFragment5)
+                        .commit()
+                }
+                17 -> {
+                    Log.d(TAG, "DispositionFragment5 -> DispositionFragment3")
+                    transaction
+                        .remove(dispositionFragment5)
+                        .hide(dispositionFragment5)
+                        .show(dispositionFragment3)
+                        .commit()
+                }
+                18 -> {
+                    Log.d(TAG, "DispositionFragment5 -> DispositionFragment6")
+                    transaction
+                        .setCustomAnimations(R.anim.horizon_enter,
+                            R.anim.none,
+                            R.anim.none,
+                            R.anim.horizon_exit)
+                        .add(R.id.fragment_container_view, dispositionFragment6)
+                        .hide(dispositionFragment5)
+                        .addToBackStack(null)
                         .commit()
                 }
             }

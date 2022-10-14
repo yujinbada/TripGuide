@@ -223,7 +223,7 @@ class MainActivity() : AppCompatActivity() {
                     Log.d(TAG, "DispositionFragment4 -> DispositionFragment3")
                     transaction
                         .remove(dispositionFragment4)
-                        .remove(dispositionFragment4)
+                        .hide(dispositionFragment4)
                         .show(dispositionFragment3)
                         .commit()
                 }
@@ -243,8 +243,7 @@ class MainActivity() : AppCompatActivity() {
                 14 -> {
                     Log.d(TAG, "DispositionFragment3 -> DispositionFragment2")
                     transaction
-                        .remove(dispositionFragment3)
-                        .remove(dispositionFragment3)
+                        .hide(dispositionFragment3)
                         .show(dispositionFragment2)
                         .commit()
                 }
@@ -268,7 +267,6 @@ class MainActivity() : AppCompatActivity() {
                 17 -> {
                     Log.d(TAG, "DispositionFragment5 -> DispositionFragment3")
                     transaction
-                        .remove(dispositionFragment5)
                         .hide(dispositionFragment5)
                         .show(dispositionFragment3)
                         .commit()

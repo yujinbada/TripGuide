@@ -60,7 +60,7 @@ class FirstFragment : Fragment() {
             .requestEmail()
             .build()
 
-        var googleSignInClient = GoogleSignIn.getClient(activity!!, gso)
+        var googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         binding.signingoogle.setOnClickListener {
             Log.d(TAG, "MainActivity login button clicked")
@@ -87,7 +87,7 @@ class FirstFragment : Fragment() {
     private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity!!) { task -> // Register on Firebase
+            .addOnCompleteListener(requireActivity()) { task -> // Register on Firebase
                 if (task.isSuccessful) { // Succeeded
                     Log.d(TAG, "login succeeded")
                     val user = auth.currentUser
@@ -96,7 +96,7 @@ class FirstFragment : Fragment() {
                         userInfo.uid = user.uid
                         userInfo.email = user.email
                     }
-                    firestore?.collection("user")?.document(user?.uid.toString()).set(userInfo)
+                    firestore.collection("user").document(user?.uid.toString()).set(userInfo)
                     Log.d(TAG, user.toString())
                     mainActivity.changeFragment(4)
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.adapter.RecommendRecyclerAdapter
@@ -78,7 +79,14 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         binding.rvrecommend1.addItemDecoration(customDecoration)
 
         binding.rvrecommend1.adapter = recommendRecyclerAdapter
-
+        setFragmentResultListener("areaCode") { key, bundle ->
+            val result = bundle.getString("areaCodeKey")
+            areaCode = result!!.toInt()
+        }
+        setFragmentResultListener("sigunguCode") { key, bundle ->
+            val result = bundle.getString("sigunguCodeKey")
+            sigunguCode = result!!.toInt()
+        }
         // recycler item click event
         recommendRecyclerAdapter.setItemClickListener(object : RecommendRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {

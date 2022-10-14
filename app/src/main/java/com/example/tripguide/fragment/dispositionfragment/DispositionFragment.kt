@@ -59,7 +59,9 @@ class DispositionFragment : Fragment(), View.OnClickListener {
         binding.daterangeview.setOnClickListener(this)
         binding.nextbtn.setOnClickListener(this)
         binding.beforebtn.setOnClickListener(this)
-
+        binding.alone.setOnClickListener(this)
+        binding.couple.setOnClickListener(this)
+        binding.over5.setOnClickListener(this)
 
     }
 
@@ -124,7 +126,6 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 userInfo.arrival = binding.viewarrive.text.toString()
                 userInfo.date = binding.daterangeview.text.toString()
                 userInfo.with = binding.tripwith.checkedChipId.toString()
-                userInfo.style = binding.tripstyle.checkedChipId.toString()
 
                 fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
             }

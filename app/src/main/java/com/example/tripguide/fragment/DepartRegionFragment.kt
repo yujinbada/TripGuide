@@ -42,6 +42,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
+import kotlin.math.log
 
 
 class DepartRegionFragment : Fragment(), View.OnClickListener {
@@ -182,6 +183,8 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
     }
     fun areaCode(name: String) {
         val areaNameSplit = name.split(" ")
+        Log.d(TAG, "name - $name")
+        Log.d(TAG, "areaNameSplit - $areaNameSplit")
         var areacode = ""
         when(areaNameSplit[0]) {
             "서울" -> areacode = "1"
@@ -203,15 +206,17 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             else -> areacode = "39"
         }
         if(areaNameSplit.size == 1) {
-            // 여기에 도착지에 관한 areaCode를 Firestore에 넣는 코드 작성해야 함
+            Log.d(TAG, "areaCode - $areacode")
+            setFragmentResult("areaCode", bundleOf("areaCodeKey" to areacode))
         }
         else {
+            setFragmentResult("areaCode", bundleOf("areaCodeKey" to areacode))
+            Log.d(TAG, "areaCode - $areacode")
             findSiGunGuCode(areacode, areaNameSplit[1].removeSuffix("시"))
         }
     }
 
     fun findSiGunGuCode(areaCode : String, sigunguName : String) {
-        Log.d(TAG, "FindAreaCode() called")
         val mobile_os = "AND"
         val mobile_app = "TripGuide"
         val serviceUrl = "http://apis.data.go.kr/B551011/KorService/areaCode"
@@ -220,9 +225,9 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
                 "&areaCode" + areaCode +
-                "&numOfRows=20" +
-                "&MobileApp=" + mobile_app +
-                "&MobileOS=" + mobile_os
+                "&numOfRows=50" +
+                "&MobileOS=" + mobile_os +
+                "&MobileApp=" + mobile_app
 
         fetchXML(requstUrl, sigunguName)
     }
@@ -231,7 +236,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
     fun fetchXML(url: String, sigunguName: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
-
+        Log.d(TAG, "sigunguName - $sigunguName")
         // xml 데이터 가져와서 파싱하기
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
@@ -283,8 +288,10 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagAreaName) {
                             areaname = xpp.text
+                            Log.d(TAG, "sigunguCode - $areaname")
                             if(areaname.contains(sigunguName)) {
-                                // 여기에 code의 시군구 코드를 Firestore에 넣는 코드 작성해야 함
+                                Log.d(TAG, "sigunguCode - $areaname")
+                                setFragmentResult("sigunguCode", bundleOf("sigunguCodeKey" to areaname))
                             }
                             tagAreaName = false
                         }

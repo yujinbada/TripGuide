@@ -8,20 +8,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tripguide.R
 import com.example.tripguide.model.RecommendItem
-import com.example.tripguide.model.SelectItem
 import com.example.tripguide.utils.Constants.TAG
-import org.w3c.dom.Text
 
-class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) :
+class RecommendRecyclerAdapter(private var items : ArrayList<RecommendItem>) :
     RecyclerView.Adapter<RecommendRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecommendRecyclerAdapter.ViewHolder {
+    ): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.recommend_recycler_item, parent, false))
     }
@@ -30,17 +29,26 @@ class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) :
     override fun getItemCount() = items.size
 
     // 전달받은 위치의 아이템 연결
-    override fun onBindViewHolder(holder: RecommendRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         if (item.recommendTitle != null) {
             holder.tvTitle.text = item.recommendTitle
             holder.tvOverView.text = item.tourOverView
 
+            Log.d(TAG, "imgFirstImage - ${item.recommendImage}")
+
+        if(item.recommendImage != null) {
             Glide.with(holder.imgFirstImage)
                 .load(item.recommendImage)
+                .placeholder(R.drawable.progress)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .centerCrop()
-                .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
+                .dontAnimate()
+                .dontTransform()
                 .into(holder.imgFirstImage)
+        }
+
 
             holder.itemView.setOnClickListener {
                 clickListener.onClick(it, position)
@@ -68,5 +76,7 @@ class RecommendRecyclerAdapter(var items : ArrayList<RecommendItem>) :
 
     private lateinit var clickListener: OnItemClickListener
 }
+
+
 
 

@@ -87,6 +87,7 @@ class MainActivity() : AppCompatActivity() {
 
         var keyHash = Utility.getKeyHash(this)
         Log.d(TAG, "keyhash : $keyHash")
+        Log.d(TAG, "SDK : "+Build.VERSION.SDK_INT)
 //    fun addFragment(a: Fragment, b: Fragment) {
 //        Log.d(TAG, "$a -> $b")
 //        supportFragmentManager.beginTransaction()

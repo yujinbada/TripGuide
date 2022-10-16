@@ -1,5 +1,6 @@
 package com.example.tripguide.fragment.dispositionfragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
@@ -36,6 +37,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
+@Suppress("DEPRECATION")
 class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     // To get the main activity's change fragment function
@@ -122,7 +124,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             }
         })
     }
-    fun keywordParser() {
+    private fun keywordParser() {
         Log.d(TAG, "장소 검색중")
         val textfield = binding.textInputEditTextregion.text.toString()
         val keyword = URLEncoder.encode(textfield)
@@ -146,6 +148,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
+            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -163,6 +166,8 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
+            @SuppressLint("NotifyDataSetChanged")
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -184,12 +189,13 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 // 파싱 진행
                 var eventType = xpp.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_DOCUMENT) {}
-                    else if (eventType == XmlPullParser.START_TAG) {
-                        var tagName = xpp.name
-                        if (tagName.equals("firstimage")) tagImage = true
-                        else if (tagName.equals("title")) tagTitle = true
-                        else if (tagName.equals("addr1")) tagAddr1 = true
+                    if (eventType != XmlPullParser.START_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG) {
+                            val tagName = xpp.name
+                            if (tagName.equals("firstimage")) tagImage = true
+                            else if (tagName.equals("title")) tagTitle = true
+                            else if (tagName.equals("addr1")) tagAddr1 = true
+                        }
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagImage) {         // 이미지
@@ -211,7 +217,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             tagAddr1 = false
                         }
                     }
-                    if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
             }

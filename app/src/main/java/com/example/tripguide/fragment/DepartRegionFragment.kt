@@ -45,6 +45,7 @@ import java.net.URL
 import kotlin.math.log
 
 
+@Suppress("DEPRECATION")
 class DepartRegionFragment : Fragment(), View.OnClickListener {
     private lateinit var callback: OnBackPressedCallback
 
@@ -143,8 +144,6 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id) {
-        }
     }
 
 
@@ -234,13 +233,14 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
 
 
-    fun fetchXML(url: String, sigunguName: String) {
+    private fun fetchXML(url: String, sigunguName: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
         Log.d(TAG, "sigunguName - $sigunguName")
         // xml 데이터 가져와서 파싱하기
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
+            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -258,6 +258,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 

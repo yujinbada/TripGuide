@@ -29,6 +29,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
+@Suppress("DEPRECATION")
 class FirstFragment : Fragment() {
     private lateinit var auth: FirebaseAuth // shared instance of object
     private lateinit var firestore : FirebaseFirestore
@@ -70,6 +71,7 @@ class FirstFragment : Fragment() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

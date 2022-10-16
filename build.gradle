@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -18,10 +19,14 @@ buildscript {
 allprojects {
     repositories {
         google()
+        jcenter()
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
         maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com' }
+        maven { url "https://dl.google.com/dl/android/maven2/"}
         maven { url 'https://naver.jfrog.io/artifactory/maven/' }
         mavenCentral()
+
     }
 }
 

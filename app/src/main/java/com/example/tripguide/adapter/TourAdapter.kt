@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.example.tripguide.R
 import com.example.tripguide.model.Tour
 import com.example.tripguide.utils.Constants.TAG
@@ -34,11 +36,17 @@ class TourAdapter(var items : ArrayList<Tour>) :
 
         Log.d(TAG, "imgFirstImage -${item.firstimage}")
 
-        Glide.with(holder.imgFirstImage)
-            .load(item.firstimage)
-            .apply(RequestOptions.timeoutOf(5 * 60 * 1000))
-            .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
-            .into(holder.imgFirstImage)
+        if(item.firstimage != null) {
+            Glide.with(holder.imgFirstImage)
+                .load(item.firstimage)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .centerCrop()
+                .dontAnimate()
+                .dontTransform()
+                .placeholder(R.drawable.progress)
+                .into(holder.imgFirstImage)
+        }
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)
@@ -60,6 +68,6 @@ class TourAdapter(var items : ArrayList<Tour>) :
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
     }
-    // (4) setItemClickListener로 설정한 함수 실행
+    // (4) setItemClickListener 설정한 함수 실행
     private lateinit var itemClickListener : OnItemClickListener
 }

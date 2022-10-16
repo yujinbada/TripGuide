@@ -33,6 +33,7 @@ import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 
+@Suppress("DEPRECATION")
 class SelectTourFragment : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
@@ -78,22 +79,16 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         }
         setFragmentResultListener("tourTitle") { key, bundle ->
             val result = bundle.getString("tourTitlebundleKey").toString()
-            if(result != null) {
-                binding.selectedTitle.text = result
-                title = result
-            }
+            binding.selectedTitle.text = result
+            title = result
         }
         setFragmentResultListener("tourImage") { key, bundle ->
             val result = bundle.getString("tourImagebundleKey").toString()
-            if(result != null) {
-                image = result
-            }
+            image = result
         }
         setFragmentResultListener("tourOverView") { key, bundle ->
             val result = bundle.getString("tourOverViewdbundleKey").toString()
-            if (result != null) {
-                binding.selectedOverView.text = result
-            }
+            binding.selectedOverView.text = result
         }
         setFragmentResultListener("tourX") { key, bundle ->
             val result = bundle.getString("tourXbundleKey").toString()
@@ -124,7 +119,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         binding.add.setOnClickListener(this)
     }
 
-    fun imgParser(contentId : String) {
+    private fun imgParser(contentId : String) {
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
                 "&numOfRows=30" +
@@ -146,6 +141,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
+            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -163,6 +159,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -172,9 +169,9 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                 var originimgurl = ""
                 var smallimageurl = "" // 이미지
 
-                var factory = XmlPullParserFactory.newInstance()    // 파서 생성
+                val factory = XmlPullParserFactory.newInstance()    // 파서 생성
                 factory.setNamespaceAware(true)                     // 파서 설정
-                var xpp = factory.newPullParser()                   // XML 파서
+                val xpp = factory.newPullParser()                   // XML 파서
 
                 // 파싱하기
                 xpp.setInput(StringReader(page))
@@ -182,12 +179,13 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                 // 파싱 진행
                 var eventType = xpp.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_DOCUMENT) {}
-                    else if (eventType == XmlPullParser.START_TAG) {
-                        var tagName = xpp.name
-                        if (tagName.equals("originimgurl")) tagOriginimgurl = true
-                        else if (tagName.equals("smallimageurl")) tagSmallimageurl = true
-                      }
+                    if (eventType != XmlPullParser.START_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG) {
+                            val tagName = xpp.name
+                            if (tagName.equals("originimgurl")) tagOriginimgurl = true
+                            else if (tagName.equals("smallimageurl")) tagSmallimageurl = true
+                        }
+                    }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagOriginimgurl) {         // 이미지
                             originimgurl = xpp.text
@@ -200,7 +198,6 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                             tagSmallimageurl = false
                         }
                     }
-                    if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
             }
@@ -209,7 +206,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         getDangerGrade().execute()
     }
 
-    fun introParser(contentId : String) {
+    private fun introParser(contentId : String) {
         val serviceUrl2 = "http://apis.data.go.kr/B551011/KorService/detailIntro"
         val requstUrl = serviceUrl2 +
                 "?serviceKey=" + serviceKey +
@@ -229,6 +226,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
+            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -246,6 +244,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -265,11 +264,12 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                 // 파싱 진행
                 var eventType = xpp.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_DOCUMENT) {}
-                    else if (eventType == XmlPullParser.START_TAG) {
-                        var tagName = xpp.name
-                        if (tagName.equals("useseason")) tagUseseason = true
-                        else if (tagName.equals("usetime")) tagUsetime = true
+                    if (eventType != XmlPullParser.START_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG) {
+                            var tagName = xpp.name
+                            if (tagName.equals("useseason")) tagUseseason = true
+                            else if (tagName.equals("usetime")) tagUsetime = true
+                        }
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagUseseason) {         // 이미지
@@ -278,7 +278,9 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                             if(useseason != ""){
                                 binding.seletedUseseason.text = "이용시기 : $useseason"
                             }
-                            else binding.seletedUseseason.text = "이용시기 : 항시 이용가능"
+                            else {
+                                binding.seletedUseseason.text = "이용시기 : 항시 이용가능"
+                            }
 
                         }
                         if(tagUsetime) {
@@ -291,7 +293,6 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
 
                         }
                     }
-                    if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
             }

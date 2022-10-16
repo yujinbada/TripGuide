@@ -1,19 +1,16 @@
 package com.example.tripguide.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.example.tripguide.R
 import com.example.tripguide.databinding.SelectItemBinding
-import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.model.SelectItem
-import com.example.tripguide.model.SelectViewModel
-import com.example.tripguide.utils.Constants.TAG
 
 class SelectRecyclerAdapter(var items : List<SelectItem>,
                             val onClickDeleteButton: (selectItem: SelectItem) -> Unit) :
@@ -25,10 +22,18 @@ class SelectRecyclerAdapter(var items : List<SelectItem>,
         fun bind(data: SelectItem) {
             itemBinding.selecttitle.text = data.title
 
-            Glide.with(itemBinding.selectimg)
-                .load(data.firstimage)
-                .error(R.drawable.ic_launcher_foreground)                  // 오류 시 이미지
-                .into(itemBinding.selectimg)
+            if(data.firstimage != null) {
+                Glide.with(itemBinding.selectimg)
+                    .load(data.firstimage)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .centerCrop()
+                    .dontAnimate()
+                    .dontTransform()
+                    .placeholder(R.drawable.progress)
+                    .into(itemBinding.selectimg)
+
+            }
 
             itemBinding.cancelbutton.setOnClickListener {
                 onClickDeleteButton.invoke(data)

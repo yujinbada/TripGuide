@@ -29,6 +29,7 @@ import java.net.URL
 import kotlin.math.log
 
 
+@Suppress("DEPRECATION")
 class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     // To get the main activity's change fragment function
@@ -60,7 +61,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         Log.d(TAG, "RecommendFragment1 - onCreateView() called")
         // Inflate the layout for this fragment
         arrayList.clear()
@@ -79,6 +80,9 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         binding.rvrecommend1.addItemDecoration(customDecoration)
 
         binding.rvrecommend1.adapter = recommendRecyclerAdapter
+        binding.rvrecommend1.apply {
+            itemAnimator = null
+        }
         setFragmentResultListener("areaCode") { key, bundle ->
             val result = bundle.getString("areaCodeKey")
             areaCode = result!!.toInt()
@@ -110,7 +114,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         })
     }
 
-    fun keywordParser() {
+    private fun keywordParser() {
         Log.d(TAG, "장소 검색중")
         // 이 url 주소 가지고 xml에서 데이터 파싱하기
         val requstUrl = serviceUrl +
@@ -128,13 +132,14 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
     }
 
     // xml 파싱하기
-    fun fetchXML(url: String) {
+    private fun fetchXML(url: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
 
         // xml 데이터 가져와서 파싱하기
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
+            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -152,6 +157,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
+            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -177,14 +183,15 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
                 // 파싱 진행
                 var eventType = xpp.eventType
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_DOCUMENT) {}
-                    else if (eventType == XmlPullParser.START_TAG) {
-                        var tagName = xpp.name
-                        if (tagName.equals("firstimage")) tagImage = true
-                        else if (tagName.equals("title")) tagTitle = true
-                        else if (tagName.equals("contentid")) tagConTentId = true
-                        else if (tagName.equals("mapx")) tagMapX = true
-                        else if (tagName.equals("mapy")) tagMapY = true
+                    if (eventType != XmlPullParser.START_DOCUMENT) {
+                        if (eventType == XmlPullParser.START_TAG) {
+                            var tagName = xpp.name
+                            if (tagName.equals("firstimage")) tagImage = true
+                            else if (tagName.equals("title")) tagTitle = true
+                            else if (tagName.equals("contentid")) tagConTentId = true
+                            else if (tagName.equals("mapx")) tagMapX = true
+                            else if (tagName.equals("mapy")) tagMapY = true
+                        }
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagImage) {         // 이미지
@@ -194,7 +201,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
                         else if (tagTitle) {    // 제목
                             title = xpp.text
                             tagTitle = false
-                            var item = RecommendItem(firstimage, title, contentid,"" , mapx, mapy)
+                            val item = RecommendItem(firstimage, title, contentid,"" , mapx, mapy)
                             arrayList.add(item)
                             getOverView(contentid)
                         }
@@ -214,7 +221,6 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
                         }
                     }
-                    if (eventType == XmlPullParser.END_TAG) {}
                     eventType = xpp.next()
                 }
             }

@@ -46,8 +46,7 @@ class MainFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.btnplan -> {
-                mainActivity.changeFragment(1)
-//                mainActivity.addFragment(MainFragment(), DispositionFragment())
+                mainActivity.addFragment(MainFragment(), DispositionFragment())
             }
         }
     }

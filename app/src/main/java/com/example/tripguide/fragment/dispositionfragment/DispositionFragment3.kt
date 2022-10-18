@@ -1,3 +1,8 @@
+/*
+    Copyright (c).2022.4  the phoenix https://soeun-87.tistory.com/34?category=897414
+    This fragment adds the places the user has previously wanted to go to according to each type.
+    The added place is shown in the recycler view, and creation and addition are free.
+*/
 package com.example.tripguide.fragment.dispositionfragment
 
 import android.content.Context
@@ -59,19 +64,19 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
 
         mBinding = FragmentDisposition3Binding.inflate(inflater, container, false)
 
-
+        // 관광지는 viewModel 의 tourList 로 들어가게 하고 RecyclerView 띄워줌
         var tourList = viewModel.tourList.value
         adapter1 = SelectRecyclerAdapter(tourList?: emptyList<SelectItem>(), onClickDeleteButton={ viewModel.deleteTask(it)})
         adapter1.setHasStableIds(true)
         binding.rvtour.adapter = adapter1
         binding.rvtour.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
+        // 식당 / 카페는 viewModel 의 foodList 로 들어가게 하고 RecyclerView 띄워줌
         var foodList = viewModel.foodList.value
         adapter2 = SelectRecyclerAdapter(foodList?: emptyList<SelectItem>(), onClickDeleteButton={ viewModel.deleteTask(it)})
         adapter2.setHasStableIds(true)
         binding.rvfood.adapter = adapter2
         binding.rvfood.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
+        // 숙소는 viewModel 의 hotelList 로 들어가게 하고 RecyclerView 띄워줌
         var hotelList = viewModel.hotelList.value
         adapter3 = SelectRecyclerAdapter(hotelList?: emptyList<SelectItem>(), onClickDeleteButton={ viewModel.deleteTask(it)})
         adapter3.setHasStableIds(true)
@@ -88,6 +93,7 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
         binding.nextbtn3.setOnClickListener(this)
         binding.beforebtn3.setOnClickListener(this)
 
+        // viveModel 의 selectList 를 observe 하고 있다가 각 데이터의 type 값에 따라 각 adapter 에 post 한다.
         viewModel.selectList.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, "DispositionFragment3 - viewModel observe is called")
             binding.rvtour.post(Runnable { adapter1.setTourData(it.filter { x -> x.type == 12} as ArrayList<SelectItem>) })
@@ -114,27 +120,27 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
                 val hint = "가고 싶은 관광지를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
                 setFragmentResult("numberrequestKey", bundleOf("numberbundleKey" to 12))
-                mainActivity.changeFragment(10)
+                mainActivity.addFragment(DispositionFragment3(), DispositionFragment4())
             }
             R.id.searchbtn2 -> {
                 btn_number = 2
                 val hint = "가고 싶은 식당/카페를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
                 setFragmentResult("numberrequestKey", bundleOf("numberbundleKey" to 39))
-                mainActivity.changeFragment(10)
+                mainActivity.addFragment(DispositionFragment3(), DispositionFragment4())
             }
             R.id.searchbtn3 -> {
                 btn_number = 3
                 val hint = "가고 싶은 숙소를 선택해 주세요."
                 setFragmentResult("hintrequestKey", bundleOf("hintbundleKey" to hint))
                 setFragmentResult("numberrequestKey", bundleOf("numberbundleKey" to 32))
-                mainActivity.changeFragment(10)
+                mainActivity.addFragment(DispositionFragment3(), DispositionFragment4())
             }
             R.id.nextbtn3 -> {
-                mainActivity.changeFragment(13)
+                mainActivity.addFragment(DispositionFragment3(), DispositionFragment5())
             }
             R.id.beforebtn3 -> {
-                mainActivity.changeFragment(14)
+                mainActivity.removeFragment(DispositionFragment2())
             }
         }
     }

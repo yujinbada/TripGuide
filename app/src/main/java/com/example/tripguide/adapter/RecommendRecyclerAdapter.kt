@@ -40,12 +40,7 @@ class RecommendRecyclerAdapter(private var items : ArrayList<RecommendItem>) :
         if(item.recommendImage != null) {
             Glide.with(holder.imgFirstImage)
                 .load(item.recommendImage)
-                .placeholder(R.drawable.progress)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .centerCrop()
-                .dontAnimate()
-                .dontTransform()
                 .into(holder.imgFirstImage)
         }
 

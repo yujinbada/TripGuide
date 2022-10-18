@@ -110,14 +110,16 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 Log.d(TAG, "TourAdapter - 아이템클릭 이벤트 발생")
                 var selecttitle = arrayList[position].title.toString()
                 var selectimage = arrayList[position].firstimage.toString()
-                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId))
+                var selectmapx = arrayList[position].mapX.toString()
+                var selectmapy = arrayList[position].mapY.toString()
+                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy))
 
                 binding.chipgroup.addView(Chip(activity).apply {
                     text = arrayList[position].title // text setting
                     isCloseIconVisible = true // show 'x' button
                     setOnCloseIconClickListener {
                         binding.chipgroup.removeView(this)
-                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId))
+                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy))
                     } // delete when we clicked 'x' button
                 })
                 makeButton()
@@ -174,10 +176,14 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 var tagImage = false   // 이미지 태그
                 var tagTitle = false   // 제목 태그
                 var tagAddr1 = false   // 주소 태그
+                var tagMapX = false
+                var tagMapY = false
 
                 var firstimage = ""    // 이미지
                 var title = ""         // 제목
                 var addr1 = ""         // 주소
+                var mapx = ""
+                var mapy = ""
 
                 var factory = XmlPullParserFactory.newInstance()    // 파서 생성
                 factory.setNamespaceAware(true)                     // 파서 설정
@@ -195,6 +201,8 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             if (tagName.equals("firstimage")) tagImage = true
                             else if (tagName.equals("title")) tagTitle = true
                             else if (tagName.equals("addr1")) tagAddr1 = true
+                            else if (tagName.equals("mapx")) tagMapX = true
+                            else if (tagName.equals("mapy")) tagMapY = true
                         }
                     }
                     if (eventType == XmlPullParser.TEXT) {
@@ -207,7 +215,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                             tagTitle = false
 
                             // 기관명까지 다 읽으면 하나의 데이터 다 읽은 것임
-                            var item = Tour(firstimage, title, addr1)
+                            var item = Tour(firstimage, title, addr1, mapx, mapy)
                             Log.d(TAG, "item - $item")
                             arrayList.add(item)
                             tourAdapter.notifyDataSetChanged()
@@ -215,6 +223,14 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                         else if (tagAddr1) {    // 주소
                             addr1 = xpp.text
                             tagAddr1 = false
+                        }
+                        else if (tagMapX) {    // mapx
+                            mapx = xpp.text
+                            tagMapX = false
+                        }
+                        else if (tagMapY) {    // mapy
+                            mapy = xpp.text
+                            tagMapY = false
                         }
                     }
                     eventType = xpp.next()
@@ -253,7 +269,7 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                     arrayList.clear()
                     binding.textInputEditTextregion.text = null
                     count = 0
-                    mainActivity.changeFragment(11)
+                    mainActivity.removeFragment(DispositionFragment3())
                 }
             }
             binding.linearLayout2.addView(dynamicButton)

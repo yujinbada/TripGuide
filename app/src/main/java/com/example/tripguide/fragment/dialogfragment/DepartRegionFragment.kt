@@ -1,11 +1,13 @@
 /*
+ Copyright (c) Jang_Story
+ https://jangstory.tistory.com/m/44
  This fragment is a fragment that receives the correct region name
  when you enter a search term using the Kakao api.
  We show the list through the recycler view when it is searched
  and also set an event when it is clicked.
 */
 
-package com.example.tripguide.fragment
+package com.example.tripguide.fragment.dialogfragment
 
 import android.content.Context
 import android.os.AsyncTask
@@ -18,7 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,11 +44,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
-import kotlin.math.log
 
 
 @Suppress("DEPRECATION")
-class DepartRegionFragment : Fragment(), View.OnClickListener {
+class DepartRegionFragment : DialogFragment(), View.OnClickListener {
     private lateinit var callback: OnBackPressedCallback
 
     // To get the main activity's change fragment function
@@ -87,18 +88,9 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-
         // Set the recycler view direction, etc.
         binding.departrecyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.departrecyclerview.adapter = myRecyclerAdapter
-
-        // This code modifies the hint of DepartRegionFragment to reuse one fragment when inputting the departure and destination.
-        setFragmentResultListener("hintrequestKey") { key, bundle ->
-            val hint = bundle.getString("hintbundleKey")
-            binding.departtextField.hint = hint
-        }
 
         binding.tripName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -107,7 +99,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d(TAG, "DepartRegionFragment - search event occurs")
-                keyword = binding.tripName.text.toString()
+                keyword = binding.tripName.text.toString().replace(" ", "")
                 getResultSearch(keyword)
                 if(binding.tripName.text.toString() == "") {
                     modelList.clear()
@@ -138,7 +130,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
 
-                mainActivity.changeFragment(3)
+                dismiss()
             }
         })
     }
@@ -152,8 +144,8 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             .baseUrl(KakaoApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val api = retrofit.create(RetrofitInterface::class.java)
-        val call = api.getKakaoAddress(KakaoApi.API_KEY, keyword)
+        var api = retrofit.create(RetrofitInterface::class.java)
+        var call = api.getKakaoAddress(KakaoApi.API_KEY, keyword)
 
         call.enqueue(object : Callback<KakaoData> {
             override fun onResponse(call: Call<KakaoData>, response: Response<KakaoData>) {
@@ -173,7 +165,7 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             // Search results available
             for (document in searchResult!!.documents) {
                 Log.d(TAG, "DepartRegionFragment - addItems() called")
-                val item = MyModel(document.address.region_1depth_name,
+                var item = MyModel(document.address.region_1depth_name,
                     document.address.region_2depth_name)
                 modelList.add(item)
                 myRecyclerAdapter.notifyDataSetChanged()
@@ -223,8 +215,9 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
 
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
-                "&areaCode" + areaCode +
-                "&numOfRows=50" +
+                "&areaCode=" + areaCode +
+                "&numOfRows=30" +
+                "&pageNo=1" +
                 "&MobileOS=" + mobile_os +
                 "&MobileApp=" + mobile_app
 
@@ -243,8 +236,8 @@ class DepartRegionFragment : Fragment(), View.OnClickListener {
             @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
-                val stream = URL(url).openStream()
-                val bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
+                var stream = URL(url).openStream()
+                var bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
 
                 // 한줄씩 읽어서 스트링 형태로 바꾼 후 page에 저장
                 page = ""

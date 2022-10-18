@@ -39,12 +39,7 @@ class TourAdapter(var items : ArrayList<Tour>) :
         if(item.firstimage != null) {
             Glide.with(holder.imgFirstImage)
                 .load(item.firstimage)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .centerCrop()
-                .dontAnimate()
-                .dontTransform()
-                .placeholder(R.drawable.progress)
                 .into(holder.imgFirstImage)
         }
 

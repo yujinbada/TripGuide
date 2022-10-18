@@ -37,8 +37,6 @@
                 android:text=""
                 android:textColor="@color/black"
                 />
-
-
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 

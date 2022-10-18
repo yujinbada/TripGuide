@@ -66,12 +66,12 @@ class DispositionFragment22 : Fragment(), View.OnClickListener {
             }
             R.id.nextbtn22 -> {
                 if ((binding.departurecar.isChecked || binding.departurepublic.isChecked) && (binding.transcar.isChecked || binding.transpublic.isChecked)) {
-                    mainActivity.changeFragment(8)
+                    mainActivity.addFragment(DispositionFragment22(), DispositionFragment3())
                 } else
                     Toast.makeText(activity, "이동수단을 선택해 주세요!", Toast.LENGTH_SHORT).show()
             }
             R.id.beforebtn22 -> {
-                mainActivity.changeFragment(9)
+                mainActivity.removeFragment(DispositionFragment2())
             }
         }
     }

@@ -51,10 +51,10 @@ class DispositionFragment5 : Fragment(),View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.beforebtn5 -> {
-                mainActivity.changeFragment(17)
+                mainActivity.removeFragment(DispositionFragment3())
             }
             R.id.nextbtn5 -> {
-                mainActivity.changeFragment(18)
+                mainActivity.addFragment(DispositionFragment5(), DispositionFragment6())
             }
         }
     }

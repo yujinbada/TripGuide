@@ -107,7 +107,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
                 setFragmentResult("tourOverView", bundleOf("tourOverViewdbundleKey" to tourOverView))
                 setFragmentResult("tourX", bundleOf("tourXbundleKey" to tourX))
                 setFragmentResult("tourY", bundleOf("tourYbundleKey" to tourY))
-                mainActivity.changeFragment(15)
+                mainActivity.addFragment(RecommendFragment1(), SelectTourFragment())
 
             }
 

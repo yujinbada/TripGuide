@@ -58,26 +58,23 @@ class DispositionFragment2 : Fragment(), View.OnClickListener {
 
         when(v?.id) {
             R.id.arrivalcar -> {
-                binding.transconstraintLayout.visibility = View.INVISIBLE
             }
             R.id.arrivalpublic -> {
-                binding.transconstraintLayout.visibility = View.INVISIBLE
             }
             R.id.arrivalplane -> {
-                binding.transconstraintLayout.visibility = View.VISIBLE
             }
             R.id.nextbtn2 -> {
                 if (binding.arrivalplane.isChecked) {
-                    mainActivity.changeFragment(7)
+                    mainActivity.addFragment(DispositionFragment2(), DispositionFragment222())
                 } else if (binding.arrivalcar.isChecked || binding.arrivalpublic.isChecked) {
-                    mainActivity.changeFragment(8)
+                    mainActivity.addFragment(DispositionFragment2(), DispositionFragment3())
                 } else {
                     Toast.makeText(activity, "이동수단을 선택해 주세요!", Toast.LENGTH_SHORT).show()
                 }
 
             }
             R.id.beforebtn2 -> {
-                mainActivity.changeFragment(66)
+                mainActivity.removeFragment(DispositionFragment())
             }
         }
     }

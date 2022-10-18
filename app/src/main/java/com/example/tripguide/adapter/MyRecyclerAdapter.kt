@@ -10,7 +10,8 @@ import com.example.tripguide.R
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.utils.Constants.TAG
 
-class MyRecyclerAdapter(var modelList : ArrayList<MyModel>): RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder>() {
+class MyRecyclerAdapter(var modelList : ArrayList<MyModel>)
+    : RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder>() {
     // 뷰홀더가 생성 되었을때
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyRecyclerAdapter.ViewHolder {
         // 연결할 레이아웃 설정

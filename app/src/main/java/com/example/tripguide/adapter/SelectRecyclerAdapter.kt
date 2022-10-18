@@ -25,12 +25,7 @@ class SelectRecyclerAdapter(var items : List<SelectItem>,
             if(data.firstimage != null) {
                 Glide.with(itemBinding.selectimg)
                     .load(data.firstimage)
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .centerCrop()
-                    .dontAnimate()
-                    .dontTransform()
-                    .placeholder(R.drawable.progress)
                     .into(itemBinding.selectimg)
 
             }

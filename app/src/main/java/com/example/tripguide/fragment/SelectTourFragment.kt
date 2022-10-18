@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import com.denzcoskun.imageslider.models.SlideModel
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.databinding.FragmentSelectTourBinding
+import com.example.tripguide.fragment.recommend.RecommendFragment1
 import com.example.tripguide.model.RecommendItem
 import com.example.tripguide.model.SelectItem
 import com.example.tripguide.model.SelectViewModel
@@ -304,11 +306,12 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.back -> {
-                mainActivity.changeFragment(16)
+                mainActivity.removeFragment(RecommendFragment1())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 12))
-                mainActivity.changeFragment(16)
+                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString()))
+                Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
+                mainActivity.removeFragment(RecommendFragment1())
             }
         }
     }

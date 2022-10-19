@@ -16,6 +16,7 @@ import com.example.tripguide.databinding.ActivityMainBinding
 import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
+import com.example.tripguide.fragment.SelectCafeFragment
 import com.example.tripguide.fragment.SelectTourFragment
 import com.example.tripguide.fragment.dialogfragment.StationDialogFragment
 import com.example.tripguide.fragment.dispositionfragment.*
@@ -39,6 +40,7 @@ class MainActivity() : AppCompatActivity() {
     private val dispositionFragment5 = DispositionFragment5()
     private val dispositionFragment6 = DispositionFragment6()
     private val selectTourFragment = SelectTourFragment()
+    private val selectCafeFragment = SelectCafeFragment()
 
 //    lateinit var myViewModel: MyViewModel
 

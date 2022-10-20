@@ -29,6 +29,7 @@
         android:layout_marginEnd="40dp"
         android:hint="여행 일정 이름을 만들어주세요!"
         android:textColorHint="@color/gray"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -150,45 +151,45 @@
         app:layout_constraintTop_toBottomOf="@+id/daterangeview"
         app:layout_constraintVertical_bias="0.071" />
 
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/tripwith"
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        app:singleSelection="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/alone"
-            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="혼자서" />
+            android:text="혼자서"
+            android:textColor="@color/white" />
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/couple"
-            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="연인과" />
+            android:text="연인과"
+            android:textColor="@color/white" />
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:id="@+id/over5"
-            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5인이상" />
+            android:text="5인이상"
+            android:textColor="@color/white" />
 
     </com.google.android.material.chip.ChipGroup>
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/nextbtn"

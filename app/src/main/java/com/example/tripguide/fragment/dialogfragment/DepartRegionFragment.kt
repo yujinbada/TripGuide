@@ -26,9 +26,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.databinding.FragmentDepartRegionBinding
-import com.example.tripguide.kakao.KakaoData
+import com.example.tripguide.model.kakao.KakaoData
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.adapter.MyRecyclerAdapter
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
 
 import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
@@ -46,7 +47,6 @@ import java.io.StringReader
 import java.net.URL
 
 
-@Suppress("DEPRECATION")
 class DepartRegionFragment : DialogFragment(), View.OnClickListener {
     private lateinit var callback: OnBackPressedCallback
 
@@ -64,16 +64,13 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    companion object {
-        const val BASE_URL = "https://dapi.kakao.com/"
-        const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
-    }
-
     val bundle = Bundle()
     var keyword = ""
 
     private val modelList = ArrayList<MyModel>() // Array to hold data
     private val myRecyclerAdapter = MyRecyclerAdapter(modelList)
+
+    var hashMap = HashMap<String,String>()
 
 
     private var mBinding: FragmentDepartRegionBinding? = null
@@ -99,12 +96,9 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d(TAG, "DepartRegionFragment - search event occurs")
-                keyword = binding.tripName.text.toString().replace(" ", "")
+                keyword = binding.tripName.text.toString()
                 getResultSearch(keyword)
-                if(binding.tripName.text.toString() == "") {
-                    modelList.clear()
-
-                }
+                modelList.clear()
             }
         })
 
@@ -129,8 +123,7 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                     areaCode( modelList[position].firstregion + " " + modelList[position].secondregion)
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
-
-                dismiss()
+                dismissAllowingStateLoss()
             }
         })
     }
@@ -144,8 +137,8 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             .baseUrl(KakaoApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        var api = retrofit.create(RetrofitInterface::class.java)
-        var call = api.getKakaoAddress(KakaoApi.API_KEY, keyword)
+        val api = retrofit.create(RetrofitInterface::class.java)
+        val call = api.getKakaoAddress(KakaoApi.API_KEY, keyword)
 
         call.enqueue(object : Callback<KakaoData> {
             override fun onResponse(call: Call<KakaoData>, response: Response<KakaoData>) {
@@ -165,7 +158,7 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             // Search results available
             for (document in searchResult!!.documents) {
                 Log.d(TAG, "DepartRegionFragment - addItems() called")
-                var item = MyModel(document.address.region_1depth_name,
+                val item = MyModel(document.address.region_1depth_name,
                     document.address.region_2depth_name)
                 modelList.add(item)
                 myRecyclerAdapter.notifyDataSetChanged()
@@ -203,7 +196,9 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
         else {
             setFragmentResult("areaCode", bundleOf("areaCodeKey" to areacode))
             Log.d(TAG, "areaCode - $areacode")
-            findSiGunGuCode(areacode, areaNameSplit[1].removeSuffix("시"))
+            var sigunguName = areaNameSplit[1].removeSuffix("시")
+            findSiGunGuCode(areacode, sigunguName)
+
         }
     }
 
@@ -228,12 +223,10 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
 
     private fun fetchXML(url: String, sigunguName: String) {
         lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
-        Log.d(TAG, "sigunguName - $sigunguName")
         // xml 데이터 가져와서 파싱하기
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
-            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 var stream = URL(url).openStream()
@@ -251,7 +244,6 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
-            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -282,10 +274,8 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagAreaName) {
                             areaname = xpp.text
-                            Log.d(TAG, "sigunguCode - $areaname")
                             if(areaname.contains(sigunguName)) {
-                                Log.d(TAG, "sigunguCode - $areaname")
-                                setFragmentResult("sigunguCode", bundleOf("sigunguCodeKey" to areaname))
+
                             }
                             tagAreaName = false
                         }
@@ -299,7 +289,6 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                 }
             }
         }
-
         getDangerGrade().execute()
     }
 
@@ -309,7 +298,7 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
-        mBinding = null
         super.onDestroyView()
+        mBinding = null
     }
 }

@@ -7,11 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.fragment.dialogfragment.StationDialogFragment
 import com.example.tripguide.databinding.FragmentDisposition222Binding
+import com.example.tripguide.model.SelectItem
 
 class DispositionFragment222 : Fragment(), View.OnClickListener {
     // To get the main activity's change fragment function
@@ -48,6 +51,8 @@ class DispositionFragment222 : Fragment(), View.OnClickListener {
                     val result = bundle.getString("stationNameKey")
                     binding.departName.text = result
                 }
+                val type = 2
+                setFragmentResult("listType", bundleOf("listTypeKey" to type))
             }
             R.id.arriveName -> {
                 mainActivity.dialogFragment(StationDialogFragment())
@@ -55,6 +60,8 @@ class DispositionFragment222 : Fragment(), View.OnClickListener {
                     val result = bundle.getString("stationNameKey")
                     binding.arriveName.text = result
                 }
+                val type = 3
+                setFragmentResult("listType", bundleOf("listTypeKey" to type))
             }
             R.id.nextbtn222 -> {
                 mainActivity.addFragment(DispositionFragment222(), DispositionFragment22())

@@ -1,4 +1,4 @@
-package com.example.tripguide
+package com.example.tripguide.model
 
 import android.app.Application
 

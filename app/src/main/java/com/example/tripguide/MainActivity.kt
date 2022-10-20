@@ -7,17 +7,17 @@ package com.example.tripguide
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.system.Os.remove
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.tripguide.databinding.ActivityMainBinding
-import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.FirstFragment
 import com.example.tripguide.fragment.MainFragment
 import com.example.tripguide.fragment.SelectTourFragment
-import com.example.tripguide.fragment.dialogfragment.StationDialogFragment
+import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.dispositionfragment.*
 import com.example.tripguide.utils.Constants
 import com.kakao.util.maps.helper.Utility
@@ -101,22 +101,20 @@ class MainActivity() : AppCompatActivity() {
 
     fun dialogFragment(show: DialogFragment) {
         Log.d(TAG, "show $show")
-        val dialog = show
+        var dialog = show
         dialog.show(supportFragmentManager, "$show")
     }
-
-
-        // supportFragmentManager function for fragment transaction
-        fun changeFragment(index: Int?) {
-            val transaction = supportFragmentManager.beginTransaction()
-            when (index) {
-                4 -> {
-                    Log.d(Constants.TAG, "Replace to MainFragment")
-                    transaction
-                        .replace(R.id.fragment_container_view, mainFragment)
-                        .show(mainFragment)
-                        .commit()
-                }
+    // supportFragmentManager function for fragment transaction
+    fun changeFragment(index: Int?) {
+        val transaction = supportFragmentManager.beginTransaction()
+        when (index) {
+            4 -> {
+                Log.d(Constants.TAG, "Replace to MainFragment")
+                transaction
+                    .replace(R.id.fragment_container_view, mainFragment)
+                    .show(mainFragment)
+                    .commit()
             }
         }
     }
+}

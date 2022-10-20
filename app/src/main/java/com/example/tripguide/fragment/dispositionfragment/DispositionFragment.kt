@@ -20,7 +20,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import com.example.tripguide.MainActivity
-import com.example.tripguide.TripGuide
+import com.example.tripguide.model.TripGuide
 import com.example.tripguide.databinding.FragmentDispositionBinding
 import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.dialogfragment.StationDialogFragment
@@ -40,6 +40,7 @@ class DispositionFragment : Fragment(), View.OnClickListener {
 
     private var mBinding: FragmentDispositionBinding? = null
     private val binding get() = mBinding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mBinding = FragmentDispositionBinding.inflate(inflater, container, false)
@@ -81,6 +82,9 @@ class DispositionFragment : Fragment(), View.OnClickListener {
             }
             R.id.viewdepart -> {
                 mainActivity.dialogFragment(StationDialogFragment())
+                val type = 1
+                setFragmentResult("listType", bundleOf("listTypeKey" to type))
+
                 setFragmentResultListener("stationName") { key, bundle ->
                     val result = bundle.getString("stationNameKey")
                     binding.viewdepart.text = result

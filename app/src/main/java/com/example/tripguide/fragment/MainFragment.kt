@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
-import com.example.tripguide.TripGuide
-import com.example.tripguide.databinding.FragmentDispositionBinding
 import com.example.tripguide.databinding.FragmentMainBinding
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
 import com.google.firebase.auth.FirebaseAuth

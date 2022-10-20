@@ -1,4 +1,4 @@
-package com.example.tripguide.kakao
+package com.example.tripguide.model.kakao
 
 data class Meta(
     val is_end: Boolean,

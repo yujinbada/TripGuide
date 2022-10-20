@@ -15,14 +15,20 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.adapter.StationAdapter
 import com.example.tripguide.databinding.FragmentStationDialogBinding
-import com.example.tripguide.kakao.KakaoData
+import com.example.tripguide.model.kakao.KakaoData
+import com.example.tripguide.model.kakao.kakaokeyword
+import com.example.tripguide.model.SelectItem
+import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.model.Station
 import com.example.tripguide.retrofit.RetrofitInterface
+import com.example.tripguide.retrofit.RetrofitKeyword
 import com.example.tripguide.utils.Constants
+import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,17 +48,27 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
 
     private val stationList = ArrayList<Station>()
     private val stationAdapter = StationAdapter(stationList)
+    private lateinit var viewModel: SelectViewModel
+
+    var type = 2
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener("listType") { key, bundle ->
+            val result = bundle.getInt("listTypeKey")
+            type = result
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        // View Model 설정
+        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()) .get(
+            SelectViewModel::class.java)
+
         mBinding = FragmentStationDialogBinding.inflate(inflater, container, false)
         return binding.root
-    }
-    companion object {
-        const val BASE_URL = "https://dapi.kakao.com/"
-        const val API_KEY = "KakaoAK 48ad751ca72b3e49a7f746f46b40b142"
     }
 
     val bundle = Bundle()
@@ -78,19 +94,19 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d(Constants.TAG, "DepartRegionFragment - search event occurs")
+                stationList.clear()
                 keyword = binding.tripName.text.toString().replace(" ", "")
                 getResultSearch(keyword)
-                if(binding.tripName.text.toString() == "") {
-                    stationList.clear()
-                }
             }
         })
 
         // Recycler Item click event
         stationAdapter.setItemClickListener(object : StationAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                val result = stationList[position].name
+                val result = stationList[position].name.toString()
                 setFragmentResult("stationName", bundleOf("stationNameKey" to result))
+                viewModel.addTask(SelectItem("", stationList[position].name, type, stationList[position].x.toString(), stationList[position].y.toString()))
+                stationList.clear()
                 dismiss()
             }
         })
@@ -101,23 +117,23 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
             .baseUrl(KakaoApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        var api = retrofit.create(RetrofitInterface::class.java)
-        var call = api.getKakaoAddress(KakaoApi.API_KEY, keyword)
+        val api = retrofit.create(RetrofitKeyword::class.java)
+        val call = api.getKakaoKeyword(KakaoApi.API_KEY, keyword)
 
-        call.enqueue(object : Callback<KakaoData> {
-            override fun onResponse(call: Call<KakaoData>, response: Response<KakaoData>) {
+        call.enqueue(object : Callback<kakaokeyword> {
+            override fun onResponse(call: Call<kakaokeyword>, response: Response<kakaokeyword>) {
                 Log.d(Constants.TAG, "communication success")
                 addItems(response.body())
             }
 
-            override fun onFailure(call: Call<KakaoData>, t: Throwable) {
+            override fun onFailure(call: Call<kakaokeyword>, t: Throwable) {
                 Log.d(Constants.TAG, "error : " + t.message)
             }
         })
     }
 
 
-    private fun addItems(searchResult: KakaoData?) {
+    private fun addItems(searchResult: kakaokeyword?) {
         if (!searchResult?.documents.isNullOrEmpty()) {
             // Search results available
             for (document in searchResult!!.documents) {
@@ -127,6 +143,7 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
                     document.address_name,
                     document.x.toDouble(),
                     document.y.toDouble())
+                Log.d(TAG, "item - $item")
                 stationList.add(item)
                 stationAdapter.notifyDataSetChanged()
             }
@@ -136,4 +153,8 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
     }
 
+    override fun onDestroyView() {
+        mBinding = null
+        super.onDestroyView()
+    }
 }

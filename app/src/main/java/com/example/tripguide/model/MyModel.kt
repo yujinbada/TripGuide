@@ -1,21 +1,16 @@
 package com.example.tripguide.model
 
-import android.os.Parcelable
-import android.service.quicksettings.Tile
-import kotlinx.parcelize.Parcelize
-import java.io.Serializable
-
 data class MyModel(
     val firstregion: String? = null,
     val secondregion: String? = null
 )
 
 data class Station(
-    val name: String, // 장소명
-    val road: String, // 도로명 주소
-    val address: String, // 지번 주소
-    val x: Double, // 경도(Longitude)
-    val y: Double) // 위도(Latitude)
+    val name: String?, // 장소명
+    val road: String?, // 도로명 주소
+    val address: String?, // 지번 주소
+    val x: Double?, // 경도(Longitude)
+    val y: Double?) // 위도(Latitude)
 
 data class FirebaseClass(
     var name : String? = null,
@@ -52,7 +47,19 @@ data class RecommendItem (
 
 data class TourRoute (
     val key : String?,
-    val type :String,
+    val type :String?,
     var mapX : String? = null,
     var mapY : String? = null
+        )
+
+data class Origin (
+    val name: String?,
+    val x: Double?,
+    val y: Double?
+    )
+
+data class Destination (
+    val key: String?,
+    val x: Double?,
+    val y: Double?
         )

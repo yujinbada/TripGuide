@@ -1,4 +1,4 @@
-package com.example.tripguide.kakao
+package com.example.tripguide.model.kakao
 
 data class Address(
     val address_name: String,

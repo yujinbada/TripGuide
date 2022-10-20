@@ -9,12 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.tripguide.MainActivity
-import com.example.tripguide.R
 import com.example.tripguide.databinding.FragmentDisposition6Binding
-import com.example.tripguide.model.SelectItem
 import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.model.TourRoute
 import com.example.tripguide.utils.Constants.TAG
+import com.example.tripguide.utils.KakaoApi.Companion.BASE_URL
 
 class DispositionFragment6 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
@@ -43,20 +42,26 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         var tourList = viewModel.tourList.value
         var foodList = viewModel.foodList.value
         var hotelList = viewModel.hotelList.value
-        Log.d(TAG, "tourList - $tourList")
+        var departRegion = viewModel.departRegion.value
+        var departStationList = viewModel.departStationList.value
+        var arriveStationList = viewModel.arriveStationList.value
 
+        Log.d(TAG, "tourList - $tourList")
         tourList?.map {
             routeList.add(TourRoute(it.title, "Tour", it.mapX, it.mapY))
         }
-        tourList?.map {
-            routeList.add(TourRoute(it.title, "Tour", it.mapX, it.mapY))
+        foodList?.map {
+            routeList.add(TourRoute(it.title, "food", it.mapX, it.mapY))
         }
-        tourList?.map {
-            routeList.add(TourRoute(it.title, "Tour", it.mapX, it.mapY))
+        hotelList?.map {
+            routeList.add(TourRoute(it.title, "hotel", it.mapX, it.mapY))
         }
+
+        BASE_URL
 
     }
 

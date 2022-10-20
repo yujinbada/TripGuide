@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
-import com.example.tripguide.TripGuide
+import com.example.tripguide.model.TripGuide
 import com.example.tripguide.databinding.FragmentDisposition22Binding
 import com.example.tripguide.fragment.fbAuth
 import com.example.tripguide.fragment.fbFirestore

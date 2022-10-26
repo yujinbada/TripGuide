@@ -36,6 +36,8 @@ class MainFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnplan.setOnClickListener(this)
+        binding.btnRt.setOnClickListener(this)
+        binding.btnFestival.setOnClickListener(this)
 
         fbAuth = FirebaseAuth.getInstance()
         fbFirestore = FirebaseFirestore.getInstance()
@@ -45,6 +47,12 @@ class MainFragment : Fragment(), View.OnClickListener {
         when(v?.id) {
             R.id.btnplan -> {
                 mainActivity.addFragment(MainFragment(), DispositionFragment())
+            }
+            R.id.btnRt -> {
+                mainActivity.addFragment(MainFragment(), RecommendedTripFragment())
+            }
+            R.id.btnFestival -> {
+                mainActivity.addFragment(MainFragment(), FestivalFragment())
             }
         }
     }

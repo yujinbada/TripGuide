@@ -17,15 +17,15 @@
         android:layout_marginTop="280dp"
         android:text="TripGuide"
         android:textColor="#57AAD1"
-        android:textSize="50dp"
+        android:textSize="57dp"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="쉽고 빠른 여행 계획 세우기"
-        />
+        android:layout_gravity="center_horizontal"
+        android:text="쉽고 빠르게 여행 일정 만들기"
+        android:textSize="16sp" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,6 +1,8 @@
 package com.example.tripguide.fragment.dispositionfragment
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,12 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.tripguide.MainActivity
+import com.example.tripguide.R
 import com.example.tripguide.databinding.FragmentDisposition6Binding
 import com.example.tripguide.model.*
 import com.example.tripguide.model.kakaoroute.Destination
 import com.example.tripguide.model.kakaoroute.KakaoRoute
 import com.example.tripguide.model.kakaoroute.Origin
 import com.example.tripguide.retrofit.RetrofitRoute
+import com.example.tripguide.fragment.RecommendedTripFragment
+import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import retrofit2.Call
@@ -59,7 +64,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()) .get(
             SelectViewModel::class.java)
         mBinding = FragmentDisposition6Binding.inflate(inflater, container, false)
-        finalRoute.add(SelectItem())
         return binding.root
     }
     // 여행의 시작의 기본 시간을 오전 8시로 설정
@@ -69,6 +73,8 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.beforebtn6.setOnClickListener(this)
+        clickShareBtn()
 
         val tourList = viewModel.tourList.value
         val foodList = viewModel.foodList.value
@@ -232,8 +238,28 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun clickShareBtn(){
+        binding.btnshare.setOnClickListener {
+            try {
+                val sendText = "TripGuide 공유하기"
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, "Share"))
+            } catch (ignored: ActivityNotFoundException) {
+                Log.d("test", "ignored : $ignored")
+            }
+        }
+    }
 
     override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.beforebtn6 -> {
+                mainActivity.removeFragment(RecommendedTripFragment())
+            }
+        }
     }
+
 
 }

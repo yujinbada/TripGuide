@@ -14,10 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.tripguide.databinding.ActivityMainBinding
-import com.example.tripguide.fragment.FirstFragment
-import com.example.tripguide.fragment.MainFragment
-import com.example.tripguide.fragment.SelectCafeFragment
-import com.example.tripguide.fragment.SelectTourFragment
+import com.example.tripguide.fragment.*
 import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.dispositionfragment.*
 import com.example.tripguide.utils.Constants
@@ -41,6 +38,11 @@ class MainActivity() : AppCompatActivity() {
     private val dispositionFragment6 = DispositionFragment6()
     private val selectTourFragment = SelectTourFragment()
     private val selectCafeFragment = SelectCafeFragment()
+    private val selectHotelFragment = SelectHotelFragment()
+    private val recommendedTripFragment = RecommendedTripFragment()
+    private val festivalFragment = FestivalFragment()
+    private val selectFestivalFragment = SelectFestivalFragment()
+    private val selectTripFragment = SelectTripFragment()
 
 //    lateinit var myViewModel: MyViewModel
 

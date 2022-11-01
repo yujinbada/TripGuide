@@ -106,6 +106,7 @@ class MainActivity() : AppCompatActivity() {
         var dialog = show
         dialog.show(supportFragmentManager, "$show")
     }
+
     // supportFragmentManager function for fragment transaction
     fun changeFragment(index: Int?) {
         val transaction = supportFragmentManager.beginTransaction()

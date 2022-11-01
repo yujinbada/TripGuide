@@ -6,17 +6,26 @@ package com.example.tripguide.model
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.time.LocalTime
 
 class SelectViewModel : ViewModel() {
 
     val selectList = MediatorLiveData<List<SelectItem>>()
     private var datas = arrayListOf<SelectItem>()
-    val departRegion = MutableLiveData<List<SelectItem>>() // departRegion information
+    val departRegion = MutableLiveData<List<SelectItem>>()       // departRegion information
     val departStationList = MutableLiveData<List<SelectItem>>()  // departStation information
+    val departStationTime = MutableLiveData<LocalTime>()         // departStation Time information
     val arriveStationList = MutableLiveData<List<SelectItem>>()  // arriveStation information
-    val tourList = MutableLiveData<List<SelectItem>>()     // tourist attractions information
-    val foodList = MutableLiveData<List<SelectItem>>()     // restaurants information
-    val hotelList = MutableLiveData<List<SelectItem>>()    // hotels information
+    val arriveStationTime = MutableLiveData<LocalTime>()         // arriveStation Time information
+    val tourList = MutableLiveData<List<SelectItem>>()           // tourist attractions information
+    val foodList = MutableLiveData<List<SelectItem>>()           // restaurants information
+    val hotelList = MutableLiveData<List<SelectItem>>()          // hotels information
+    val areaCode : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val sigunguCode : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
     init{
         selectList.addSource(tourList){
@@ -47,6 +56,12 @@ class SelectViewModel : ViewModel() {
     fun deleteTask(selectItem : SelectItem){
         datas.remove(selectItem)
         setData(datas)
+    }
+    fun setDepartTime(time: LocalTime) {
+        departStationTime.value = time
+    }
+    fun setArriveTime(time: LocalTime) {
+        arriveStationTime.value = time
     }
 
     private fun setData(data: ArrayList<SelectItem>){

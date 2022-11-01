@@ -105,7 +105,7 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
             override fun onClick(v: View, position: Int) {
                 val result = stationList[position].name.toString()
                 setFragmentResult("stationName", bundleOf("stationNameKey" to result))
-                viewModel.addTask(SelectItem("", stationList[position].name, type, stationList[position].x.toString(), stationList[position].y.toString()))
+                viewModel.addTask(SelectItem("", stationList[position].name, type, stationList[position].x.toString(), stationList[position].y.toString(), 0))
                 stationList.clear()
                 dismiss()
             }
@@ -137,13 +137,11 @@ class StationDialogFragment : DialogFragment(), View.OnClickListener {
         if (!searchResult?.documents.isNullOrEmpty()) {
             // Search results available
             for (document in searchResult!!.documents) {
-                Log.d(Constants.TAG, "StationDialogFragment - addItems() called")
                 val item = Station(document.place_name,
                     document.road_address_name,
                     document.address_name,
                     document.x.toDouble(),
                     document.y.toDouble())
-                Log.d(TAG, "item - $item")
                 stationList.add(item)
                 stationAdapter.notifyDataSetChanged()
             }

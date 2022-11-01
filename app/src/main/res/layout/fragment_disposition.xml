@@ -57,7 +57,7 @@
 
     <TextView
         android:id="@+id/viewarrive"
-        android:layout_width="wrap_content"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:text="도착지"
         android:textColor="@color/gray"
@@ -73,6 +73,7 @@
         android:id="@+id/textView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
         android:layout_weight="1"
         android:text="여행을 출발하는 주소를 적어주세요!"
         android:textAllCaps="false"
@@ -83,12 +84,12 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/tripName"
-        app:layout_constraintVertical_bias="0.186" />
+        app:layout_constraintTop_toBottomOf="@+id/viewarrive"
+        app:layout_constraintVertical_bias="0.001" />
 
     <TextView
         android:id="@+id/viewdepart"
-        android:layout_width="wrap_content"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:text="출발지 주소"
         android:textColor="@color/gray"

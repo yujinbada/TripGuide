@@ -34,7 +34,10 @@ data class SelectItem (
     val title: String?,
     val type: Int?,
     var mapX : String? = null,
-    var mapY : String? = null)
+    var mapY : String? = null,
+    var duration: Int?
+    )
+
 
 data class RecommendItem (
     val recommendImage : String? = null,
@@ -45,21 +48,9 @@ data class RecommendItem (
     var recommendmapY : String? = null,
 )
 
-data class TourRoute (
-    val key : String?,
-    val type :String?,
-    var mapX : String? = null,
-    var mapY : String? = null
-        )
 
-data class Origin (
-    val name: String?,
-    val x: Double?,
-    val y: Double?
-    )
 
-data class Destination (
-    val key: String?,
-    val x: Double?,
-    val y: Double?
+data class RouteResult (
+    var key: String?,
+    var duration : Int?
         )

@@ -3,6 +3,7 @@ package com.example.tripguide.fragment
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -275,7 +276,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagUseseason) {         // 이미지
-                            useseason = xpp.text.replace("<br />", "\n")
+                            useseason = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagUseseason = false
                             if(useseason != ""){
                                 binding.seletedUseseason.text = "이용시기 : $useseason"
@@ -286,7 +287,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagUsetime) {
-                            usetime = xpp.text.replace("<br />", "\n")
+                            usetime = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagUsetime = false
                             if(usetime != null) {
                                 binding.selectedUsetime.text = "이용시간 : $usetime"
@@ -309,7 +310,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                 mainActivity.removeFragment(RecommendFragment1())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString()))
+                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString(), 0))
                 Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
                 mainActivity.removeFragment(RecommendFragment1())
             }

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -116,17 +117,25 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 }
             }
             R.id.nextbtn -> {
-                mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
-                var userInfo = TripGuide()
-                userInfo.uid = fbAuth?.uid
-                userInfo.userId = fbAuth?.currentUser?.email
-                userInfo.timestamp = System.currentTimeMillis()
-                userInfo.tripName = binding.tripName.text.toString()
-                userInfo.arrival = binding.viewarrive.text.toString()
-                userInfo.date = binding.daterangeview.text.toString()
-                userInfo.with = binding.tripwith.checkedChipId.toString()
-
-                fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
+                if(binding.viewarrive.text == "도착지") {
+                    Toast.makeText(activity, "도착지를 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    if(binding.viewdepart.text == "출발지 주소") {
+                        Toast.makeText(activity, "출발지 주소를 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                    }
+                    else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+                }
+//                var userInfo = TripGuide()
+//                userInfo.uid = fbAuth?.uid
+//                userInfo.userId = fbAuth?.currentUser?.email
+//                userInfo.timestamp = System.currentTimeMillis()
+//                userInfo.tripName = binding.tripName.text.toString()
+//                userInfo.arrival = binding.viewarrive.text.toString()
+//                userInfo.date = binding.daterangeview.text.toString()
+//                userInfo.with = binding.tripwith.checkedChipId.toString()
+//
+//                fbFirestore?.collection("basic_information")?.document(fbAuth?.uid.toString())?.set(userInfo)
             }
             R.id.beforebtn -> {
                 mainActivity.changeFragment(4)

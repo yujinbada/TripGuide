@@ -112,20 +112,21 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 var selectimage = arrayList[position].firstimage.toString()
                 var selectmapx = arrayList[position].mapX.toString()
                 var selectmapy = arrayList[position].mapY.toString()
-                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy))
+                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, 0))
 
                 binding.chipgroup.addView(Chip(activity).apply {
                     text = arrayList[position].title // text setting
                     isCloseIconVisible = true // show 'x' button
                     setOnCloseIconClickListener {
                         binding.chipgroup.removeView(this)
-                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy))
+                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, 0))
                     } // delete when we clicked 'x' button
                 })
                 makeButton()
             }
         })
     }
+
     private fun keywordParser() {
         Log.d(TAG, "장소 검색중")
         val textfield = binding.textInputEditTextregion.text.toString()

@@ -260,7 +260,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagOpentimefood) {
-                            opentimefood = xpp.text.replace("<br />", "\n")
+                            opentimefood = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagOpentimefood = false
                             if(opentimefood != ""){
                                 binding.seletedOpentimefood.text = "영업 시간 : $opentimefood"
@@ -271,7 +271,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagRestdatefood) {
-                            restdatefood = xpp.text.replace("<br />", "\n")
+                            restdatefood = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagRestdatefood = false
                             if(restdatefood != null) {
                                 binding.selectedRestdatefood.text = "휴뮤일 : $restdatefood"
@@ -280,7 +280,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagFirstmenu) {
-                            firstmenu = xpp.text.replace("<br />", "\n")
+                            firstmenu = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagFirstmenu = false
                             if(firstmenu != null) {
                                 binding.selectedFirstmenu.text = "대표 메뉴 : $firstmenu"
@@ -289,7 +289,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagReservationfood) {
-                            reservationfood = xpp.text.replace("<br />", "\n")
+                            reservationfood = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagReservationfood = false
                             if(reservationfood != null) {
                                 binding.selectedReservationfood.text = "예약 안내 : $reservationfood"
@@ -298,7 +298,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagInfocenterfood) {
-                            infocenterfood = xpp.text.replace("<br />", "\n")
+                            infocenterfood = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagInfocenterfood = false
                             if(infocenterfood != null) {
                                 binding.selectedInfocenterfood.text = "문의 및 안내 : $infocenterfood"
@@ -321,7 +321,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
                 mainActivity.removeFragment(RecommendFragment2())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString()))
+                viewModel.addTask(SelectItem(image, title, 39, tourX.toString(), tourY.toString(), 0))
                 Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
                 mainActivity.removeFragment(RecommendFragment2())
             }

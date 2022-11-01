@@ -23,6 +23,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.databinding.FragmentDepartRegionBinding
@@ -30,10 +31,12 @@ import com.example.tripguide.model.kakao.KakaoData
 import com.example.tripguide.model.MyModel
 import com.example.tripguide.adapter.MyRecyclerAdapter
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
+import com.example.tripguide.model.SelectViewModel
 
 import com.example.tripguide.retrofit.RetrofitInterface
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
+import okhttp3.internal.notify
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import retrofit2.Call
@@ -69,9 +72,7 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
 
     private val modelList = ArrayList<MyModel>() // Array to hold data
     private val myRecyclerAdapter = MyRecyclerAdapter(modelList)
-
-    var hashMap = HashMap<String,String>()
-
+    private lateinit var viewModel: SelectViewModel
 
     private var mBinding: FragmentDepartRegionBinding? = null
     private val binding get() = mBinding!!
@@ -84,6 +85,8 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()) .get(
+            SelectViewModel::class.java)
 
         // Set the recycler view direction, etc.
         binding.departrecyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -189,13 +192,13 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             "전남" -> areacode = "38"
             else -> areacode = "39"
         }
+
         if(areaNameSplit.size == 1) {
             Log.d(TAG, "areaCode - $areacode")
-            setFragmentResult("areaCode", bundleOf("areaCodeKey" to areacode))
+            viewModel.areaCode.value = areacode
+            viewModel.sigunguCode.value = ""
         }
         else {
-            setFragmentResult("areaCode", bundleOf("areaCodeKey" to areacode))
-            Log.d(TAG, "areaCode - $areacode")
             var sigunguName = areaNameSplit[1].removeSuffix("시")
             findSiGunGuCode(areacode, sigunguName)
 
@@ -275,7 +278,8 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                         if (tagAreaName) {
                             areaname = xpp.text
                             if(areaname.contains(sigunguName)) {
-
+                                Log.d(TAG, "sigunguname - $areaname sigungucode - $code")
+                                viewModel.sigunguCode.value = code
                             }
                             tagAreaName = false
                         }

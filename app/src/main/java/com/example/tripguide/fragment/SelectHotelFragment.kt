@@ -264,7 +264,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
                     }
                     if (eventType == XmlPullParser.TEXT) {
                         if (tagRoomtype) {
-                            roomtype = xpp.text.replace("<br />", "\n")
+                            roomtype = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagRoomtype = false
                             if(roomtype != ""){
                                 binding.seletedRoomtype.text = "객실 유형 : $roomtype"
@@ -275,7 +275,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagCheckintime) {
-                            checkintime = xpp.text.replace("<br />", "\n")
+                            checkintime = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagCheckintime = false
                             if(checkintime != null) {
                                 binding.selectedCheckintime.text = "입실 시간 : $checkintime"
@@ -284,7 +284,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagCheckouttime) {
-                            checkouttime = xpp.text.replace("<br />", "\n")
+                            checkouttime = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagCheckouttime = false
                             if(checkouttime != null) {
                                 binding.selectedCheckouttime.text = "퇴실 시간 : $checkouttime"
@@ -293,7 +293,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagSubfacility) {
-                            subfacility = xpp.text.replace("<br />", "\n")
+                            subfacility = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagSubfacility = false
                             if(subfacility != null) {
                                 binding.selectedSubfacility.text = "부대 시설 : $subfacility"
@@ -302,7 +302,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagReservationlodging) {
-                            reservationlodging = xpp.text.replace("<br />", "\n")
+                            reservationlodging = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagReservationlodging = false
                             if(reservationlodging != null) {
                                 binding.selectedReservationlodging.text = "예약 안내 : $reservationlodging"
@@ -311,7 +311,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
 
                         }
                         if(tagRefundregulation) {
-                            refundregulation = xpp.text.replace("<br />", "\n")
+                            refundregulation = xpp.text.replace("<br />", "\n").replace("<br/>", "\n")
                             tagRefundregulation = false
                             if(refundregulation != null) {
                                 binding.selectedRefundregulation.text = "환불 규정 : $refundregulation"
@@ -334,7 +334,7 @@ class SelectHotelFragment : Fragment(), View.OnClickListener {
                 mainActivity.removeFragment(RecommendFragment3())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString()))
+                viewModel.addTask(SelectItem(image, title, 32, tourX.toString(), tourY.toString(), 0))
                 Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
                 mainActivity.removeFragment(RecommendFragment3())
             }

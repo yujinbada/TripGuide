@@ -13,12 +13,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.adapter.RecommendRecyclerAdapter
 import com.example.tripguide.databinding.FragmentRecommend1Binding
 import com.example.tripguide.fragment.SelectTourFragment
 import com.example.tripguide.model.RecommendItem
+import com.example.tripguide.model.SelectItem
+import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.utils.Constants.TAG
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -44,8 +48,8 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
     var contentTypeId = 12
     val type = "json"
     val arrange = "B"
-    var areaCode = 4
-    var sigunguCode = 4
+    var areaCode = ""
+    var sigunguCode = ""
     val numOfRows = 10
     val pageNo = 1
     val serviceUrl = "http://apis.data.go.kr/B551011/KorService/areaBasedList"
@@ -53,10 +57,10 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     private var mBinding: FragmentRecommend1Binding? = null
     private val binding get() = mBinding!!
+    private lateinit var viewModel: SelectViewModel
 
     private var arrayList = ArrayList<RecommendItem>()
     private val recommendRecyclerAdapter = RecommendRecyclerAdapter(arrayList)
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +68,20 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
     ): View {
         Log.d(TAG, "RecommendFragment1 - onCreateView() called")
         // Inflate the layout for this fragment
+        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()) .get(
+            SelectViewModel::class.java)
+        val areaCodeObserver = Observer<String> {
+            areaCode = it
+        }
+        viewModel.areaCode.observe(viewLifecycleOwner, areaCodeObserver)
+
+        val sigunguCodeObserver = Observer<String> {
+            sigunguCode = it
+            Log.d(TAG, "areaCode - $areaCode sigunguCode - $sigunguCode")
+            keywordParser()
+        }
+
+        viewModel.sigunguCode.observe(viewLifecycleOwner, sigunguCodeObserver)
         arrayList.clear()
         mBinding = FragmentRecommend1Binding.inflate(inflater, container, false)
         return binding.root
@@ -71,8 +89,6 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        keywordParser()
         binding.rvrecommend1.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,
             false)
@@ -83,14 +99,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         binding.rvrecommend1.apply {
             itemAnimator = null
         }
-        setFragmentResultListener("areaCode") { key, bundle ->
-            val result = bundle.getString("areaCodeKey")
-            areaCode = result!!.toInt()
-        }
-        setFragmentResultListener("sigunguCode") { key, bundle ->
-            val result = bundle.getString("sigunguCodeKey")
-            sigunguCode = result!!.toInt()
-        }
+
         // recycler item click event
         recommendRecyclerAdapter.setItemClickListener(object : RecommendRecyclerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {

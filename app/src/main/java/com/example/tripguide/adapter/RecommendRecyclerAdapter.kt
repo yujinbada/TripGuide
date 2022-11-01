@@ -35,8 +35,6 @@ class RecommendRecyclerAdapter(private var items : ArrayList<RecommendItem>) :
             holder.tvTitle.text = item.recommendTitle
             holder.tvOverView.text = item.tourOverView
 
-            Log.d(TAG, "imgFirstImage - ${item.recommendImage}")
-
         if(item.recommendImage != null) {
             Glide.with(holder.imgFirstImage)
                 .load(item.recommendImage)

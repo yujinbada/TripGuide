@@ -3,12 +3,14 @@ package com.example.tripguide.fragment.dispositionfragment
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
@@ -20,8 +22,11 @@ import com.example.tripguide.model.kakaoroute.Origin
 import com.example.tripguide.retrofit.RetrofitRoute
 import com.example.tripguide.fragment.RecommendedTripFragment
 import com.example.tripguide.model.SelectViewModel
+import com.example.tripguide.model.kakaoroute.Route
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
+import kotlinx.coroutines.*
+import okhttp3.internal.wait
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -106,8 +111,10 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 departStationList.first().mapX?.toDouble(),
                 departStationList.first().mapY?.toDouble()
                 ))
+            GlobalScope.launch {
+                addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList)
+            }
 
-            addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList)
 
             /* 비행기 or 기차를 이용해서 공항이나 역을 가야하면 도착역을 여행지에서의 일정의 첫번째로 설정하고
                도착시간에서 출발시간을 뺀 값을 초 단위로 duration 에 넣어준다. */
@@ -125,6 +132,10 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 origin.y = it.mapY?.toDouble()
             }
         }
+        // 비행기 or 기차를 이용하지 않는다면 도착지 여행지 값을 기준으로 해서 이동시간을 계산해 liveTime 을 설정한다.
+        else {
+
+        }
 
 
         /* 여행지, 식당, 숙소를 입력받은 viewModel 을 경로 계산을 위한 배열 영식으로 바꿔서 넣어준다. */
@@ -140,6 +151,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         }
 
         val count = tourList?.count()!! + foodList?.count()!! + hotelList?.count()!!
+
         var breakFast = 0
         var lunch = 0
         var dinner = 0
@@ -147,60 +159,147 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         /* Origin 과 여행지 목록을 바탕으로 finalRoute 를 계산한다. */
         for (i in 1..count) {
             /* liveTime 을 기준으로 */
-            when(liveTime.hour * 60 + liveTime.minute) {
-                in 0..420 -> { // 0시부터 7시에는 여행 시작
+            var type = ""
+            type = when(liveTime.hour * 60 + liveTime.minute) {
+                in (0..420) -> "tour" // 0시부터 7시에는 여행 시작
+                in 421..540 -> "food" // 7시부터 9시는 아침 식사 시간
+                in 541..720 -> "tour" // 9시부터 12시는 여행 시간
+                in 721..840 -> "food" // 12시부터 2시는 점심 시간
+                in 841..1200 -> "tour" // 2시부터 6시는 여행 시간
+                in 1201..1320 -> "food" // 6시부터 8시는 저녁 시간
+                else -> "hotel" // 8시 이후는 숙소
+            }
+            when(type) {
+                "tour" -> {
+                    Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "tourDestination - $tourDestination")
-                }
-                in 421..540 -> { // 7시부터 9시는 아침 식사 시간
-                    Log.d(TAG, "foodDestination - $foodDestination")
-                    addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList)
-                    breakFast++
-                }
-                in 541..720 -> { // 9시부터 12시는 여행 시간
-                    if(i == 1 || breakFast == 1) {
-                        Log.d(TAG, "tourDestination - $tourDestination")
-                    }
-                    else {
+                    var minLocation = RouteResult(null, 10000000)
+                    var nextLocation = RouteResult(null, null)
 
+                    for(destination in tourDestination) {
+                        runBlocking {
+                            nextLocation = getResultSearch(origin, destination)
+                        }
+
+                        if (minLocation.duration!! > nextLocation.duration!!) {
+                            minLocation = nextLocation
+                        }
+                    }
+
+                    Log.d(TAG, "minLocation - $minLocation")
+                    addFinalRoute(minLocation, tourDestination, tourList)
+                    tourList.map {
+                        if(it.title == minLocation.key) {
+                            tourDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                        }
                     }
                 }
-                in 721..840 -> { // 12시부터 2시는 점심 시간
-                    Log.d(TAG, "tourDestination - $tourDestination")
-                }
-                in 841..1200 -> { // 2시부터 6시는 여행 시간
-                    Log.d(TAG, "tourDestination - $tourDestination")
-                }
-                in 1201..1320 -> { // 6시부터 8시는 저녁 시간
+                "food" -> {
+                    Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "foodDestination - $foodDestination")
+                    var minLocation = RouteResult(null, 10000000)
+                    var nextLocation = RouteResult(null, null)
+
+                    for(destination in foodDestination) {
+                        runBlocking {
+                            nextLocation = getResultSearch(origin, destination)
+                        }
+
+                        if (minLocation.duration!! > nextLocation.duration!!) {
+                            minLocation = nextLocation
+                        }
+                    }
+
+                    Log.d(TAG, "minLocation - $minLocation")
+                    addFinalRoute(minLocation, foodDestination, foodList)
+                    foodList.map {
+                        if(it.title == minLocation.key) {
+                            foodDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                        }
+                    }
                 }
-                else -> { // 8시 이후는 숙소
+                "hotel" ->  {
+                    Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "hotelDestination - $hotelDestination")
+                    var minLocation = RouteResult(null, 10000000)
+                    var nextLocation = RouteResult(null, null)
+
+                    for(destination in hotelDestination) {
+                        runBlocking {
+                            nextLocation = getResultSearch(origin, destination)
+                        }
+
+                        if (minLocation.duration!! > nextLocation.duration!!) {
+                            minLocation = nextLocation
+                        }
+                    }
+
+                    Log.d(TAG, "minLocation - $minLocation")
+                    addFinalRoute(minLocation, hotelDestination, hotelList)
+                    hotelList.map {
+                        if(it.title == minLocation.key) {
+                            hotelDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                        }
+                    }
                 }
             }
         }
     }
 
+    object RetrofitClient {
+        val retrofitRoute : RetrofitRoute by lazy {
+            Retrofit.Builder()
+                .baseUrl( "https://apis-navi.kakaomobility.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(RetrofitRoute::class.java)
+        }
+    }
+
+    sealed class Result<out T: Any> {
+        data class Success<out T : Any>(val data: T) : Result<T>()
+        data class Error(val exception: String) : Result<Nothing>()
+    }
+
+    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): Result<T> {
+        return try {
+            val myResp = call.invoke()
+
+            if (myResp.isSuccessful) {
+                Result.Success(myResp.body()!!)
+            } else {
+                Result.Error(myResp.message() ?: "Something goes wrong")
+            }
+
+        } catch (e: Exception) {
+            Result.Error(e.message ?: "Internet error runs")
+        }
+    }
+
     // Origin 에 가장 가까운 Destination Return
     private fun getResultSearch(origin: Origin, destination: Destination) : RouteResult {
-        val retrofit = Retrofit.Builder()
-            .baseUrl( "https://apis-navi.kakaomobility.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val api = retrofit.create(RetrofitRoute::class.java)
-        val call = api.getKakaoRoute(KakaoApi.API_KEY, origin, destination, "TIME", true)
+        val originstring = "${origin.x},${origin.y},name=${origin.name}"
+        val destinationstring = "${destination.x},${destination.y},name=${destination.name}"
         var nextLocation = RouteResult(null, null)
+        runBlocking {
+            GlobalScope.launch {
+                // Result가 성공이냐 실패냐에 따라 동작처리
+                when (val result = safeApiCall {
+                    RetrofitClient.retrofitRoute.getKakaoRoute(KakaoApi.API_KEY,
+                        originstring,
+                        destinationstring,
+                        "TIME",
+                        true)
+                }) {
+                    is Result.Success -> {
+                        nextLocation = addItems(result.data)
+                    }
+                    is Result.Error -> {
+                    }
+                }
 
-        call.enqueue(object : Callback<KakaoRoute> {
-            override fun onResponse(call: Call<KakaoRoute>, response: Response<KakaoRoute>) {
-                Log.d(TAG, "communication success")
-                Log.d(TAG, "response.body() - ${response.body()}")
-                nextLocation = addItems(response.body())
-            }
-
-            override fun onFailure(call: Call<KakaoRoute>, t: Throwable) {
-                Log.d(TAG, "error : " + t.message)
-            }
-        })
+            }.join()
+        }
         return nextLocation
     }
 
@@ -209,13 +308,14 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         val nextLocation = RouteResult(null, null)
         if (!searchResult?.routes.isNullOrEmpty()) {
             // Search results available
-            // 우리는 Origin 에서 가장 가까운 지역만 알면 되기 때문에 첫번째 값만 가진다.
-            if (searchResult!!.routes.first().result_msg != "길찾기 성공") {
-                nextLocation.key = searchResult.routes.first().summary.origin.name
-                nextLocation.duration = searchResult.routes[0].summary.duration
-                Log.d(TAG, "nextLocation - $nextLocation")
+            for (route in searchResult!!.routes) {
+                // 우리는 Origin 에서 가장 가까운 지역만 알면 되기 때문에 첫번째 값만 가진다.
+                if (route.result_msg == "길찾기 성공") {
+                    nextLocation.key = route.summary.destination.name
+                    nextLocation.duration = route.summary.duration
+                }
+                else Log.d(TAG, "길찾기 실패")
             }
-            else Log.d(TAG, "길찾기 실패")
         }
         return nextLocation
     }
@@ -226,14 +326,12 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 list?.map { y ->
                     if(y.title == x.name) {
                         y.duration = nextLocation.duration
-                        liveTime.plusSeconds(nextLocation.duration!!.toLong())
-                        liveTime.plusMinutes(120)
-                        Log.d(TAG, "liveTime - $liveTime")
-                        Log.d(TAG, "finalRoute - $finalRoute")
+                        liveTime = liveTime.plusSeconds(nextLocation.duration!!.toLong())
+                                           .plusHours(2)
                         finalRoute.add(y)
+                        Log.d(TAG, "finalRoute - $finalRoute")
                     }
                 }
-                destinations.remove(x)
             }
         }
     }

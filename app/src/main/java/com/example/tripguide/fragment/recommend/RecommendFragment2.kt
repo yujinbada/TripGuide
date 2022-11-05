@@ -32,7 +32,6 @@ import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
 
-@Suppress("DEPRECATION")
 class RecommendFragment2 : Fragment(), View.OnClickListener {
 
     // To get the main activity's change fragment function
@@ -135,7 +134,6 @@ class RecommendFragment2 : Fragment(), View.OnClickListener {
         lateinit var page : String
 
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
-            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 val stream = URL(url).openStream()
                 val bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
@@ -150,7 +148,6 @@ class RecommendFragment2 : Fragment(), View.OnClickListener {
                 return null
             }
 
-            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 

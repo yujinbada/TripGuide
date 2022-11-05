@@ -36,7 +36,6 @@ import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 
-@Suppress("DEPRECATION")
 class SelectTourFragment : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {

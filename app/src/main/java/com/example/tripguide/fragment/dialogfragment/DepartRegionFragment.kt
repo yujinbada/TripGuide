@@ -173,7 +173,7 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
         Log.d(TAG, "name - $name")
         Log.d(TAG, "areaNameSplit - $areaNameSplit")
         var areacode = ""
-        when(areaNameSplit[0]) {
+        when(areaNameSplit[0].removeSuffix("광역시")) {
             "서울" -> areacode = "1"
             "인천" -> areacode = "2"
             "대전" -> areacode = "3"
@@ -192,17 +192,14 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             "전남" -> areacode = "38"
             else -> areacode = "39"
         }
+        Log.d(TAG, "areaCode - $areacode")
+        viewModel.areaCode.value = areacode
 
-        if(areaNameSplit.size == 1) {
-            Log.d(TAG, "areaCode - $areacode")
-            viewModel.areaCode.value = areacode
-            viewModel.sigunguCode.value = ""
-        }
-        else {
-            var sigunguName = areaNameSplit[1].removeSuffix("시")
+        if (areacode.toInt() !in 1..8) {
+            val sigunguName = areaNameSplit[1].removeSuffix("시")
             findSiGunGuCode(areacode, sigunguName)
-
         }
+        else viewModel.sigunguCode.value = ""
     }
 
     fun findSiGunGuCode(areaCode : String, sigunguName : String) {

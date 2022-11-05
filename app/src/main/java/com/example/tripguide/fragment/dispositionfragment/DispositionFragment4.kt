@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -36,8 +38,6 @@ import java.io.StringReader
 import java.net.URL
 import java.net.URLEncoder
 
-
-@Suppress("DEPRECATION")
 class DispositionFragment4 : Fragment(), View.OnClickListener {
 
     // To get the main activity's change fragment function
@@ -96,6 +96,16 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         binding.regionrecyclerview.adapter = tourAdapter
 
         // 여행지 검색
+        binding.textInputEditTextregion.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun afterTextChanged(s: Editable?) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                arrayList.clear()
+            }
+
+        })
         binding.textInputEditTextregion.setOnKeyListener{ v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 Log.d(Constants.TAG, "여행지 검색")
@@ -151,7 +161,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
         // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
             // url 이용해서 xml 읽어오기
-            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 // 데이터 스트림 형태로 가져오기
                 val stream = URL(url).openStream()
@@ -169,8 +178,6 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
             }
 
             // 읽어온 xml 파싱하기
-            @SuppressLint("NotifyDataSetChanged")
-            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 

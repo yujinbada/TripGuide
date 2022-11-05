@@ -33,7 +33,6 @@ import java.net.URL
 import kotlin.math.log
 
 
-@Suppress("DEPRECATION")
 class RecommendFragment1 : Fragment(), View.OnClickListener {
 
     // To get the main activity's change fragment function
@@ -78,7 +77,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         val sigunguCodeObserver = Observer<String> {
             sigunguCode = it
             Log.d(TAG, "areaCode - $areaCode sigunguCode - $sigunguCode")
-            keywordParser()
+            keywordParser(areaCode, sigunguCode)
         }
 
         viewModel.sigunguCode.observe(viewLifecycleOwner, sigunguCodeObserver)
@@ -123,8 +122,9 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun keywordParser() {
+    private fun keywordParser(areaCode : String, sigunguCode : String) {
         Log.d(TAG, "장소 검색중")
+        Log.d(TAG, "areaCode - $areaCode sigunguCode - $sigunguCode")
         // 이 url 주소 가지고 xml에서 데이터 파싱하기
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +

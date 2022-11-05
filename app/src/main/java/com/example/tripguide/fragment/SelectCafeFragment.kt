@@ -90,8 +90,6 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
         setFragmentResultListener("tourX") { key, bundle ->
             val result = bundle.getString("tourXbundleKey").toString()
             tourX = result.toDouble()
-            Log.d(Constants.TAG, "tourX - $tourX")
-
         }
         setFragmentResultListener("tourY") { key, bundle ->
             val result = bundle.getString("tourYbundleKey").toString()
@@ -134,7 +132,6 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
         lateinit var page : String
 
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
-            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 val stream = URL(url).openStream()
                 val bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
@@ -149,7 +146,6 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
                 return null
             }
 
-            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 
@@ -209,7 +205,6 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
         lateinit var page : String
 
         class getDangerGrade : AsyncTask<Void, Void, Void>() {
-            @Deprecated("Deprecated in Java")
             override fun doInBackground(vararg p0: Void?): Void? {
                 val stream = URL(url).openStream()
                 val bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
@@ -224,7 +219,6 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
                 return null
             }
 
-            @Deprecated("Deprecated in Java")
             override fun onPostExecute(result: Void?) {
                 super.onPostExecute(result)
 

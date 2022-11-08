@@ -29,6 +29,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
 import java.net.URL
+import java.time.LocalTime
 
 @Suppress("DEPRECATION")
 class SelectCafeFragment : Fragment(), View.OnClickListener {
@@ -315,7 +316,7 @@ class SelectCafeFragment : Fragment(), View.OnClickListener {
                 mainActivity.removeFragment(RecommendFragment2())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 39, tourX.toString(), tourY.toString(), 0))
+                viewModel.addTask(SelectItem(image, title, 39, tourX.toString(), tourY.toString(), null))
                 Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
                 mainActivity.removeFragment(RecommendFragment2())
             }

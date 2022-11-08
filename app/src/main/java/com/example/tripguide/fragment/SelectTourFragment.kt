@@ -309,7 +309,7 @@ class SelectTourFragment : Fragment(), View.OnClickListener {
                 mainActivity.removeFragment(RecommendFragment1())
             }
             R.id.add -> {
-                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString(), 0))
+                viewModel.addTask(SelectItem(image, title, 12, tourX.toString(), tourY.toString(), null))
                 Toast.makeText(activity, "장소가 추가 되었습니다!", Toast.LENGTH_SHORT).show()
                 mainActivity.removeFragment(RecommendFragment1())
             }

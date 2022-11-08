@@ -1,5 +1,7 @@
 package com.example.tripguide.model
 
+import java.time.LocalTime
+
 data class MyModel(
     val firstregion: String? = null,
     val secondregion: String? = null
@@ -35,8 +37,13 @@ data class SelectItem (
     val type: Int?,
     var mapX : String? = null,
     var mapY : String? = null,
-    var duration: Int?
+    var liveTime: LocalTime?
     )
+
+data class FinalItem (
+    val selectItem: SelectItem?,
+    var date : String?
+)
 
 
 data class RecommendItem (

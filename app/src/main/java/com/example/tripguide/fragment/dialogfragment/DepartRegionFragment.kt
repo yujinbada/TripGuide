@@ -32,8 +32,13 @@ import com.example.tripguide.model.MyModel
 import com.example.tripguide.adapter.MyRecyclerAdapter
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment
 import com.example.tripguide.model.SelectViewModel
+import com.example.tripguide.model.Station
+import com.example.tripguide.model.kakao.kakaokeyword
+import com.example.tripguide.model.kakaoroute.Destination
 
 import com.example.tripguide.retrofit.RetrofitInterface
+import com.example.tripguide.retrofit.RetrofitKeyword
+import com.example.tripguide.utils.Constants
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import okhttp3.internal.notify
@@ -118,12 +123,16 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                     Log.d(TAG, "departresult <- region_1depth_txt")
                     val result = modelList[position].firstregion
                     areaCode(result.toString())
+                    val request = result?.removeSuffix("광역시")?.removeSuffix("특별자치시")?.removeSuffix("특별자치도")
+                    getCitySearch(result + "시청")
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
                 else {
                     Log.d(TAG, "departresult <- region_2depth_txt")
                     val result = modelList[position].secondregion
-                    areaCode( modelList[position].firstregion + " " + modelList[position].secondregion)
+                    val request = modelList[position].firstregion + " " + modelList[position].secondregion
+                    areaCode(request)
+                    getCitySearch(request + "청")
                     setFragmentResult("requestKey", bundleOf("bundleKey" to result))
                 }
                 dismissAllowingStateLoss()
@@ -168,11 +177,10 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             }
         }
     }
+    var areacode = ""
     fun areaCode(name: String) {
         val areaNameSplit = name.split(" ")
-        Log.d(TAG, "name - $name")
         Log.d(TAG, "areaNameSplit - $areaNameSplit")
-        var areacode = ""
         when(areaNameSplit[0].removeSuffix("광역시")) {
             "서울" -> areacode = "1"
             "인천" -> areacode = "2"
@@ -195,12 +203,14 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
         Log.d(TAG, "areaCode - $areacode")
         viewModel.areaCode.value = areacode
 
-        if (areacode.toInt() !in 1..8) {
-            val sigunguName = areaNameSplit[1].removeSuffix("시")
+        if (!(areacode.toInt() in 1..8 || areacode.toInt() == 39)) {
+            val sigunguName = areaNameSplit[1].removeSuffix("시").removeSuffix("군")
             findSiGunGuCode(areacode, sigunguName)
         }
         else viewModel.sigunguCode.value = ""
     }
+
+
 
     fun findSiGunGuCode(areaCode : String, sigunguName : String) {
         val mobile_os = "AND"
@@ -291,6 +301,36 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
             }
         }
         getDangerGrade().execute()
+    }
+
+    private fun getCitySearch(keyword: String) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(KakaoApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api = retrofit.create(RetrofitKeyword::class.java)
+        val call = api.getKakaoKeyword(KakaoApi.API_KEY, keyword)
+
+        call.enqueue(object : Callback<kakaokeyword> {
+            override fun onResponse(call: Call<kakaokeyword>, response: Response<kakaokeyword>) {
+                Log.d(Constants.TAG, "communication success")
+                for (document in response.body()!!.documents) {
+                    val item = Destination(document.place_name,
+                        document.x.toDouble(),
+                        document.y.toDouble())
+                    if(item.name?.substring(item.name?.length!! - 1) == "청") {
+                        Log.d(TAG, "arriveOffice - $item")
+                        viewModel.setArriveOfficeRegion(item)
+                        break
+                    }
+                    else continue
+                }
+            }
+
+            override fun onFailure(call: Call<kakaokeyword>, t: Throwable) {
+                Log.d(Constants.TAG, "error : " + t.message)
+            }
+        })
     }
 
     override fun onDetach() {

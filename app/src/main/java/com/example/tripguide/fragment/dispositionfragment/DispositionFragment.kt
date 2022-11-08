@@ -20,6 +20,7 @@ import com.example.tripguide.utils.Constants.TAG
 import com.google.android.material.datepicker.MaterialDatePicker
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.tripguide.MainActivity
 import com.example.tripguide.model.TripGuide
 import com.example.tripguide.databinding.FragmentDispositionBinding
@@ -27,6 +28,7 @@ import com.example.tripguide.fragment.dialogfragment.DepartRegionFragment
 import com.example.tripguide.fragment.dialogfragment.StationDialogFragment
 import com.example.tripguide.fragment.fbAuth
 import com.example.tripguide.fragment.fbFirestore
+import com.example.tripguide.model.SelectViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,9 +43,14 @@ class DispositionFragment : Fragment(), View.OnClickListener {
 
     private var mBinding: FragmentDispositionBinding? = null
     private val binding get() = mBinding!!
+    private lateinit var viewModel: SelectViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        viewModel =
+            ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(
+                SelectViewModel::class.java)
+
         mBinding = FragmentDispositionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -107,11 +114,12 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 dateRangePicker.addOnPositiveButtonClickListener { selection ->
                     val calendar = Calendar.getInstance()
                     calendar.timeInMillis = selection?.first ?: 0
-                    val startDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-
+                    val startDate = SimpleDateFormat("MMdd").format(calendar.time).toString()
+                    viewModel.setStartDate(startDate)
                     calendar.timeInMillis = selection?.second ?: 0
-                    val endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-
+                    val endDate = SimpleDateFormat("MMdd").format(calendar.time).toString()
+                    viewModel.setEndDate(endDate)
+                    Log.d(TAG, "Date - $startDate ~ $endDate")
                     binding.daterangeview.text = dateRangePicker.headerText
 
                 }
@@ -124,7 +132,20 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                     if(binding.viewdepart.text == "출발지 주소") {
                         Toast.makeText(activity, "출발지 주소를 선택해 주세요!", Toast.LENGTH_SHORT).show()
                     }
-                    else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+                    else {
+                        val calendar: Calendar = Calendar.getInstance()
+                        val currentTime = calendar.timeInMillis // 현재 시간
+                        calendar.add(Calendar.DATE, +1)
+                        val tomorrow = calendar.timeInMillis // 내일
+                        val dataFormat = SimpleDateFormat("M월 d일")
+
+                        if(binding.daterangeview.text == "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}") {
+                            Toast.makeText(activity, "여행 기간을 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                        }
+                        else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+
+
+                    }
                 }
 //                var userInfo = TripGuide()
 //                userInfo.uid = fbAuth?.uid

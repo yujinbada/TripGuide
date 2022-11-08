@@ -122,14 +122,14 @@ class DispositionFragment4 : Fragment(), View.OnClickListener {
                 var selectimage = arrayList[position].firstimage.toString()
                 var selectmapx = arrayList[position].mapX.toString()
                 var selectmapy = arrayList[position].mapY.toString()
-                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, 0))
+                viewModel.addTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, null))
 
                 binding.chipgroup.addView(Chip(activity).apply {
                     text = arrayList[position].title // text setting
                     isCloseIconVisible = true // show 'x' button
                     setOnCloseIconClickListener {
                         binding.chipgroup.removeView(this)
-                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, 0))
+                        viewModel.deleteTask(SelectItem(selectimage, selecttitle, contentTypeId, selectmapx, selectmapy, null))
                     } // delete when we clicked 'x' button
                 })
                 makeButton()

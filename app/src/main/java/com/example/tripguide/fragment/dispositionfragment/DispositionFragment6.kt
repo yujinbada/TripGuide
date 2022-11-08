@@ -3,17 +3,19 @@ package com.example.tripguide.fragment.dispositionfragment
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
+import com.example.tripguide.adapter.FinalRecyclerAdapter1
 import com.example.tripguide.databinding.FragmentDisposition6Binding
 import com.example.tripguide.model.*
 import com.example.tripguide.model.kakaoroute.Destination
@@ -22,18 +24,15 @@ import com.example.tripguide.model.kakaoroute.Origin
 import com.example.tripguide.retrofit.RetrofitRoute
 import com.example.tripguide.fragment.RecommendedTripFragment
 import com.example.tripguide.model.SelectViewModel
-import com.example.tripguide.model.kakaoroute.Route
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import kotlinx.coroutines.*
-import okhttp3.internal.wait
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalTime
 import kotlin.collections.ArrayList
+import kotlin.math.log
 
 class DispositionFragment6 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
@@ -50,15 +49,19 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     private val tourDestination = ArrayList<Destination>()
     private val foodDestination = ArrayList<Destination>()
     private val hotelDestination = ArrayList<Destination>()
+    private var arriveOffice = Destination("", 0.0, 0.0)
 
     private val responseRouteList = ArrayList<RouteResult>()
 
-
-    private val finalRoute = ArrayList<SelectItem>()
-
+    private val finalRoute = ArrayList<FinalItem>()
+    private val finalRecyclerAdapter = FinalRecyclerAdapter1(finalRoute)
 
     var departStationTime : LocalTime = LocalTime.of(0, 0, 0)
     var arriveStationTime : LocalTime = LocalTime.of(0, 0, 0)
+    // 여행의 시작의 기본 시간을 오전 8시로 설정
+    var startTime : LocalTime = LocalTime.of(8,0, 0)
+    var liveTime : LocalTime = LocalTime.of(8, 0, 0)
+    var stationDurationTime: LocalTime = LocalTime.of(0, 0, 0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,20 +69,22 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     ): View? {
         Log.d(TAG, "DispositionFragment6 - onCreateView() called")
         // View Model 설정
-        viewModel = ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()) .get(
-            SelectViewModel::class.java)
+        viewModel =
+            ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(
+                SelectViewModel::class.java)
         mBinding = FragmentDisposition6Binding.inflate(inflater, container, false)
         return binding.root
     }
-    // 여행의 시작의 기본 시간을 오전 8시로 설정
-    var startTime : LocalTime = LocalTime.of(8, 0, 0)
-    var liveTime : LocalTime = LocalTime.of(8, 0, 0)
-    var stationDurationTime: LocalTime = LocalTime.of(0, 0, 0)
+
+
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.beforebtn6.setOnClickListener(this)
         clickShareBtn()
+
+        binding.routeRCV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding.routeRCV.adapter = finalRecyclerAdapter
 
         val tourList = viewModel.tourList.value
         val foodList = viewModel.foodList.value
@@ -87,21 +92,32 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         val departRegion = viewModel.departRegion.value
         val departStationList = viewModel.departStationList.value
         val arriveStationList = viewModel.arriveStationList.value
+        var startDate = viewModel.startDate.value
+        val endDate = viewModel.endDate.value
         if(viewModel.departStationTime.value != null) {
             departStationTime = viewModel.departStationTime.value!!
         }
         if(viewModel.arriveStationTime.value != null) {
             arriveStationTime = viewModel.arriveStationTime.value!!
         }
-
         // 여행의 출발주소를 origin 으로 설정
         departRegion?.forEach {
             origin.name = it.title
             origin.x = it.mapX?.toDouble()
             origin.y = it.mapY?.toDouble()
+
+            if(viewModel.arriveOfficeRegion.value != null) {
+                arriveOffice = viewModel.arriveOfficeRegion.value!!
+                Log.d(TAG, "arriveOffice - $arriveOffice")
+                val arriveCity = getResultSearch(origin, arriveOffice)
+                liveTime = liveTime.plusSeconds(arriveCity.duration?.toLong()!!)
+            }
+            it.liveTime = liveTime
             Log.d(TAG, "origin - $origin")
-            finalRoute.add(it)
+            finalRoute.add(FinalItem(it, startDate))
         }
+
+
 
         /* 비행기 or 기차를 이용해서 공항이나 역을 가야하면 origin 에서 공항이나 역까지 거리를 getResultSearch 로 구하고
            이전에 tourDestination 에 집어넣었던 공항이나 역값을 제거하고 공항이나 역을 finalRoute 에 add 한다. */
@@ -110,9 +126,9 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             tourDestination.add(Destination(departStationList.first().title,
                 departStationList.first().mapX?.toDouble(),
                 departStationList.first().mapY?.toDouble()
-                ))
+            ))
             GlobalScope.launch {
-                addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList)
+                addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList, startDate)
             }
 
 
@@ -121,20 +137,16 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             Log.d(TAG, "arriveStationList - $arriveStationList")
             Log.d(TAG, "departStationTime - $departStationTime, arriveStationTime - $arriveStationTime")
             arriveStationList?.forEach {
-                liveTime = LocalTime.of(arriveStationTime.hour, arriveStationTime.minute, 0)
+                liveTime = arriveStationTime
+                it.liveTime = liveTime
                 stationDurationTime = arriveStationTime.minusHours(departStationTime.hour.toLong())
                     .minusMinutes(departStationTime.minute.toLong())
-                it.duration = stationDurationTime.hour * 60 * 60 + stationDurationTime.minute * 60
                 Log.d(TAG, "stationDurationTime - $stationDurationTime")
-                finalRoute.add(it)
+                finalRoute.add(FinalItem(it, startDate))
                 origin.name = it.title
                 origin.x = it.mapX?.toDouble()
                 origin.y = it.mapY?.toDouble()
             }
-        }
-        // 비행기 or 기차를 이용하지 않는다면 도착지 여행지 값을 기준으로 해서 이동시간을 계산해 liveTime 을 설정한다.
-        else {
-
         }
 
 
@@ -151,11 +163,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         }
 
         val count = tourList?.count()!! + foodList?.count()!! + hotelList?.count()!!
-
-        var breakFast = 0
-        var lunch = 0
-        var dinner = 0
-
         /* Origin 과 여행지 목록을 바탕으로 finalRoute 를 계산한다. */
         for (i in 1..count) {
             /* liveTime 을 기준으로 */
@@ -165,86 +172,119 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 in 421..540 -> "food" // 7시부터 9시는 아침 식사 시간
                 in 541..720 -> "tour" // 9시부터 12시는 여행 시간
                 in 721..840 -> "food" // 12시부터 2시는 점심 시간
-                in 841..1200 -> "tour" // 2시부터 6시는 여행 시간
-                in 1201..1320 -> "food" // 6시부터 8시는 저녁 시간
+                in 841..1080 -> "tour" // 2시부터 6시는 여행 시간
+                in 1080..1200 -> "food" // 6시부터 8시는 저녁 시간
                 else -> "hotel" // 8시 이후는 숙소
             }
             when(type) {
                 "tour" -> {
                     Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "tourDestination - $tourDestination")
-                    var minLocation = RouteResult(null, 10000000)
-                    var nextLocation = RouteResult(null, null)
+                    if(tourDestination.isNotEmpty()) {
+                        var minLocation = RouteResult(null, 10000000)
+                        var nextLocation = RouteResult(null, null)
 
-                    for(destination in tourDestination) {
-                        runBlocking {
-                            nextLocation = getResultSearch(origin, destination)
+                        for(destination in tourDestination) {
+                            runBlocking {
+                                nextLocation = getResultSearch(origin, destination)
+                            }
+
+                            if (minLocation.duration!! > nextLocation.duration!!) {
+                                minLocation = nextLocation
+                            }
                         }
 
-                        if (minLocation.duration!! > nextLocation.duration!!) {
-                            minLocation = nextLocation
+                        Log.d(TAG, "minLocation - $minLocation")
+                        addFinalRoute(minLocation, tourDestination, tourList, startDate)
+                        tourList.map {
+                            if(it.title == minLocation.key) {
+                                tourDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                            }
                         }
                     }
-
-                    Log.d(TAG, "minLocation - $minLocation")
-                    addFinalRoute(minLocation, tourDestination, tourList)
-                    tourList.map {
-                        if(it.title == minLocation.key) {
-                            tourDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
-                        }
+                    else {
+                        Log.d(TAG, "빈 장소 추가")
+                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        finalRoute.add(FinalItem(emptySelectItem, startDate))
+                        liveTime = liveTime.plusHours(2)
                     }
+
                 }
                 "food" -> {
                     Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "foodDestination - $foodDestination")
-                    var minLocation = RouteResult(null, 10000000)
-                    var nextLocation = RouteResult(null, null)
+                    if (foodDestination.isNotEmpty()) {
+                        var minLocation = RouteResult(null, 10000000)
+                        var nextLocation = RouteResult(null, null)
 
-                    for(destination in foodDestination) {
-                        runBlocking {
-                            nextLocation = getResultSearch(origin, destination)
+                        for(destination in foodDestination) {
+                            runBlocking {
+                                nextLocation = getResultSearch(origin, destination)
+                            }
+
+                            if (minLocation.duration!! > nextLocation.duration!!) {
+                                minLocation = nextLocation
+                            }
                         }
 
-                        if (minLocation.duration!! > nextLocation.duration!!) {
-                            minLocation = nextLocation
+                        Log.d(TAG, "minLocation - $minLocation")
+                        addFinalRoute(minLocation, foodDestination, foodList, startDate)
+                        foodList.map {
+                            if(it.title == minLocation.key) {
+                                foodDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                            }
                         }
                     }
-
-                    Log.d(TAG, "minLocation - $minLocation")
-                    addFinalRoute(minLocation, foodDestination, foodList)
-                    foodList.map {
-                        if(it.title == minLocation.key) {
-                            foodDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
-                        }
+                    else {
+                        Log.d(TAG, "빈 장소 추가")
+                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        finalRoute.add(FinalItem(emptySelectItem, startDate))
+                        liveTime = liveTime.plusHours(2)
                     }
                 }
                 "hotel" ->  {
                     Log.d(TAG, "liveTime - $liveTime")
                     Log.d(TAG, "hotelDestination - $hotelDestination")
-                    var minLocation = RouteResult(null, 10000000)
-                    var nextLocation = RouteResult(null, null)
+                    if(hotelDestination.isNotEmpty()) {
+                        var minLocation = RouteResult(null, 10000000)
+                        var nextLocation = RouteResult(null, null)
 
-                    for(destination in hotelDestination) {
-                        runBlocking {
-                            nextLocation = getResultSearch(origin, destination)
+                        for(destination in hotelDestination) {
+                            runBlocking {
+                                nextLocation = getResultSearch(origin, destination)
+                            }
+
+                            if (minLocation.duration!! > nextLocation.duration!!) {
+                                minLocation = nextLocation
+                            }
                         }
 
-                        if (minLocation.duration!! > nextLocation.duration!!) {
-                            minLocation = nextLocation
+                        Log.d(TAG, "minLocation - $minLocation")
+                        addFinalRoute(minLocation, hotelDestination, hotelList, startDate)
+                        finalRecyclerAdapter.notifyDataSetChanged()
+                        hotelList.map {
+                            if(it.title == minLocation.key) {
+                                hotelDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
+                            }
                         }
+
                     }
-
-                    Log.d(TAG, "minLocation - $minLocation")
-                    addFinalRoute(minLocation, hotelDestination, hotelList)
-                    hotelList.map {
-                        if(it.title == minLocation.key) {
-                            hotelDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
-                        }
+                    else {
+                        Log.d(TAG, "빈 장소 추가")
+                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        finalRoute.add(FinalItem(emptySelectItem, startDate))
+                        liveTime = liveTime.plusHours(2)
+                    }
+                    /* 호텔을 추가하고 난 다음에는 다음날로 넘어가고 liveTime 을 8시로 설정한다. */
+                    liveTime = LocalTime.of(8, 0, 0)
+                    if (startDate != endDate) {
+                        startDate = (startDate?.toInt()!! + 1).toString()
                     }
                 }
             }
         }
     }
+
 
     object RetrofitClient {
         val retrofitRoute : RetrofitRoute by lazy {
@@ -261,7 +301,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         data class Error(val exception: String) : Result<Nothing>()
     }
 
-    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): Result<T> {
+    private suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): Result<T> {
         return try {
             val myResp = call.invoke()
 
@@ -297,7 +337,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                     is Result.Error -> {
                     }
                 }
-
             }.join()
         }
         return nextLocation
@@ -320,16 +359,16 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         return nextLocation
     }
 
-    private fun addFinalRoute(nextLocation: RouteResult, destinations: ArrayList<Destination>, list: List<SelectItem>?) {
+    private fun addFinalRoute(nextLocation: RouteResult, destinations: ArrayList<Destination>, list: List<SelectItem>?, date: String?) {
         destinations.map { x ->
             if( x.name == nextLocation.key ){
                 list?.map { y ->
                     if(y.title == x.name) {
-                        y.duration = nextLocation.duration
                         liveTime = liveTime.plusSeconds(nextLocation.duration!!.toLong())
-                                           .plusHours(2)
-                        finalRoute.add(y)
+                        y.liveTime = liveTime
+                        finalRoute.add(FinalItem(y, date))
                         Log.d(TAG, "finalRoute - $finalRoute")
+                        liveTime = liveTime.plusHours(2)
                     }
                 }
             }

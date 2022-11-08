@@ -6,6 +6,7 @@ package com.example.tripguide.model
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.tripguide.model.kakaoroute.Destination
 import java.time.LocalTime
 
 class SelectViewModel : ViewModel() {
@@ -13,6 +14,9 @@ class SelectViewModel : ViewModel() {
     val selectList = MediatorLiveData<List<SelectItem>>()
     private var datas = arrayListOf<SelectItem>()
     val departRegion = MutableLiveData<List<SelectItem>>()       // departRegion information
+    val arriveOfficeRegion : MutableLiveData<Destination> by lazy {
+        MutableLiveData<Destination>()
+    }                                                            // arriveRegion City Office information
     val departStationList = MutableLiveData<List<SelectItem>>()  // departStation information
     val departStationTime = MutableLiveData<LocalTime>()         // departStation Time information
     val arriveStationList = MutableLiveData<List<SelectItem>>()  // arriveStation information
@@ -24,6 +28,12 @@ class SelectViewModel : ViewModel() {
         MutableLiveData<String>()
     }
     val sigunguCode : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val startDate : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val endDate : MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -62,6 +72,15 @@ class SelectViewModel : ViewModel() {
     }
     fun setArriveTime(time: LocalTime) {
         arriveStationTime.value = time
+    }
+    fun setArriveOfficeRegion(destination: Destination) {
+        arriveOfficeRegion.value = destination
+    }
+    fun setStartDate(string: String) {
+        startDate.value = string
+    }
+    fun setEndDate(string: String) {
+        endDate.value = string
     }
 
     private fun setData(data: ArrayList<SelectItem>){

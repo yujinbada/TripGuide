@@ -88,7 +88,6 @@ class DispositionFragment3 : Fragment(), View.OnClickListener {
 
         // viveModel 의 selectList 를 observe 하고 있다가 각 데이터의 type 값에 따라 각 adapter 에 post 한다.
         viewModel.selectList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "DispositionFragment3 - viewModel observe is called")
             binding.rvtour.post(Runnable { adapter1.setTourData(it.filter { x -> x.type == 12} as ArrayList<SelectItem>) })
             binding.rvfood.post(Runnable { adapter2.setFoodData(it.filter { x -> x.type == 39} as ArrayList<SelectItem>) })
             binding.rvhotel.post(Runnable { adapter3.setHotelData(it.filter { x -> x.type == 32} as ArrayList<SelectItem>) })

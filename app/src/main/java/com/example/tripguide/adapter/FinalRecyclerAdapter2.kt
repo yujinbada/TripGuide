@@ -47,7 +47,7 @@ class FinalRecyclerAdapter2(private var finalRoute : ArrayList<FinalItem>)
 
         if (item.selectItem?.firstimage != null) {
             Glide.with(holder.image)
-                .load(item.selectItem?.firstimage)
+                .load(item.selectItem.firstimage)
                 .centerCrop()
                 .into(holder.image)
         }

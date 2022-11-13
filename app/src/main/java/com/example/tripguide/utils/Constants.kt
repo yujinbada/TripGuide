@@ -10,4 +10,3 @@ class KakaoApi {
         const val API_KEY = "KakaoAK ddb1caa8bc77c6a0eb62a545fa0b5ec7"
     }
 }
-

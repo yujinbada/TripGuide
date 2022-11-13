@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tripguide.R
 import com.example.tripguide.model.FinalItem
-import com.example.tripguide.model.SelectItem
-import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
-class FinalRecyclerAdapter2(private var finalRoute : ArrayList<FinalItem>)
+class FinalRecyclerAdapter2(private var finalRoute : List<FinalItem>)
     : RecyclerView.Adapter<FinalRecyclerAdapter2.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FinalRecyclerAdapter2.ViewHolder {
@@ -31,40 +30,74 @@ class FinalRecyclerAdapter2(private var finalRoute : ArrayList<FinalItem>)
         val appCompatImageView : ImageView = itemView.findViewById(R.id.appCompatImageView)
     }
 
+
     override fun onBindViewHolder(holder: FinalRecyclerAdapter2.ViewHolder, position: Int) {
         val item = finalRoute[position]
 
-        holder.title.text = item.selectItem?.title
-        holder.period.text
+
+        val timeFormatter : DateTimeFormatter = DateTimeFormatter.ofPattern("H:mm")
+
 
         // duration 설정
-        if (item.selectItem?.liveTime == LocalTime.of(8,0,0)) {
-            holder.duration.visibility = View.INVISIBLE
+        if (position == 0) {
+            holder.duration.text = "  오늘의 일정 시작!"
             holder.appCompatImageView.visibility = View.INVISIBLE
+            holder.period.text = "${item.selectItem?.liveTime?.format(timeFormatter)}\n ~ \n${item.selectItem?.liveTime?.format(timeFormatter)}"
+        }
+        else if (position == 1) {
+            val formerLiveTime = finalRoute[position-1].selectItem?.liveTime
+            val duration = item.selectItem?.liveTime?.minusHours(formerLiveTime?.hour!!.toLong())
+                ?.minusMinutes(formerLiveTime.minute.toLong())
+            holder.duration.text = "이동시간 - ${duration?.hour}시간 ${duration?.minute}분"
+            holder.period.text = "${item.selectItem?.liveTime?.format(timeFormatter)}\n ~ \n${item.selectItem?.liveTime?.plusMinutes(90)?.format(timeFormatter)}"
         }
         else {
+            val formerLiveTime = finalRoute[position-1].selectItem?.liveTime
+            val duration = item.selectItem?.liveTime?.minusHours(formerLiveTime?.hour!!.toLong())
+                                                    ?.minusMinutes(formerLiveTime.minute.toLong() + 90)
+            holder.duration.text = "이동시간 - ${duration?.hour}시간 ${duration?.minute}분"
+            holder.period.text = "${item.selectItem?.liveTime?.format(timeFormatter)}\n ~ \n${item.selectItem?.liveTime?.plusMinutes(90)?.format(timeFormatter)}"
         }
 
-        if (item.selectItem?.firstimage != null) {
+        if (item.selectItem?.title != "장소 추가") {
+            holder.title.text = item.selectItem?.title
             Glide.with(holder.image)
-                .load(item.selectItem.firstimage)
+                .load(item.selectItem?.firstimage)
+                .centerCrop()
+                .into(holder.image)
+        }
+        else {
+            holder.title.text = "이 시간에 다른 장소를 \n 추가 해주세요"
+            Glide.with(holder.image)
+                .load(R.color.white)
                 .centerCrop()
                 .into(holder.image)
         }
 
         holder.itemView.setOnClickListener {
-            itemClickListener.onClick(it, position)
+            itemClickListener.onItemClick(it, position)
+        }
+        holder.itemView.setOnLongClickListener {
+            itemLongClickListener.onLongClick(it, position)
+            return@setOnLongClickListener true
         }
     }
 
     // (2) 리스너 인터페이스
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int)
+        fun onItemClick(v: View, childPosition: Int)
+    }
+    interface OnItemLongClickListener {
+        fun onLongClick(v: View, childPosition: Int)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
     }
+    fun setItemLongClickListener(onItemLongClickListener: OnItemLongClickListener) {
+        this.itemLongClickListener = onItemLongClickListener
+    }
     // (4) setItemClickListener로 설정한 함수 실행
     private lateinit var itemClickListener : OnItemClickListener
+    private lateinit var itemLongClickListener: OnItemLongClickListener
 }

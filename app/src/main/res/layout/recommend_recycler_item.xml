@@ -5,7 +5,9 @@
     android:layout_margin="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
@@ -14,9 +16,12 @@
         android:elevation="6dp"
         android:layout_margin="5dp"
         app:cardCornerRadius="20dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="true">
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/recommendImage"
             android:layout_width="100dp"

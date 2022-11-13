@@ -34,7 +34,6 @@ import kotlin.math.log
 
 
 class RecommendFragment1 : Fragment(), View.OnClickListener {
-
     // To get the main activity's change fragment function
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {

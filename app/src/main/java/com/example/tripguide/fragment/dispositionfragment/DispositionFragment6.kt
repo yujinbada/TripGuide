@@ -1,44 +1,53 @@
 package com.example.tripguide.fragment.dispositionfragment
 
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.os.Bundle
+import android.graphics.Color
+import android.os.*
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.adapter.FinalRecyclerAdapter1
+import com.example.tripguide.adapter.FinalRecyclerAdapter2
 import com.example.tripguide.databinding.FragmentDisposition6Binding
+import com.example.tripguide.fragment.RecommendedTripFragment
+import com.example.tripguide.fragment.recommend.LocationBasedFragment
 import com.example.tripguide.model.*
 import com.example.tripguide.model.kakaoroute.Destination
 import com.example.tripguide.model.kakaoroute.KakaoRoute
 import com.example.tripguide.model.kakaoroute.Origin
 import com.example.tripguide.retrofit.RetrofitRoute
-import com.example.tripguide.fragment.RecommendedTripFragment
-import com.example.tripguide.model.SelectViewModel
 import com.example.tripguide.utils.Constants.TAG
 import com.example.tripguide.utils.KakaoApi
 import kotlinx.coroutines.*
+import net.daum.mf.map.api.*
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalTime
-import kotlin.collections.ArrayList
-import kotlin.math.log
+
 
 class DispositionFragment6 : Fragment(), View.OnClickListener {
     private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+//        LoadingDialog(mainActivity).show()
     }
     private var mBinding: FragmentDisposition6Binding? = null
     private val binding get() = mBinding!!
@@ -54,7 +63,8 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     private val responseRouteList = ArrayList<RouteResult>()
 
     private val finalRoute = ArrayList<FinalItem>()
-    private val finalRecyclerAdapter = FinalRecyclerAdapter1(finalRoute)
+    private val grandFinalRoute = ArrayList<GrandFinalItem>()
+    private val finalRecyclerAdapter = FinalRecyclerAdapter1(grandFinalRoute)
 
     var departStationTime : LocalTime = LocalTime.of(0, 0, 0)
     var arriveStationTime : LocalTime = LocalTime.of(0, 0, 0)
@@ -68,6 +78,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?,
     ): View? {
         Log.d(TAG, "DispositionFragment6 - onCreateView() called")
+
         // View Model 설정
         viewModel =
             ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(
@@ -76,12 +87,16 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-
+    private lateinit var mapView : MapView
+    var start = ""
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.beforebtn6.setOnClickListener(this)
         clickShareBtn()
+
+        mapView = MapView(activity)
+        binding.KakaoMapView.addView(mapView)
 
         binding.routeRCV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.routeRCV.adapter = finalRecyclerAdapter
@@ -93,6 +108,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         val departStationList = viewModel.departStationList.value
         val arriveStationList = viewModel.arriveStationList.value
         var startDate = viewModel.startDate.value
+        start = startDate!!
         val endDate = viewModel.endDate.value
         if(viewModel.departStationTime.value != null) {
             departStationTime = viewModel.departStationTime.value!!
@@ -105,14 +121,14 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             origin.name = it.title
             origin.x = it.mapX?.toDouble()
             origin.y = it.mapY?.toDouble()
-
+            it.liveTime = liveTime
             if(viewModel.arriveOfficeRegion.value != null) {
                 arriveOffice = viewModel.arriveOfficeRegion.value!!
                 Log.d(TAG, "arriveOffice - $arriveOffice")
                 val arriveCity = getResultSearch(origin, arriveOffice)
                 liveTime = liveTime.plusSeconds(arriveCity.duration?.toLong()!!)
             }
-            it.liveTime = liveTime
+
             Log.d(TAG, "origin - $origin")
             finalRoute.add(FinalItem(it, startDate))
         }
@@ -163,6 +179,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         }
 
         val count = tourList?.count()!! + foodList?.count()!! + hotelList?.count()!!
+        val origindate = startDate
         /* Origin 과 여행지 목록을 바탕으로 finalRoute 를 계산한다. */
         for (i in 1..count) {
             /* liveTime 을 기준으로 */
@@ -176,6 +193,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 in 1080..1200 -> "food" // 6시부터 8시는 저녁 시간
                 else -> "hotel" // 8시 이후는 숙소
             }
+            if (i == 1) liveTime = startTime
             when(type) {
                 "tour" -> {
                     Log.d(TAG, "liveTime - $liveTime")
@@ -195,6 +213,11 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                         }
 
                         Log.d(TAG, "minLocation - $minLocation")
+                        tourDestination.map {
+                            if(it.name == minLocation.key) {
+                                origin = Origin(it.name, it.x, it.y)
+                            }
+                        }
                         addFinalRoute(minLocation, tourDestination, tourList, startDate)
                         tourList.map {
                             if(it.title == minLocation.key) {
@@ -204,11 +227,10 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                     }
                     else {
                         Log.d(TAG, "빈 장소 추가")
-                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        val emptySelectItem = SelectItem(null, "장소 추가", 12,null, null, liveTime)
                         finalRoute.add(FinalItem(emptySelectItem, startDate))
                         liveTime = liveTime.plusHours(2)
                     }
-
                 }
                 "food" -> {
                     Log.d(TAG, "liveTime - $liveTime")
@@ -228,6 +250,11 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                         }
 
                         Log.d(TAG, "minLocation - $minLocation")
+                        foodDestination.map {
+                            if(it.name == minLocation.key) {
+                                origin = Origin(it.name, it.x, it.y)
+                            }
+                        }
                         addFinalRoute(minLocation, foodDestination, foodList, startDate)
                         foodList.map {
                             if(it.title == minLocation.key) {
@@ -237,7 +264,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                     }
                     else {
                         Log.d(TAG, "빈 장소 추가")
-                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        val emptySelectItem = SelectItem(null, "장소 추가", 39,null, null, liveTime)
                         finalRoute.add(FinalItem(emptySelectItem, startDate))
                         liveTime = liveTime.plusHours(2)
                     }
@@ -260,8 +287,12 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                         }
 
                         Log.d(TAG, "minLocation - $minLocation")
+                        hotelDestination.map {
+                            if(it.name == minLocation.key) {
+                                origin = Origin(it.name, it.x, it.y)
+                            }
+                        }
                         addFinalRoute(minLocation, hotelDestination, hotelList, startDate)
-                        finalRecyclerAdapter.notifyDataSetChanged()
                         hotelList.map {
                             if(it.title == minLocation.key) {
                                 hotelDestination.remove(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
@@ -271,7 +302,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                     }
                     else {
                         Log.d(TAG, "빈 장소 추가")
-                        val emptySelectItem = SelectItem(null, "장소 추가", null,null, null, liveTime)
+                        val emptySelectItem = SelectItem(null, "장소 추가", 32,null, null, liveTime)
                         finalRoute.add(FinalItem(emptySelectItem, startDate))
                         liveTime = liveTime.plusHours(2)
                     }
@@ -283,6 +314,75 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 }
             }
         }
+
+        val dayCount = endDate?.toInt()!! - origindate?.toInt()!!
+        for(i in 0 ..dayCount) {
+            val date = "${origindate.toInt() + i}"
+            val dayRoute = finalRoute.filter { it.date == date }
+            if(dayRoute.isNotEmpty()) {
+                grandFinalRoute.add(GrandFinalItem(dayRoute, date))
+            }
+            else {
+                val emptySelectItem = SelectItem(null, "장소 추가", 39,null, null, LocalTime.of(8, 0, 0))
+                val emptyFinalItem = ArrayList<FinalItem>()
+                emptyFinalItem.add(FinalItem(emptySelectItem, date))
+                grandFinalRoute.add(GrandFinalItem(emptyFinalItem, date))
+            }
+//            LoadingDialog(mainActivity).dismiss()
+            setMapView(mapView, finalRoute, startDate)
+            finalRecyclerAdapter.notifyDataSetChanged()
+        }
+
+
+
+        finalRecyclerAdapter.setItemClickListener(object : DispositionFragment6.RVitemClickListner {
+            override fun onChildItemClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>) {
+                // recyclerview item 클릭시 장소의 좌표로 mapView 이동
+                if(item[childPosition].selectItem?.title != "장소 추가") {
+                    val mapX = item[childPosition].selectItem?.mapY!!.toDouble()
+                    val mapY = item[childPosition].selectItem?.mapX!!.toDouble()
+                    val mapPoint = MapPoint.mapPointWithGeoCoord(mapX, mapY)
+                    mapView.setMapCenterPoint(mapPoint, true)
+                    mapView.setZoomLevel(3, true)
+                }
+                else {
+                    // 만약 item 의 title 이 "장소 추가" 라면 이전 장소를 기준으로 장소 추가를 위한 LocationBasedFragment 로 이동
+                    if(childPosition != 0) {
+                        val formerMapX = item[childPosition - 1].selectItem?.mapY!!.toString()
+                        val formerMapY = item[childPosition - 1].selectItem?.mapX!!.toString()
+                        val title = item[childPosition - 1].selectItem?.title.toString()
+                        val type = item[childPosition].selectItem?.type.toString()
+                        val builder = AlertDialog.Builder(activity)
+                        builder.setTitle("장소를 추가 하시겠습니까?")
+                            .setPositiveButton("확인",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    setFragmentResult("tourType", bundleOf("tourTypebundleKey" to type))
+                                    setFragmentResult("tourTitle", bundleOf("tourTitlebundleKey" to title))
+                                    setFragmentResult("tourX", bundleOf("tourXbundleKey" to formerMapX))
+                                    setFragmentResult("tourY", bundleOf("tourYbundleKey" to formerMapY))
+                                    binding.KakaoMapView.removeView(mapView)
+                                    mainActivity.addFragment(DispositionFragment6(), LocationBasedFragment())
+                                })
+                            .setNegativeButton("취소",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                })
+                        // 다이얼로그를 띄워주기
+                        builder.show()
+                        viewModel.addList.observe(viewLifecycleOwner, Observer {
+                            item[childPosition].selectItem = it
+                            Log.d(TAG, "finalRoute - $finalRoute")
+                        })
+
+                    }
+                }
+            }
+
+            // recyclerview item 길게 클릭시 진동과 함께 list 수정 가능
+            override fun onChildItemLongClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>) {
+            }
+        })
+
+
     }
 
 
@@ -368,7 +468,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                         y.liveTime = liveTime
                         finalRoute.add(FinalItem(y, date))
                         Log.d(TAG, "finalRoute - $finalRoute")
-                        liveTime = liveTime.plusHours(2)
+                        liveTime = liveTime.plusMinutes(90)
                     }
                 }
             }
@@ -395,6 +495,48 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             R.id.beforebtn6 -> {
                 mainActivity.removeFragment(RecommendedTripFragment())
             }
+        }
+    }
+
+
+
+    private fun setMapView(mapView : MapView, finalRoute: ArrayList<FinalItem>, date: String?) {
+        val mapPolyline = MapPolyline()
+        val mapMarker = MapPOIItem()
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+        mapPolyline.tag = 1000
+        mapPolyline.lineColor = Color.argb(100, 87, 170, 209)
+        finalRoute.filter { it.date == date }.map {
+            if(it.selectItem?.title != "장소 추가") {
+                val mapName = it.selectItem?.title.toString()
+                val mapPoint = MapPoint.mapPointWithGeoCoord(it.selectItem?.mapY?.toDouble()!!, it.selectItem!!.mapX?.toDouble()!!)
+                mapMarker.itemName = mapName
+                mapMarker.mapPoint = mapPoint
+                mapMarker.markerType = MapPOIItem.MarkerType.BluePin
+                mapMarker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                mapView.addPOIItem(mapMarker)
+                mapPolyline.addPoint(mapPoint)
+            }
+        }
+        mapView.addPolyline(mapPolyline)
+        val mapPointBounds = MapPointBounds(mapPolyline.mapPoints)
+        val padding = 100 // px
+
+        mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
+    }
+
+    interface RVitemClickListner {
+        fun onChildItemClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>)
+        fun onChildItemLongClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>)
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(hidden) {
+        }
+        else {
+            setMapView(mapView, finalRoute, start)
         }
     }
 

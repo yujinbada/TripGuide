@@ -7,7 +7,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.dispositionfragment.DispositionFragment4"
     android:background="@color/white"
-    android:id="@+id/constraint">
+    android:id="@+id/constraint"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:id="@+id/linearLayout"

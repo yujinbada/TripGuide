@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     app:cardCornerRadius="10dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="350dp"
@@ -26,7 +28,7 @@
                 android:id="@+id/departtextField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="여행지를 입력해주세요?"
+                android:hint="여행지를 입력해주세요"
                 android:gravity="center"
                 app:endIconMode="clear_text"
                 >

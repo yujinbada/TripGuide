@@ -24,6 +24,7 @@ class SelectViewModel : ViewModel() {
     val tourList = MutableLiveData<List<SelectItem>>()           // tourist attractions information
     val foodList = MutableLiveData<List<SelectItem>>()           // restaurants information
     val hotelList = MutableLiveData<List<SelectItem>>()          // hotels information
+    val addList = MutableLiveData<SelectItem>()
     val areaCode : MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -81,6 +82,9 @@ class SelectViewModel : ViewModel() {
     }
     fun setEndDate(string: String) {
         endDate.value = string
+    }
+    fun setAddList(selectItem: SelectItem) {
+        addList.value = selectItem
     }
 
     private fun setData(data: ArrayList<SelectItem>){

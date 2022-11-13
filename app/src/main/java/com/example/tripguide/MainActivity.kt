@@ -5,12 +5,17 @@
 package com.example.tripguide
 
 import android.app.Activity
+import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.system.Os.remove
 import android.util.Log
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.tripguide.databinding.ActivityMainBinding

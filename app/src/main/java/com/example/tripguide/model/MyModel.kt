@@ -37,13 +37,17 @@ data class SelectItem (
     val type: Int?,
     var mapX : String? = null,
     var mapY : String? = null,
-    var liveTime: LocalTime?
+    var liveTime: LocalTime? = null
     )
 
 data class FinalItem (
-    val selectItem: SelectItem?,
+    var selectItem: SelectItem?,
     var date : String?
 )
+data class GrandFinalItem(
+    val finalItemList: List<FinalItem>,
+    var date : String?
+        )
 
 
 data class RecommendItem (

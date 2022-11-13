@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.dispositionfragment.DispositionFragment2"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

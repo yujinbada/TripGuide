@@ -79,7 +79,7 @@ class RecommendFragment3 : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        keywordParser()
         binding.rvHotelList.layoutManager = LinearLayoutManager(activity,
             LinearLayoutManager.VERTICAL,
             false)

@@ -140,7 +140,9 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                         val dataFormat = SimpleDateFormat("M월 d일")
 
                         if(binding.daterangeview.text == "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}") {
-                            Toast.makeText(activity, "여행 기간을 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                            viewModel.setStartDate(SimpleDateFormat("MMdd").format(currentTime))
+                            viewModel.setEndDate(SimpleDateFormat("MMdd").format(tomorrow))
+                            mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
                         }
                         else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
 

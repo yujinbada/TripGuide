@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.dispositionfragment.DispositionFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

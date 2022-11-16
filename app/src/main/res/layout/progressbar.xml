@@ -33,8 +33,5 @@
             android:text="Loading.."
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/black"/>
-
-
-
     </LinearLayout>
 </RelativeLayout>

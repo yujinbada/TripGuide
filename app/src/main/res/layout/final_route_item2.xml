@@ -8,69 +8,121 @@
     android:clickable="true"
     android:focusable="true">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="20dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/gray"
-        android:background="@color/white"
+        android:layout_height="110dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appCompatImageView">
+        app:layout_constraintTop_toBottomOf="@id/appCompatImageView"
+        android:clickable="true"
+        android:focusable="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appCompatImageView">
 
-            <TextView
-                android:id="@+id/tripPeriod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="8:00\n~\n10:00"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                app:cardCornerRadius="20dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true">
 
-            <FrameLayout
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tripPeriod"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/finalImg"
-                    android:layout_width="300dp"
-                    android:layout_marginStart="5dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_launcher_foreground"/>
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tvRemove"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#F42929"
+                        android:text="삭제"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:layout_weight="3"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appCompatImageView">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                >
 
                 <TextView
-                    android:id="@+id/finalTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:background="@color/white"
-                    android:text="title"
+                    android:id="@+id/tripPeriod"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:text="8:00\n~\n10:00"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textColor="@color/black"
-                    android:textSize="15dp"
-                    android:layout_gravity="center"
-                    />
+                    android:textSize="20dp" />
 
-            </FrameLayout>
+                <FrameLayout
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="70dp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/finalImg"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_launcher_foreground"/>
 
-    </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/finalTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:background="@color/white"
+                        android:text="title"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:layout_gravity="center"
+                        />
+
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+   </FrameLayout>
+
+
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView"
@@ -91,6 +143,7 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="15dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
         app:layout_constraintTop_toTopOf="parent" />
 

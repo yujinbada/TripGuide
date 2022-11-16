@@ -62,7 +62,8 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
 
     private var arrayList = ArrayList<RecommendItem>()
     private val recommendRecyclerAdapter = RecommendRecyclerAdapter(arrayList)
-    private lateinit var mapView : MapView
+    lateinit var mapView : MapView
+    private val marker = MapPOIItem()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +91,8 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
         binding.recyclerView.apply {
             itemAnimator = null
         }
+        mapView = MapView(activity)
+        binding.MapView.addView(mapView)
 
         setFragmentResultListener("tourType") { key, bundle ->
             val result = bundle.getString("tourTypebundleKey")
@@ -111,22 +114,19 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
         setFragmentResultListener("tourY") { key, bundle ->
             val result = bundle.getString("tourYbundleKey").toString()
             mapY = result.toDouble()
-            mapView = MapView(activity)
-            val mapPoint = MapPoint.mapPointWithGeoCoord(mapY, mapX)
-            binding.MapView.addView(mapView)
+            Log.d(TAG, "mapX $mapX mapY $mapY contentTypeId $contentTypeId")
+            val mapPoint = MapPoint.mapPointWithGeoCoord(mapX, mapY)
             mapView.setMapCenterPoint(mapPoint, true)
             mapView.setZoomLevel(5, true)
 
             //마커 생성
-            val marker = MapPOIItem()
-            marker.itemName = "$title 근처의 장소를 추가 해주세요"
+            marker.itemName = "$title 근처의 장소를\n추가 해주세요"
             marker.mapPoint = mapPoint
             marker.markerType = MapPOIItem.MarkerType.BluePin
             marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
 
             mapView.addPOIItem(marker)
 
-            Log.d(TAG, "mapX $mapX mapY $mapY contentTypeId $contentTypeId")
             keywordParser(mapX, mapY, contentTypeId)
         }
 
@@ -144,6 +144,7 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                                     arrayList[position].recommendcontentId?.toInt(),
                                     arrayList[position].recommendmapX,
                                     arrayList[position].recommendmapY))
+                            binding.MapView.removeView(mapView)
                             mainActivity.removeFragment(LocationBasedFragment())
                         })
                     .setNegativeButton("취소",
@@ -209,12 +210,15 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                 var tagConTentId = false
                 var tagMapX = false
                 var tagMapY = false
+                var tagDist = false
 
                 var firstimage = ""    // 이미지
-                var title = ""         // 제목
+                var title2 = ""         // 제목
                 var contentid = "126508"
                 var mapx = ""
                 var mapy = ""
+                var dist = ""
+                var overview = ""
 
                 var factory = XmlPullParserFactory.newInstance()    // 파서 생성
                 factory.setNamespaceAware(true)                     // 파서 설정
@@ -234,6 +238,7 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                             else if (tagName.equals("contentid")) tagConTentId = true
                             else if (tagName.equals("mapx")) tagMapX = true
                             else if (tagName.equals("mapy")) tagMapY = true
+                            else if (tagName.equals("dist")) tagDist = true
                         }
                     }
                     if (eventType == XmlPullParser.TEXT) {
@@ -242,11 +247,20 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                             tagImage = false
                         }
                         else if (tagTitle) {    // 제목
-                            title = xpp.text
+                            title2 = xpp.text
                             tagTitle = false
-                            val item = RecommendItem(firstimage, title, contentid,"" , mapx, mapy)
+                            val item = RecommendItem(firstimage, title2, contentid, overview , mapx, mapy)
                             arrayList.add(item)
-                            getOverView(contentid)
+                            val mapPoint = MapPoint.mapPointWithGeoCoord(mapy.toDouble(), mapx.toDouble())
+                            //마커 생성
+                            marker.itemName = "$title2"
+                            marker.mapPoint = mapPoint
+                            marker.markerType = MapPOIItem.MarkerType.BluePin
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+
+                            mapView.addPOIItem(marker)
+
+                            recommendRecyclerAdapter.notifyDataSetChanged()
                         }
                         else if (tagConTentId) {    // 콘텐츠 아이디
                             contentid = xpp.text
@@ -263,6 +277,11 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                             tagMapY = false
 
                         }
+                        else if (tagDist) {    // mapy
+                            dist = xpp.text
+                            overview = "$title 에서 $dist 미터 떨어져 있습니다."
+                            tagDist = false
+                        }
                     }
                     eventType = xpp.next()
                 }
@@ -270,97 +289,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
         }
 
         getDangerGrade().execute()
-    }
-
-    fun getOverView(contentId : String) {
-        val serviceUrl2 = "http://apis.data.go.kr/B551011/KorService/detailCommon"
-        val overviewyn = "Y"
-        val requstUrl2 = serviceUrl2 +
-                "?serviceKey=" + serviceKey +
-                "&MobileApp=" + mobile_app +
-                "&MobileOS=" + mobile_os +
-                "&contentId=" + contentId +
-                "&overviewYN=Y"
-
-        fetchXML2(requstUrl2)
-    }
-
-    // xml 파싱하기
-    fun fetchXML2(url: String) {
-        lateinit var page : String  // url 주소 통해 전달받은 내용 저장할 변수
-
-        var tagOverView= false
-        var overView = "blank"
-        // xml 데이터 가져와서 파싱하기
-        // 외부에서 데이터 가져올 때 화면 계속 동작하도록 AsyncTask 이용
-
-        class GetDangerGrade : AsyncTask<Void, Void, Void>() {
-            // url 이용해서 xml 읽어오기
-            override fun doInBackground(vararg p0: Void?): Void? {
-                // 데이터 스트림 형태로 가져오기
-                val stream = URL(url).openStream()
-                val bufReader = BufferedReader(InputStreamReader(stream, "UTF-8"))
-
-                // 한줄씩 읽어서 스트링 형태로 바꾼 후 page에 저장
-                page = ""
-                var line = bufReader.readLine()
-                while (line != null) {
-                    page += line
-                    line = bufReader.readLine()
-                }
-
-                return null
-            }
-
-            // 읽어온 xml 파싱하기
-            override fun onPostExecute(result: Void?) {
-                super.onPostExecute(result)
-
-                var tagConTentId = false
-                var contentid = ""
-
-                var factory = XmlPullParserFactory.newInstance()    // 파서 생성
-                factory.setNamespaceAware(true)                     // 파서 설정
-                var xpp = factory.newPullParser()                   // XML 파서
-
-                // 파싱하기
-                xpp.setInput(StringReader(page))
-
-                // 파싱 진행
-                var eventType = xpp.eventType
-                while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_DOCUMENT) {}
-                    else if (eventType == XmlPullParser.START_TAG) {
-                        var tagName = xpp.name
-                        if (tagName.equals("overview")) tagOverView = true
-                        else if (tagName.equals("contentid")) tagConTentId = true
-                    }
-                    if (eventType == XmlPullParser.TEXT) {
-                        if (tagOverView) {         // 이미지
-                            overView = xpp.text.replace("<br />", "\n")
-                                .replace("<br/>", "\n")
-                                .replace("<br>", "")
-                            tagOverView = false
-                            arrayList.map {
-                                if( it.recommendcontentId == contentid) {
-                                    it.tourOverView = overView
-                                    recommendRecyclerAdapter.notifyDataSetChanged()
-                                }
-                            }
-                        }
-                        else if (tagConTentId) {    // 콘텐츠 아이디
-                            contentid = xpp.text
-                            tagConTentId = false
-
-                        }
-                    }
-                    if (eventType == XmlPullParser.END_TAG) {}
-                    eventType = xpp.next()
-                }
-            }
-        }
-        GetDangerGrade().execute()
-
     }
 
     fun newInstant() : RecommendFragment1
@@ -376,7 +304,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
 
     override fun onDestroyView() {
         mBinding = null
-        binding.MapView.removeView(mapView)
         super.onDestroyView()
     }
 }

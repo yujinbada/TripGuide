@@ -11,19 +11,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tripguide.MainActivity
 import com.example.tripguide.R
 import com.example.tripguide.adapter.FinalRecyclerAdapter1
-import com.example.tripguide.adapter.FinalRecyclerAdapter2
 import com.example.tripguide.databinding.FragmentDisposition6Binding
 import com.example.tripguide.fragment.RecommendedTripFragment
 import com.example.tripguide.fragment.recommend.LocationBasedFragment
@@ -71,7 +67,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     // 여행의 시작의 기본 시간을 오전 8시로 설정
     var startTime : LocalTime = LocalTime.of(8,0, 0)
     var liveTime : LocalTime = LocalTime.of(8, 0, 0)
-    var stationDurationTime: LocalTime = LocalTime.of(0, 0, 0)
+    lateinit var origindate : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,11 +91,12 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         binding.beforebtn6.setOnClickListener(this)
         clickShareBtn()
 
-        mapView = MapView(activity)
-        binding.KakaoMapView.addView(mapView)
-
         binding.routeRCV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.routeRCV.adapter = finalRecyclerAdapter
+
+
+        mapView = MapView(activity)
+        binding.KakaoMapView.addView(mapView)
 
         val tourList = viewModel.tourList.value
         val foodList = viewModel.foodList.value
@@ -122,13 +119,15 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             origin.x = it.mapX?.toDouble()
             origin.y = it.mapY?.toDouble()
             it.liveTime = liveTime
-            if(viewModel.arriveOfficeRegion.value != null) {
-                arriveOffice = viewModel.arriveOfficeRegion.value!!
-                Log.d(TAG, "arriveOffice - $arriveOffice")
-                val arriveCity = getResultSearch(origin, arriveOffice)
-                liveTime = liveTime.plusSeconds(arriveCity.duration?.toLong()!!)
+            it.type = 1
+            if (departStationList?.isEmpty()!!) {
+                if(viewModel.arriveOfficeRegion.value != null) {
+                    arriveOffice = viewModel.arriveOfficeRegion.value!!
+                    Log.d(TAG, "arriveOffice - $arriveOffice")
+                    val arriveCity = getResultSearch(origin, arriveOffice)
+                    liveTime = liveTime.plusSeconds(arriveCity.duration?.toLong()!!)
+                }
             }
-
             Log.d(TAG, "origin - $origin")
             finalRoute.add(FinalItem(it, startDate))
         }
@@ -143,21 +142,26 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 departStationList.first().mapX?.toDouble(),
                 departStationList.first().mapY?.toDouble()
             ))
-            GlobalScope.launch {
-                addFinalRoute(getResultSearch(origin, tourDestination.first()), tourDestination, departStationList, startDate)
+            val departStation = getResultSearch(origin, tourDestination.first())
+            // 여행 출발 시간을 비행기 or 기차 출발시간을 계산하여 수정
+            finalRoute.map {
+                if(it.selectItem?.title == origin.name) {
+                    it.selectItem?.liveTime = departStationTime.minusSeconds(departStation.duration!!.toLong())
+                }
             }
-
-
+            departStationList.forEach {
+                it.liveTime = departStationTime
+                it.type = 2
+                finalRoute.add(FinalItem(it, startDate))
+            }
             /* 비행기 or 기차를 이용해서 공항이나 역을 가야하면 도착역을 여행지에서의 일정의 첫번째로 설정하고
                도착시간에서 출발시간을 뺀 값을 초 단위로 duration 에 넣어준다. */
             Log.d(TAG, "arriveStationList - $arriveStationList")
             Log.d(TAG, "departStationTime - $departStationTime, arriveStationTime - $arriveStationTime")
             arriveStationList?.forEach {
-                liveTime = arriveStationTime
-                it.liveTime = liveTime
-                stationDurationTime = arriveStationTime.minusHours(departStationTime.hour.toLong())
-                    .minusMinutes(departStationTime.minute.toLong())
-                Log.d(TAG, "stationDurationTime - $stationDurationTime")
+                startTime = arriveStationTime
+                it.liveTime = arriveStationTime
+                it.type = 3
                 finalRoute.add(FinalItem(it, startDate))
                 origin.name = it.title
                 origin.x = it.mapX?.toDouble()
@@ -178,8 +182,9 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             hotelDestination.add(Destination(it.title, it.mapX?.toDouble(), it.mapY?.toDouble()))
         }
 
-        val count = tourList?.count()!! + foodList?.count()!! + hotelList?.count()!!
-        val origindate = startDate
+        var count = tourList?.count()!! + foodList?.count()!! + hotelList?.count()!!
+        origindate = startDate
+        if(count <= 7) count = 8
         /* Origin 과 여행지 목록을 바탕으로 finalRoute 를 계산한다. */
         for (i in 1..count) {
             /* liveTime 을 기준으로 */
@@ -193,7 +198,9 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 in 1080..1200 -> "food" // 6시부터 8시는 저녁 시간
                 else -> "hotel" // 8시 이후는 숙소
             }
-            if (i == 1) liveTime = startTime
+            if (i == 1) {
+                liveTime = startTime
+            }
             when(type) {
                 "tour" -> {
                     Log.d(TAG, "liveTime - $liveTime")
@@ -320,7 +327,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             val date = "${origindate.toInt() + i}"
             val dayRoute = finalRoute.filter { it.date == date }
             if(dayRoute.isNotEmpty()) {
-                grandFinalRoute.add(GrandFinalItem(dayRoute, date))
+                grandFinalRoute.add(GrandFinalItem(dayRoute as ArrayList<FinalItem>, date))
             }
             else {
                 val emptySelectItem = SelectItem(null, "장소 추가", 39,null, null, LocalTime.of(8, 0, 0))
@@ -329,12 +336,12 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 grandFinalRoute.add(GrandFinalItem(emptyFinalItem, date))
             }
 //            LoadingDialog(mainActivity).dismiss()
-            setMapView(mapView, finalRoute, startDate)
+            setMapView(finalRoute, origindate)
             finalRecyclerAdapter.notifyDataSetChanged()
         }
 
 
-
+        var position = 0
         finalRecyclerAdapter.setItemClickListener(object : DispositionFragment6.RVitemClickListner {
             override fun onChildItemClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>) {
                 // recyclerview item 클릭시 장소의 좌표로 mapView 이동
@@ -348,6 +355,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                 else {
                     // 만약 item 의 title 이 "장소 추가" 라면 이전 장소를 기준으로 장소 추가를 위한 LocationBasedFragment 로 이동
                     if(childPosition != 0) {
+                        position = childPosition
                         val formerMapX = item[childPosition - 1].selectItem?.mapY!!.toString()
                         val formerMapY = item[childPosition - 1].selectItem?.mapX!!.toString()
                         val title = item[childPosition - 1].selectItem?.title.toString()
@@ -368,20 +376,16 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                                 })
                         // 다이얼로그를 띄워주기
                         builder.show()
-                        viewModel.addList.observe(viewLifecycleOwner, Observer {
-                            item[childPosition].selectItem = it
-                            Log.d(TAG, "finalRoute - $finalRoute")
-                        })
-
                     }
                 }
             }
-
-            // recyclerview item 길게 클릭시 진동과 함께 list 수정 가능
-            override fun onChildItemLongClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>) {
-            }
         })
 
+        viewModel.addList.observe(viewLifecycleOwner, Observer {
+            finalRoute[position].selectItem = it
+            Log.d(TAG, "finalRoute - $finalRoute")
+            reCalculateFinalRoute(finalRoute)
+        })
 
     }
 
@@ -500,7 +504,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
 
 
 
-    private fun setMapView(mapView : MapView, finalRoute: ArrayList<FinalItem>, date: String?) {
+    private fun setMapView(finalRoute: ArrayList<FinalItem>, date: String?) {
         val mapPolyline = MapPolyline()
         val mapMarker = MapPOIItem()
         mapView.removeAllPOIItems()
@@ -526,9 +530,35 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
     }
 
+    private fun reCalculateFinalRoute(finalRoute: ArrayList<FinalItem>) {
+        var liveTime = LocalTime.of(8,0,0)
+        finalRoute.map {
+            if (it.selectItem!!.type == 1) {
+                origin = Origin(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())
+                liveTime = it.selectItem!!.liveTime!!
+            }
+            else {
+                if(it.selectItem?.title != "장소 추가") {
+                    val duration = getResultSearch(origin, Destination(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())).duration
+                    Log.d(TAG, "duration - $duration")
+                    liveTime = liveTime.plusSeconds(duration!!.toLong())
+                    Log.d(TAG, "liveTime - $liveTime")
+                    it.selectItem?.liveTime == liveTime
+                    liveTime = liveTime.plusMinutes(90)
+                    origin = Origin(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())
+                }
+                else {
+                    it.selectItem?.liveTime == liveTime
+                    liveTime = liveTime.plusMinutes(90)
+                }
+            }
+        }
+        Log.d(TAG, "finalRoute - $finalRoute")
+        finalRecyclerAdapter.notifyDataSetChanged()
+    }
+
     interface RVitemClickListner {
         fun onChildItemClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>)
-        fun onChildItemLongClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -536,9 +566,16 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         if(hidden) {
         }
         else {
-            setMapView(mapView, finalRoute, start)
+            setMapView(finalRoute, origindate)
         }
     }
 
-
+    fun Fragment.vibratePhone() {
+        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(200)
+        }
+    }
 }

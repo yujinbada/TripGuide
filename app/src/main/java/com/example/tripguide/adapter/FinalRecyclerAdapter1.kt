@@ -1,14 +1,21 @@
 package com.example.tripguide.adapter
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripguide.R
 import com.example.tripguide.fragment.dispositionfragment.DispositionFragment6
+import com.example.tripguide.model.FinalItem
 import com.example.tripguide.model.GrandFinalItem
 import com.example.tripguide.utils.Constants.TAG
 
@@ -44,12 +51,15 @@ class FinalRecyclerAdapter1 (private var grandFinalRoute : ArrayList<GrandFinalI
             }
         }
 
-        finalRecyclerAdapter2.setItemLongClickListener(object  : FinalRecyclerAdapter2.OnItemLongClickListener {
-            override fun onLongClick(v: View, childPosition: Int) {
-                val childItem = item.finalItemList
-                rvitemClickListener.onChildItemLongClick(position, childPosition, childItem)
-            }
-        })
+        val swipeHelperCallback = SwipeHelperCallback(finalRecyclerAdapter2).apply {
+            setClamp(270F)
+        }
+        ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(holder.finalRecyclerView)
+
+        holder.finalRecyclerView.setOnClickListener {
+            swipeHelperCallback.removePreviousClamp(holder.finalRecyclerView)
+            false
+        }
 
         finalRecyclerAdapter2.setItemClickListener(object : FinalRecyclerAdapter2.OnItemClickListener {
             override fun onItemClick(v: View, childPosition: Int) {
@@ -64,4 +74,6 @@ class FinalRecyclerAdapter1 (private var grandFinalRoute : ArrayList<GrandFinalI
     fun setItemClickListener(onItemClickListener: DispositionFragment6.RVitemClickListner) {
         this.rvitemClickListener = onItemClickListener
     }
+
+
 }

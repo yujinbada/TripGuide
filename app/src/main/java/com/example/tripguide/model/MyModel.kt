@@ -34,7 +34,7 @@ data class Tour (
 data class SelectItem (
     val firstimage: String?,
     val title: String?,
-    val type: Int?,
+    var type: Int?,
     var mapX : String? = null,
     var mapY : String? = null,
     var liveTime: LocalTime? = null
@@ -45,7 +45,7 @@ data class FinalItem (
     var date : String?
 )
 data class GrandFinalItem(
-    val finalItemList: List<FinalItem>,
+    val finalItemList: ArrayList<FinalItem>,
     var date : String?
         )
 

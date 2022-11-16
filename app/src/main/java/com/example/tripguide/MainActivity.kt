@@ -5,17 +5,11 @@
 package com.example.tripguide
 
 import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.system.Os.remove
 import android.util.Log
 import android.view.WindowManager
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.tripguide.databinding.ActivityMainBinding
@@ -83,6 +77,7 @@ class MainActivity() : AppCompatActivity() {
         Log.d(TAG, "keyhash : $keyHash")
         Log.d(TAG, "SDK : "+Build.VERSION.SDK_INT)
 
+
     }
 
     fun addFragment(now: Fragment, next: Fragment) {
@@ -110,8 +105,7 @@ class MainActivity() : AppCompatActivity() {
 
     fun dialogFragment(show: DialogFragment) {
         Log.d(TAG, "show $show")
-        var dialog = show
-        dialog.show(supportFragmentManager, "$show")
+        show.show(supportFragmentManager, "$show")
     }
 
     // supportFragmentManager function for fragment transaction
@@ -127,4 +121,6 @@ class MainActivity() : AppCompatActivity() {
             }
         }
     }
+
+
 }

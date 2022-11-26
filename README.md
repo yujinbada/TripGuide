@@ -57,22 +57,31 @@
   >여행 출발지 입력은 KakaoApi의 로컬 api 에서 keyword 검색 기능을 Retrofit2로 구현
   
   ![image](https://user-images.githubusercontent.com/106158445/204072718-0ba2c9b8-09c0-4f40-9b59-da291ae6edf1.png)
-  >이동 수단을 '비행기 / 기차'로 선택했다면 추가적인 정보 입력
+  >이동 수단을 '비행기 / 기차'로 선택했다면 추가적인 정보 입력,
   >출발, 도착 역 / 공항은 이전의 여행 출발지 입력을 구현한 Fragmentdialog 재사용
   >(추가 정보: 출발, 도착 역 / 공항 and 출발, 도착 시간)
   
-  ![image](https://user-images.githubusercontent.com/106158445/204073043-92d40441-0ef0-47a1-8bf7-6fb6c213c9ab.png)
+  ![image](https://user-images.githubusercontent.com/106158445/204073592-35acf8ea-b8d7-4b0a-8ee8-32a6c1e47063.png)
   >방문 장소 Type을 관광지, 식당 / 카페, 숙소 3가지로 분류하고 사용자가 가고자 하는 장소 추가
   >장소 추가는 한국관광공사의 TourApi에 있는 국문관광장소 키워드 검색 서비스를 이용해 구현
   
-  ![image](https://user-images.githubusercontent.com/106158445/204073153-8a451988-e0c0-4ae2-9ecd-f81811c52648.png)
-  >사용자가 추가한 장소 외에 다른 장소도 추천, 장소 Item 클릭시 사진, 상세정보 및 KakaoMap 위치 확인
+  ![image](https://user-images.githubusercontent.com/106158445/204073619-af5583c1-d361-4406-ad98-f05f02f9310d.png)
+  >사용자가 추가한 장소 외에 다른 장소도 추천
+  >장소 Item 클릭시 사진, 상세정보 및 KakaoMap 위치 확인 가능
   
-  ![image](https://user-images.githubusercontent.com/106158445/204073236-b27b71ad-d759-4815-b66b-1e60ebb7db8e.png)
-  >사용자의 정보를 바탕으로 한 여행 일정 완성
+  ![image](https://user-images.githubusercontent.com/106158445/204073650-dce37ea1-cf1d-437c-b7b0-cd71d96aced2.png)
+  >사용자의 정보를 바탕으로 한 여행 일정 완성 및 경로 표시
+  >Item 클릭시 해당 위치로 KakaoMap 이동
   
-  ![image](https://user-images.githubusercontent.com/106158445/204073353-ba416ebb-5bd7-4fb6-be98-01092ffb61db.png)
-  >여행 일정의 
+  ![image](https://user-images.githubusercontent.com/106158445/204073472-e9c169f8-974e-44cb-94fe-5b668d927284.png)
+  >여행 일정에서 비어있는 시간대의 Item 클릭시 해당 위치에 장소 추가 가능
+  >추천해주는 장소는 시간대에 맞게 이전 장소에서 가장 가까이 있는 장소 추천
+
+ ![image](https://user-images.githubusercontent.com/106158445/204073730-ccb37720-8e2c-4a7c-be3f-356a4aaa9849.png) 
+ >장소 추가시 해당 장소를 포함한 전체 일정을 다시 계산하여 표시
+ >~~Item 왼쪽 슬라이드시 삭제 버튼이 보이며 클릭시 해당 Item 삭제
+ >위, 아래로 슬라이드시 여행 일정 순서 수정 가능~~ 해당 기능은 작동하나 시간대가 수정 안됨
+ 
 
   
  

@@ -157,7 +157,6 @@ class DepartRegionFragment : DialogFragment(), View.OnClickListener {
                 Log.d(TAG, "communication success")
                 addItems(response.body())
             }
-
             override fun onFailure(call: Call<KakaoData>, t: Throwable) {
                 Log.d(TAG, "error : " + t.message)
             }

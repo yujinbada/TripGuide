@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tripguide.R
+import com.example.tripguide.fragment.dispositionfragment.DispositionFragment6
 import com.example.tripguide.model.FinalItem
 import kotlinx.coroutines.NonDisposableHandle.parent
 import java.time.format.DateTimeFormatter

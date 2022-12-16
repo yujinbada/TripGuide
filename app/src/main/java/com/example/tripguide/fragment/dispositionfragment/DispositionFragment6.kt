@@ -6,12 +6,18 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.*
+import android.text.style.TtsSpan.TimeBuilder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.contains
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
@@ -22,6 +28,8 @@ import com.example.tripguide.R
 import com.example.tripguide.adapter.FinalRecyclerAdapter1
 import com.example.tripguide.databinding.FragmentDisposition6Binding
 import com.example.tripguide.fragment.RecommendedTripFragment
+import com.example.tripguide.fragment.fbAuth
+import com.example.tripguide.fragment.fbFirestore
 import com.example.tripguide.fragment.recommend.LocationBasedFragment
 import com.example.tripguide.model.*
 import com.example.tripguide.model.kakaoroute.Destination
@@ -68,6 +76,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
     var startTime : LocalTime = LocalTime.of(8,0, 0)
     var liveTime : LocalTime = LocalTime.of(8, 0, 0)
     lateinit var origindate : String
+    var count = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +94,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
 
     private lateinit var mapView : MapView
     var start = ""
+    var name = ""
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,7 +103,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
 
         binding.routeRCV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.routeRCV.adapter = finalRecyclerAdapter
-
 
         mapView = MapView(activity)
         binding.KakaoMapView.addView(mapView)
@@ -107,12 +116,20 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         var startDate = viewModel.startDate.value
         start = startDate!!
         val endDate = viewModel.endDate.value
+        val tripName = viewModel.tripName.value
+        name = tripName!!
         if(viewModel.departStationTime.value != null) {
             departStationTime = viewModel.departStationTime.value!!
         }
         if(viewModel.arriveStationTime.value != null) {
             arriveStationTime = viewModel.arriveStationTime.value!!
         }
+
+        // 날짜만큼 버튼 생성
+        for (i in startDate.toInt() .. endDate!!.toInt()) {
+            makeButton(i.toString())
+        }
+
         // 여행의 출발주소를 origin 으로 설정
         departRegion?.forEach {
             origin.name = it.title
@@ -131,8 +148,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             Log.d(TAG, "origin - $origin")
             finalRoute.add(FinalItem(it, startDate))
         }
-
-
 
         /* 비행기 or 기차를 이용해서 공항이나 역을 가야하면 origin 에서 공항이나 역까지 거리를 getResultSearch 로 구하고
            이전에 tourDestination 에 집어넣었던 공항이나 역값을 제거하고 공항이나 역을 finalRoute 에 add 한다. */
@@ -322,7 +337,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             }
         }
 
-        val dayCount = endDate?.toInt()!! - origindate?.toInt()!!
+        val dayCount = endDate.toInt() - origindate.toInt()
         for(i in 0 ..dayCount) {
             val date = "${origindate.toInt() + i}"
             val dayRoute = finalRoute.filter { it.date == date }
@@ -368,7 +383,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
                                     setFragmentResult("tourTitle", bundleOf("tourTitlebundleKey" to title))
                                     setFragmentResult("tourX", bundleOf("tourXbundleKey" to formerMapX))
                                     setFragmentResult("tourY", bundleOf("tourYbundleKey" to formerMapY))
-                                    binding.KakaoMapView.removeView(mapView)
                                     mainActivity.addFragment(DispositionFragment6(), LocationBasedFragment())
                                 })
                             .setNegativeButton("취소",
@@ -383,10 +397,13 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
 
         viewModel.addList.observe(viewLifecycleOwner, Observer {
             finalRoute[position].selectItem = it
-            Log.d(TAG, "finalRoute - $finalRoute")
+            Log.d(TAG, "finalRoute - $finalRoute date - ${finalRoute[position].date}")
             reCalculateFinalRoute(finalRoute)
+            setMapView(finalRoute, finalRoute[position].date)
         })
-
+        binding.beforebtn6.setOnClickListener(this)
+        binding.recal.setOnClickListener(this)
+        binding.savebtn.setOnClickListener(this)
     }
 
 
@@ -479,19 +496,7 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun clickShareBtn(){
-        binding.btnshare.setOnClickListener {
-            try {
-                val sendText = "TripGuide 공유하기"
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, "Share"))
-            } catch (ignored: ActivityNotFoundException) {
-                Log.d("test", "ignored : $ignored")
-            }
-        }
+    private fun clickShareBtn() {
     }
 
     override fun onClick(v: View?) {
@@ -499,8 +504,21 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             R.id.beforebtn6 -> {
                 mainActivity.removeFragment(RecommendedTripFragment())
             }
+            R.id.recal -> {
+                reCalculateFinalRoute(finalRoute)
+            }
+            R.id.savebtn -> {
+                finalRoute.mapIndexed { index, route ->
+                    fbFirestore?.collection("users")?.document(fbAuth?.uid.toString())?.collection(name)?.document("$index. ${route.selectItem?.title.toString()}")?.set(route)
+                }
+                mainActivity.changeFragment(4)
+
+            }
         }
+
     }
+
+
 
 
 
@@ -509,8 +527,10 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         val mapMarker = MapPOIItem()
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
+
         mapPolyline.tag = 1000
         mapPolyline.lineColor = Color.argb(100, 87, 170, 209)
+
         finalRoute.filter { it.date == date }.map {
             if(it.selectItem?.title != "장소 추가") {
                 val mapName = it.selectItem?.title.toString()
@@ -530,27 +550,26 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding))
     }
 
+
     private fun reCalculateFinalRoute(finalRoute: ArrayList<FinalItem>) {
         var liveTime = LocalTime.of(8,0,0)
+        var mapX = 0.0
+        var mapY = 0.0
         finalRoute.map {
             if (it.selectItem!!.type == 1) {
                 origin = Origin(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())
+                mapX = it.selectItem!!.mapX!!.toDouble()
+                mapY = it.selectItem!!.mapX!!.toDouble()
                 liveTime = it.selectItem!!.liveTime!!
             }
             else {
                 if(it.selectItem?.title != "장소 추가") {
-                    val duration = getResultSearch(origin, Destination(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())).duration
-                    Log.d(TAG, "duration - $duration")
-                    liveTime = liveTime.plusSeconds(duration!!.toLong())
-                    Log.d(TAG, "liveTime - $liveTime")
-                    it.selectItem?.liveTime == liveTime
-                    liveTime = liveTime.plusMinutes(90)
+                    val duration = getResultSearch(origin, Destination(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())).duration ?: 0
+                    liveTime = liveTime.plusSeconds(duration.toLong())
                     origin = Origin(it.selectItem!!.title, it.selectItem!!.mapX?.toDouble(), it.selectItem!!.mapY?.toDouble())
                 }
-                else {
-                    it.selectItem?.liveTime == liveTime
-                    liveTime = liveTime.plusMinutes(90)
-                }
+                it.selectItem = SelectItem(it.selectItem!!.firstimage, it.selectItem!!.title, it.selectItem!!.type, it.selectItem!!.mapX, it.selectItem!!.mapY, liveTime)
+                liveTime = liveTime.plusMinutes(90)
             }
         }
         Log.d(TAG, "finalRoute - $finalRoute")
@@ -561,15 +580,6 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
         fun onChildItemClick(parentPosition: Int, childPosition: Int, item: List<FinalItem>)
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if(hidden) {
-        }
-        else {
-            setMapView(finalRoute, origindate)
-        }
-    }
-
     fun Fragment.vibratePhone() {
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
@@ -578,4 +588,29 @@ class DispositionFragment6 : Fragment(), View.OnClickListener {
             vibrator.vibrate(200)
         }
     }
+
+    private fun makeButton(date : String) {
+        val dynamicButton = Button(activity).apply {
+            width = ViewGroup.LayoutParams.WRAP_CONTENT
+            height = ViewGroup.LayoutParams.WRAP_CONTENT
+            val Ip = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            Ip.setMargins(0, 10, 0, 0)
+            layoutParams = Ip
+            text = "${date[0]}${date[1]}/${date[2]}${date[3]}"
+            setTextColor(resources.getColor(R.color.white))
+            textSize = 11F
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setBackgroundColor(resources.getColor(R.color.sky))
+
+            // 버튼 클릭 이벤트
+            setOnClickListener {
+                setMapView(finalRoute, date)
+            }
+        }
+        binding.dateButtonLayout.addView(dynamicButton)
+    }
+
 }

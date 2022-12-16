@@ -127,7 +127,7 @@ class RecommendFragment1 : Fragment(), View.OnClickListener {
         // 이 url 주소 가지고 xml에서 데이터 파싱하기
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
-                "&numOfRows=30" +
+                "&numOfRows=10" +
                 "&pageNo=1" +
                 "&MobileApp=" + mobile_app +
                 "&MobileOS=" + mobile_os +

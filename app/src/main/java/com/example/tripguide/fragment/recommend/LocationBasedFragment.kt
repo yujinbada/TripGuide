@@ -62,8 +62,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
 
     private var arrayList = ArrayList<RecommendItem>()
     private val recommendRecyclerAdapter = RecommendRecyclerAdapter(arrayList)
-    lateinit var mapView : MapView
-    private val marker = MapPOIItem()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,8 +89,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
         binding.recyclerView.apply {
             itemAnimator = null
         }
-        mapView = MapView(activity)
-        binding.MapView.addView(mapView)
 
         setFragmentResultListener("tourType") { key, bundle ->
             val result = bundle.getString("tourTypebundleKey")
@@ -115,17 +111,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
             val result = bundle.getString("tourYbundleKey").toString()
             mapY = result.toDouble()
             Log.d(TAG, "mapX $mapX mapY $mapY contentTypeId $contentTypeId")
-            val mapPoint = MapPoint.mapPointWithGeoCoord(mapX, mapY)
-            mapView.setMapCenterPoint(mapPoint, true)
-            mapView.setZoomLevel(5, true)
-
-            //마커 생성
-            marker.itemName = "$title 근처의 장소를\n추가 해주세요"
-            marker.mapPoint = mapPoint
-            marker.markerType = MapPOIItem.MarkerType.BluePin
-            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-
-            mapView.addPOIItem(marker)
 
             keywordParser(mapX, mapY, contentTypeId)
         }
@@ -144,7 +129,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                                     arrayList[position].recommendcontentId?.toInt(),
                                     arrayList[position].recommendmapX,
                                     arrayList[position].recommendmapY))
-                            binding.MapView.removeView(mapView)
                             mainActivity.removeFragment(LocationBasedFragment())
                         })
                     .setNegativeButton("취소",
@@ -251,15 +235,6 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
                             tagTitle = false
                             val item = RecommendItem(firstimage, title2, contentid, overview , mapx, mapy)
                             arrayList.add(item)
-                            val mapPoint = MapPoint.mapPointWithGeoCoord(mapy.toDouble(), mapx.toDouble())
-                            //마커 생성
-                            marker.itemName = "$title2"
-                            marker.mapPoint = mapPoint
-                            marker.markerType = MapPOIItem.MarkerType.BluePin
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-
-                            mapView.addPOIItem(marker)
-
                             recommendRecyclerAdapter.notifyDataSetChanged()
                         }
                         else if (tagConTentId) {    // 콘텐츠 아이디
@@ -306,4 +281,5 @@ class LocationBasedFragment : Fragment(),View.OnClickListener {
         mBinding = null
         super.onDestroyView()
     }
+
 }

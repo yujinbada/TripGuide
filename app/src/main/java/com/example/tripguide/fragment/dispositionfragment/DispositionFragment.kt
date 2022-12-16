@@ -125,30 +125,38 @@ class DispositionFragment : Fragment(), View.OnClickListener {
                 }
             }
             R.id.nextbtn -> {
-                if(binding.viewarrive.text == "도착지") {
-                    Toast.makeText(activity, "도착지를 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                if(binding.tripName.text.toString() == "") {
+                    Toast.makeText(activity, "일정 이름를 선택해 주세요!", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    if(binding.viewdepart.text == "출발지 주소") {
-                        Toast.makeText(activity, "출발지 주소를 선택해 주세요!", Toast.LENGTH_SHORT).show()
+                    viewModel.setTripName(binding.tripName.text.toString())
+
+                    if(binding.viewarrive.text == "도착지") {
+                        Toast.makeText(activity, "도착지를 선택해 주세요!", Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        val calendar: Calendar = Calendar.getInstance()
-                        val currentTime = calendar.timeInMillis // 현재 시간
-                        calendar.add(Calendar.DATE, +1)
-                        val tomorrow = calendar.timeInMillis // 내일
-                        val dataFormat = SimpleDateFormat("M월 d일")
-
-                        if(binding.daterangeview.text == "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}") {
-                            viewModel.setStartDate(SimpleDateFormat("MMdd").format(currentTime))
-                            viewModel.setEndDate(SimpleDateFormat("MMdd").format(tomorrow))
-                            mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+                        if(binding.viewdepart.text == "출발지 주소") {
+                            Toast.makeText(activity, "출발지 주소를 선택해 주세요!", Toast.LENGTH_SHORT).show()
                         }
-                        else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+                        else {
+                            val calendar: Calendar = Calendar.getInstance()
+                            val currentTime = calendar.timeInMillis // 현재 시간
+                            calendar.add(Calendar.DATE, +1)
+                            val tomorrow = calendar.timeInMillis // 내일
+                            val dataFormat = SimpleDateFormat("M월 d일")
+
+                            if(binding.daterangeview.text == "${dataFormat.format(currentTime)} ~ ${dataFormat.format(tomorrow)}") {
+                                viewModel.setStartDate(SimpleDateFormat("MMdd").format(currentTime))
+                                viewModel.setEndDate(SimpleDateFormat("MMdd").format(tomorrow))
+                                mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
+                            }
+                            else mainActivity.addFragment(DispositionFragment(), DispositionFragment2())
 
 
+                        }
                     }
                 }
+
 //                var userInfo = TripGuide()
 //                userInfo.uid = fbAuth?.uid
 //                userInfo.userId = fbAuth?.currentUser?.email

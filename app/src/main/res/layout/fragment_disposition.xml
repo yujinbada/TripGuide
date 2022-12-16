@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:hint="여행 일정 이름을 만들어주세요!"
+        android:text= ""
         android:textColorHint="@color/gray"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"

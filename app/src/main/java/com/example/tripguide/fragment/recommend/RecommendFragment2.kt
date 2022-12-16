@@ -118,7 +118,7 @@ class RecommendFragment2 : Fragment(), View.OnClickListener {
         Log.d(Constants.TAG, "장소 검색중")
         val requstUrl = serviceUrl +
                 "?serviceKey=" + serviceKey +
-                "&numOfRows=30" +
+                "&numOfRows=10" +
                 "&pageNo=1" +
                 "&MobileApp=" + mobile_app +
                 "&MobileOS=" + mobile_os +

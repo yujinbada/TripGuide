@@ -37,6 +37,9 @@ class SelectViewModel : ViewModel() {
     val endDate : MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+    val tripName : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
     init{
         selectList.addSource(tourList){
@@ -82,6 +85,9 @@ class SelectViewModel : ViewModel() {
     }
     fun setEndDate(string: String) {
         endDate.value = string
+    }
+    fun setTripName(string: String) {
+        tripName.value = string
     }
     fun setAddList(selectItem: SelectItem) {
         addList.value = selectItem

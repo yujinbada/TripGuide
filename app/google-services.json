@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "156500920502",
+    "project_id": "tripguide-417c2",
+    "storage_bucket": "tripguide-417c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156500920502:android:08797bbef1c6db88227e17",
+        "android_client_info": {
+          "package_name": "com.example.tripguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156500920502-h7mbq3t3d4fvlb6mhnilaei8sjr8poig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripguide",
+            "certificate_hash": "3747a0084569bb0583e26c13d80ed50fbe1b9124"
+          }
+        },
+        {
+          "client_id": "156500920502-aeb7fr9gq9elckm9l7ceobushc2qp67f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD80kovsTTzLgdO7kkahM8Z9K4jmh8fxXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156500920502-aeb7fr9gq9elckm9l7ceobushc2qp67f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

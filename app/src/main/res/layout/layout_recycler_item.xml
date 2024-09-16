@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    android:background="@color/white"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="top"
+        >
+
+        <TextView
+            android:id="@+id/region1depthtxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경북"
+            android:textSize="30sp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"
+            />
+        <TextView
+            android:id="@+id/region2depthtxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경주"
+            android:textSize="30sp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"
+            />
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
